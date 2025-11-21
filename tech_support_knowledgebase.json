@@ -36,7 +36,7 @@
       "slow charging",
       "won't charge"
     ],
-    "response": "Confirm original charger wattage. Inspect cable/port for damage; clean lint. With AC connected, boot to OS and check battery health. Try battery driver reset (Windows Device Manager → Batteries → uninstall 'Microsoft ACPI...' then Scan for hardware changes). On macOS, run battery diagnostics and reset SMC (Intel Macs). If charge resumes only when off, suspect low‑watt adapter or bad battery.",
+    "response": "Use the original charger, plug directly into a wall outlet, and check for a solid connection at the laptop. Inspect and gently clean the port. Let the laptop cool, then try charging while it's on and while it's off. If it only charges when off or stays stuck, the charger or battery likely needs service.",
     "categories": [
       "power",
       "mobile",
@@ -61,7 +61,7 @@
       "monitor says no signal",
       "no display"
     ],
-    "response": "For desktops: verify monitor input/source, cable, and GPU power leads. Try motherboard video with GPU removed. Reseat RAM and GPU, test one RAM stick. For laptops: shine a flashlight at screen (faint image = backlight issue). External display test isolates panel vs. GPU. If POST beeps/LED codes present, decode from vendor guide.",
+    "response": "Check monitor power, brightness, and input/source. Reseat or swap the video cable and try another port. Restart the PC and test with another display if possible. If the screen stays black, seek service.",
     "categories": [
       "power",
       "display",
@@ -87,7 +87,7 @@
       "endless spinning dots",
       "restarts repeatedly"
     ],
-    "response": "Disconnect all USB devices. Enter BIOS and 'Load Optimized Defaults'. Check boot order. For Windows: power‑cycle into WinRE → Startup Repair; if fails, Safe Mode → uninstall recent drivers/updates. For macOS: Safe Mode, then run Disk Utility First Aid. Suspects: bad driver, corrupt update, failing disk, RAM issues.",
+    "response": "Unplug USB/SD devices, then fully power off and restart. Let the built-in repair or automatic fix run if it appears. After reboot, install pending updates. If it still loops, contact support for hands-on help.",
     "categories": [
       "boot",
       "os",
@@ -105,7 +105,7 @@
       "bios beeps",
       "post beeps"
     ],
-    "response": "Count beeps or note LED pattern; look up the vendor’s POST code chart. Common causes: RAM not seated, GPU issues, CPU/overheat. Reseat components and test one RAM module at a time.",
+    "response": "Count the beeps or light pattern and check the PC maker's support page for what it means. Unplug external devices and restart. If it keeps beeping, it's likely a hardware issue that needs service.",
     "categories": [
       "hardware",
       "diagnostics"
@@ -129,7 +129,7 @@
       "electrical smell",
       "popping sound computer"
     ],
-    "response": "Immediately power off and unplug. Inspect for debris in fan, cables touching fans, or liquid damage. Clicking suggests failing HDD—do NOT keep powering on; prioritize data recovery. Recommend professional hardware inspection before reuse.",
+    "response": "Turn it off, unplug it, and stop using it. If you hear clicking from a drive or smelled burning, avoid powering it back on and have a professional check it - data and safety first.",
     "categories": [
       "safety",
       "hardware",
@@ -148,7 +148,7 @@
       "slow laptop",
       "system performance"
     ],
-    "response": "Check Task Manager/Activity Monitor for high CPU/RAM/disk. Disable heavy startup apps. Ensure 20% free disk space. On HDD systems, upgrade to SSD. Run malware scan. Update drivers and OS. Clean dust and ensure airflow. Consider RAM upgrade if frequently >80% utilization.",
+    "response": "Restart, close unneeded tabs or apps, and remove programs you don't use. Free up disk space, run a quick antivirus scan, and install OS or app updates. If it's still slow, consider a hardware checkup or upgrade.",
     "categories": [
       "performance",
       "windows",
@@ -168,7 +168,7 @@
       "random freeze",
       "system crash"
     ],
-    "response": "Run memory test (Windows Memory Diagnostic/ MemTest). Check SMART/Drive health. Update GPU/chipset drivers. Watch temps with HWMonitor/Intel/AMD utilities; repaste/clean if throttling. Review Event Viewer/Console for repeating errors. Test in Safe Mode to isolate third‑party drivers.",
+    "response": "Restart, close heavy apps or tabs, and free up some disk space. Run a quick antivirus scan and install OS or app updates. Keep the device on a hard surface so it can cool. If it still freezes, note what you were doing and contact support.",
     "categories": [
       "performance",
       "diagnostics"
@@ -186,7 +186,7 @@
       "overheating",
       "thermal throttling"
     ],
-    "response": "Clean vents and fans; replace thermal paste if aged. Elevate rear of laptop or use a cooling pad. Verify that vents are not blocked. Limit turbo boost when on battery. Rebuild dust‑clogged desktops and optimize fan curves in BIOS. Replace failing fans.",
+    "response": "Move the device to a hard surface, blow out vents with short bursts of compressed air, and close heavy apps or browser tabs. Keep vents clear and consider a cooling pad. If it stays very hot or loud, have it serviced.",
     "categories": [
       "thermal",
       "hardware"
@@ -237,7 +237,7 @@
       "wifi sucks",
       "wifi unstable"
     ],
-    "response": "Power‑cycle modem+router (full 60s). Reposition router higher/central, away from microwaves and thick walls. Separate 2.4 GHz and 5 GHz SSIDs; prefer 5 GHz near router, 2.4 GHz for range. Update router firmware and client drivers. Consider a mesh system for larger homes.",
+    "response": "Restart the modem or router and your device. Move closer to the router, forget and rejoin the Wi-Fi, and use 5 GHz near the router or 2.4 GHz for range. Reduce interference like microwaves and thick walls; if it stays flaky, reposition the router or add a mesh or extender.",
     "categories": [
       "network",
       "wifi"
@@ -260,7 +260,7 @@
       "wifi authentication problem",
       "wrong password wifi"
     ],
-    "response": "Confirm password and Wi‑Fi band. Forget and re‑add network. Ensure airplane mode off and adapter enabled. For Windows: Network Reset; for macOS/iOS: Reset Network Settings. Check MAC filtering on router. Update drivers/firmware.",
+    "response": "Toggle Airplane mode, then rejoin Wi-Fi with the correct password. Restart the router and your device, and try standing closer to the router. If one network won't work, test another to see if it's the device or the network. Use Reset Network Settings only if other steps fail.",
     "categories": [
       "network",
       "wifi",
@@ -281,7 +281,7 @@
       "no network cable",
       "unidentified network"
     ],
-    "response": "Try a different Ethernet cable and port on router/switch. Verify link lights. Update NIC driver; disable/enable adapter. Set IPv4 to DHCP (auto). Test another device on same cable to isolate port vs. PC issue.",
+    "response": "Make sure the cable clicks in on both ends, check for link lights, and try another cable and router/modem port. Restart the PC and router. Test another device on the same cable to see if the port is bad.",
     "categories": [
       "network",
       "ethernet"
@@ -297,7 +297,7 @@
       "router not working out of box",
       "setup router"
     ],
-    "response": "Connect modem → router WAN. Access router UI (usually 192.168.0.1 or 192.168.1.1). Change admin password, set SSIDs for 2.4/5 GHz, enable WPA2/WPA3, update firmware. Disable WPS. For ISP combo modems, set to bridge mode if using your own router.",
+    "response": "Plug the modem into the router's WAN port, then use the router app or setup page to create a new admin password and Wi-Fi name/password. Choose WPA2/WPA3 security and restart the modem and router once when done.",
     "categories": [
       "network",
       "router"
@@ -352,7 +352,7 @@
       "printer offline wifi",
       "printer won't connect to wifi"
     ],
-    "response": "Ensure printer is on same 2.4 GHz SSID if it doesn't support 5 GHz. Run printer's wireless setup assistant. Assign a DHCP reservation so IP stays consistent. Install vendor driver/software rather than generic AirPrint only.",
+    "response": "Place the printer near the router and use its wireless setup to join your home Wi-Fi (often 2.4 GHz). Then add it in the vendor app or OS. Restart the printer and router if it won't join the first time.",
     "categories": [
       "printers",
       "network"
@@ -407,7 +407,7 @@
       "reset microsoft password",
       "reset outlook password"
     ],
-    "response": "Use Microsoft Account Recovery to verify identity and set a new password, then enable 2FA via Microsoft Authenticator. Review recent sign‑ins and sign‑out from unrecognized sessions.",
+    "response": "Use Microsoft Account Recovery to verify your identity, set a new password, and enable two-step verification. Review recent sign-ins and sign out of unfamiliar sessions.",
     "categories": [
       "accounts",
       "security",
@@ -431,7 +431,7 @@
       "recover gmail",
       "reset google password"
     ],
-    "response": "Go to Google Account Recovery, confirm recovery email/phone, then set a strong password and turn on 2‑Step Verification. Review Security Checkup and revoke unknown devices.",
+    "response": "Use Google Account Recovery, confirm recovery email/phone, set a strong new password, and turn on 2-Step Verification. Review Security Checkup and sign out unknown devices.",
     "categories": [
       "accounts",
       "security",
@@ -456,7 +456,7 @@
       "icloud password reset",
       "reset apple id"
     ],
-    "response": "Use iforgot.apple.com or Settings → Your Name → Password & Security → Change Password. Turn on two‑factor authentication and generate recovery keys. Review device list and remove unknown devices.",
+    "response": "Use iforgot.apple.com or Settings > Your Name > Password & Security > Change Password. Turn on two-factor authentication, review trusted devices, and update recovery options.",
     "categories": [
       "accounts",
       "security",
@@ -481,7 +481,7 @@
       "email sending spam",
       "suspicious login"
     ],
-    "response": "Immediately change password and enable 2FA. Check recovery email/phone for tampering. Review recent activity/devices. Run malware scan on your computer and phone. Warn contacts if spam was sent.",
+    "response": "Change your password right away on a trusted device, turn on two-factor authentication, review recent logins/devices, and update recovery email/phone. Let contacts know if spam was sent and run a quick antivirus scan.",
     "categories": [
       "security",
       "accounts"
@@ -546,7 +546,7 @@
       "mac update failed",
       "macos update error"
     ],
-    "response": "Check free disk space, safe boot, and run Disk Utility First Aid. If still failing, download the Combo Installer when available. Ensure stable power and network. Backup before retry.",
+    "response": "Free up at least 20-25 GB, plug in power, restart, and retry the update from System Settings. If it still fails, download the update again, back up your Mac, and contact Apple support before trying more.",
     "categories": [
       "macos",
       "updates"
@@ -562,7 +562,7 @@
       "app won't open",
       "program won't start"
     ],
-    "response": "Update or reinstall the app. Delete corrupted cache/profile folders. On macOS, allow app in Privacy & Security if flagged. Check Event Viewer/Console logs for faulting module.",
+    "response": "Restart the device, update the app and OS, and make sure you have storage space. Force close the app, clear its cache/data if offered, then reinstall if it still won't launch.",
     "categories": [
       "apps",
       "windows",
@@ -615,7 +615,7 @@
       "printer offline",
       "won't print"
     ],
-    "response": "Power‑cycle printer and clear print queue. Reinstall vendor driver/software. Set printer to use its IP (Standard TCP/IP port) and give it a DHCP reservation. Ensure it’s on the same network/VLAN.",
+    "response": "Power cycle the printer and computer, make sure the printer is on the same Wi-Fi, and set it as the default printer. Clear any stuck print jobs and reinstall the printer in your OS if needed.",
     "categories": [
       "printers",
       "network"
@@ -651,7 +651,7 @@
       "scan software not working",
       "scanner not detected"
     ],
-    "response": "Install full vendor suite (not driver‑only). Ensure desktop firewall allows the scanner service. Try USB first to confirm function, then configure network scanning with correct destination and credentials.",
+    "response": "Install the full printer or scanner software, connect by USB to confirm scanning works, then enable 'scan to computer' in the app and ensure the PC and printer are on the same Wi-Fi.",
     "categories": [
       "printers",
       "scanners"
@@ -674,7 +674,7 @@
       "can't connect bluetooth",
       "pairing failed"
     ],
-    "response": "Turn Bluetooth off/on and forget the device, then re‑pair. Charge both devices. Keep within 1–2 meters and avoid 2.4 GHz interference. Update firmware. For Windows, remove hidden Bluetooth entries in Device Manager and reboot.",
+    "response": "Toggle Bluetooth off/on, forget the device, and pair again. Charge both devices, keep them within a couple feet, and make sure the device isn't paired to something else. Restart both devices if it fails.",
     "categories": [
       "bluetooth",
       "peripherals"
@@ -697,7 +697,7 @@
       "camera unavailable",
       "webcam not detected"
     ],
-    "response": "Check privacy settings and app permissions. Close other apps that may hold the camera. Update drivers/firmware. Try a different USB port. On macOS, grant camera access in System Settings → Privacy & Security.",
+    "response": "Check camera privacy and permission settings, close other video apps, and make sure any camera switch or cover is open. Unplug and replug USB cameras, then restart and reinstall the app if needed.",
     "categories": [
       "peripherals",
       "privacy"
@@ -713,7 +713,7 @@
       "second monitor not detected",
       "tv not showing pc"
     ],
-    "response": "Power‑cycle display and PC. Use correct HDMI input and quality cable. Set display to 'Extend' not 'Second screen only'. Update GPU drivers. Some laptops require Fn+Display toggle. Try a different port or adapter.",
+    "response": "Set the TV/monitor to the correct HDMI input, seat the cable firmly, and try another cable or port. Restart both devices. On Windows, press Windows+P and pick Extend/Second screen; on laptops use the display toggle key.",
     "categories": [
       "display",
       "peripherals"
@@ -856,7 +856,7 @@
       "recover deleted files",
       "restore file recycle bin"
     ],
-    "response": "Check Recycle Bin/Trash first. For cloud files, check version history (OneDrive/Google Drive/iCloud). Avoid writing new data to the same disk. Use reputable recovery tools for HDD/SSD/SD cards; success varies.",
+    "response": "Check Recycle Bin or Trash and cloud version history. If not there, stop saving new files on that device to avoid overwriting. For important data, contact a recovery pro or trusted service; DIY recovery is not guaranteed.",
     "categories": [
       "storage",
       "backup"
@@ -928,7 +928,7 @@
       "hp smart install",
       "install hp printer driver"
     ],
-    "response": "Download and install HP Smart or the full driver package. Connect via USB first to confirm printing, then switch to Wi‑Fi and assign a DHCP reservation on your router.",
+    "response": "Install the HP Smart app, connect the printer by USB once, and follow the app to finish Wi-Fi setup. Restart the printer and your computer if the installer hangs.",
     "categories": [
       "printers",
       "vendor"
@@ -950,7 +950,7 @@
       "canon printer wifi setup",
       "connect canon printer to wifi"
     ],
-    "response": "Use the printer’s Wi‑Fi setup wizard to join your 2.4 GHz SSID. Then install Canon’s IJ/MP driver for your OS. Consider assigning a static/DHCP reservation for stability.",
+    "response": "Run the printer's Wi-Fi setup wizard to join your home network (usually 2.4 GHz). Reinstall or update the Canon app/driver, then restart the printer and router if setup stalls.",
     "categories": [
       "printers",
       "vendor"
@@ -996,7 +996,7 @@
       "nighthawk update",
       "update netgear firmware"
     ],
-    "response": "Log into your Netgear router, back up settings, then check for updates under Administration → Router Update. Apply firmware, reboot, and re‑enable features. Do not power off during update.",
+    "response": "Using the Netgear app or router page, check for updates while you're near the router. Start the update, wait for it to reboot on its own, and avoid unplugging it during the process.",
     "categories": [
       "router",
       "vendor"
@@ -1019,7 +1019,7 @@
       "tp link deco install",
       "tp link mesh setup"
     ],
-    "response": "Download the TP‑Link Deco app, follow on‑screen steps to create your mesh, place nodes mid‑way between router and weak areas, and update to latest firmware after onboarding.",
+    "response": "Open the Deco app, follow the guided setup, and place nodes halfway between the main router and weak areas, in the open and off the floor. Let the app finish updates after setup.",
     "categories": [
       "router",
       "vendor",
@@ -1043,7 +1043,7 @@
       "lenovo vantage bios",
       "update lenovo firmware"
     ],
-    "response": "Install Lenovo Vantage, check for System Update → BIOS/UEFI updates. Plug into power and do not interrupt. After update, recheck boot order and device security settings.",
+    "response": "Open Lenovo Vantage, plug into power, and run System Update for the recommended items. Avoid manual BIOS changes; if an update fails or you're unsure, contact Lenovo support.",
     "categories": [
       "firmware",
       "vendor"
@@ -1061,7 +1061,7 @@
       "dell epsa",
       "pre-boot assessment"
     ],
-    "response": "Run Dell ePSA diagnostics (power on → F12 → Diagnostics). Record any error codes. Use SupportAssist within Windows for driver/firmware updates.",
+    "response": "Open Dell SupportAssist in Windows and run the quick hardware tests while plugged in. If it reports an issue or shows an error code, share that with Dell support.",
     "categories": [
       "diagnostics",
       "vendor"
@@ -1079,7 +1079,7 @@
       "hp diagnostics",
       "hp pc hardware diagnostics"
     ],
-    "response": "Use HP PC Hardware Diagnostics UEFI to test memory, battery, and storage. Update BIOS from HP Support Assistant if needed.",
+    "response": "In Windows, open HP Support Assistant and run the quick hardware check while plugged into power. If it shows a failure, contact HP support with the code.",
     "categories": [
       "diagnostics",
       "vendor"
