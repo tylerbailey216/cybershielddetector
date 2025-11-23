@@ -10,7 +10,7 @@
                 id: 'microsoft_windows',
                 title: 'Microsoft · Windows',
                 summary: 'Password resets, update loops, Teams calls.',
-                response: `Start here for Windows PCs, Microsoft 365 accounts, or Teams meetings.`,
+                response: `Start here for Windows PCs, Microsoft 365 accounts, or Teams meetings. Navigation tip: click Start on the taskbar and type to search any setting; open Settings via the gear; Win + A opens Quick Settings to toggle Wi‑Fi/Bluetooth; right-click Start for Device Manager and Power options.`,
                 tags: ['windows', 'office'],
                 children: [
                     {
@@ -797,7 +797,7 @@
                 id: 'apple_ios_mac',
                 title: 'Apple · iOS · macOS',
                 summary: 'Apple ID, iPhone power, Mac performance.',
-                response: `Use this lane for Apple ID recovery, iPhone that will not boot, or a Mac that feels slow/hot.`,
+                response: `Use this lane for Apple ID recovery, iPhone that will not boot, or a Mac that feels slow/hot. Navigation tip (iPhone/iPad): swipe down from the top-right for Control Center toggles; tap Settings (gray gear) for Wi‑Fi/Bluetooth and battery; long-press Wi‑Fi/Bluetooth tiles to jump into details. On Mac, click the Apple menu → System Settings for most options.`,
                 tags: ['apple'],
                 children: [
                     {
@@ -871,7 +871,7 @@
                 id: 'android_google',
                 title: 'Android · Google',
                 summary: 'Charging, storage, account recovery.',
-                response: `These paths cover Pixel/Android devices plus Google account safety.`,
+                response: `These paths cover Pixel/Android devices plus Google account safety. Navigation tip: swipe down twice from the top for Quick Settings; long-press Wi‑Fi/Bluetooth tiles to open their settings; tap the gear to open Settings; use the search bar at the top of Settings to jump to any option.`,
                 tags: ['android', 'google'],
                 children: [
                     {
