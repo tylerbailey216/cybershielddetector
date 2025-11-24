@@ -10,7 +10,7 @@
                 id: 'microsoft_windows',
                 title: 'Microsoft · Windows',
                 summary: 'Password resets, update loops, Teams calls.',
-                response: `Start here for Windows PCs, Microsoft 365 accounts, or Teams meetings. Navigation tip: click Start (Windows logo on taskbar) and type to search any setting; open Settings via the gear; Win + A opens Quick Settings to toggle Wi‑Fi/Bluetooth; right-click Start for Device Manager and Power options.`,
+                response: `Start here for Windows PCs, Microsoft 365 accounts, or Teams meetings. Navigation tip: click Start (Windows logo on taskbar) and type to search any setting; open Settings via the gear; Win(logo) + A opens Quick Settings to toggle Wi‑Fi/Bluetooth; right-click Start for Device Manager and Power options.`,
                 tags: ['windows', 'office'],
                 children: [
                     {
@@ -168,8 +168,8 @@
                                 id: 'wifi_cant_connect',
                                 title: 'Wi-Fi will not connect',
                                 summary: 'Password ok but Windows refuses to join.',
-                                response: `1. Toggle Airplane mode on then off (Win + A opens Quick Settings), then restart the PC.
-2. Forget the Wi-Fi network: Start (Windows logo on taskbar) > Settings (gear) > Network & internet > Wi-Fi > Manage known networks > pick your network > Forget, then reconnect with the password.
+                                response: `1. Toggle Airplane mode on then off (Win(logo) + A opens Quick Settings), then restart the PC.
+2. Forget the Wi-Fi network: Start (Windows logo on taskbar) > Settings (gear icon) (gear icon) > Network & internet > Wi-Fi > Manage known networks > pick your network > Forget, then reconnect with the password.
 3. Reboot the router/modem and ensure the SSID is broadcasting on 2.4 GHz or 5 GHz as needed.`,
                                 tags: ['wifi'],
                                 links: [
@@ -417,7 +417,7 @@
                                 id: 'external_monitor_missing',
                                 title: 'External monitor not detected',
                                 summary: 'Second screen stays blank.',
-                                response: `1. Press Win + P and pick Duplicate or Extend.
+                                response: `1. Press Win(logo) + P and pick Duplicate or Extend.
 2. Reseat HDMI/DisplayPort cables and power cycle the monitor.
 3. Update graphics drivers and reboot.`,
                                 tags: ['display'],
@@ -638,7 +638,7 @@
                             {
                                 id: 'clipboard_history_not_working',
                                 title: 'Clipboard history not working',
-                                summary: 'Win + V does nothing.',
+                                summary: 'Win(logo) + V does nothing.',
                                 response: `1. Settings → System → Clipboard: turn Clipboard history on.
 2. Sign into your Microsoft account if you want sync.
 3. Restart Explorer/Windows to clear clipboard glitches.`,
@@ -797,7 +797,7 @@
                 id: 'apple_ios_mac',
                 title: 'Apple · iOS · macOS',
                 summary: 'Apple ID, iPhone power, Mac performance.',
-                response: `Use this lane for Apple ID recovery, iPhone that will not boot, or a Mac that feels slow/hot. Navigation tip (iPhone/iPad): swipe down from the top-right for Control Center toggles; tap Settings (gray gear) for Wi‑Fi/Bluetooth and battery; long-press Wi‑Fi/Bluetooth tiles to jump into details. On Mac, click the Apple menu → System Settings for most options.`,
+                response: `Use this lane for Apple ID recovery, iPhone that will not boot, or a Mac that feels slow/hot. Navigation tip (iPhone/iPad): swipe down from the top-right for Control Center toggles; tap Settings (gear icon) for Wi‑Fi/Bluetooth and battery; long-press Wi‑Fi/Bluetooth tiles to jump into details. On Mac, click the Apple menu → System Settings for most options.`,
                 tags: ['apple'],
                 children: [
                     {
@@ -831,7 +831,7 @@
                         title: 'iPhone Wi‑Fi will not connect',
                         summary: 'Forget network, toggle radios.',
                         response: `1. Open Control Center (swipe down from the top-right) and toggle Airplane mode on/off, then toggle WiFi off/on.
-2. Go to Settings (gray gear) > WiFi > tap the (i) next to your network > Forget This Network, then rejoin with the password.
+2. Go to Settings (gear icon) > WiFi > tap the (i) next to your network > Forget This Network, then rejoin with the password.
 3. Restart the router and the iPhone; stand close to the router during reconnect.
 4. If still stuck: Settings > General > Transfer or Reset > Reset > Reset Network Settings (this removes saved WiFi and Bluetooth).`,
                         tags: ['ios', 'wifi'],
@@ -843,7 +843,7 @@
                         id: 'iphone_storage',
                         title: 'iPhone storage is full',
                         summary: 'Offload apps and clear media.',
-                        response: `1. Open Settings (gray gear) > General > iPhone Storage, then turn on "Offload Unused Apps".
+                        response: `1. Open Settings (gear icon) > General > iPhone Storage, then turn on "Offload Unused Apps".
 2. Photos > Albums > Recently Deleted: empty it. Move large videos to iCloud/Drive if space is tight.
 3. Delete old Messages threads with lots of photos/videos; Settings > Safari > Clear History and Website Data.
 4. Keep 510 GB free so updates install smoothly.`,
@@ -892,7 +892,7 @@
                         title: 'Android Wi‑Fi will not connect',
                         summary: 'Forget network + airplane toggle.',
                         response: `1. Swipe down twice from the top for Quick Settings and toggle Airplane on/off, then WiFi off/on.
-2. Long-press the WiFi tile or go to Settings (gear) > Network & internet > Internet/WiFi > tap your network > Forget, then reconnect with the correct password.
+2. Long-press the WiFi tile or go to Settings (gear icon) > Network & internet > Internet/WiFi > tap your network > Forget, then reconnect with the correct password.
 3. Restart the router and the phone; stand close to the router for the test.
 4. If still stuck: Settings > System > Reset options > Reset WiFi, mobile & Bluetooth (removes saved networks).`,
                         tags: ['android', 'wifi'],
