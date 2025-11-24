@@ -168,8 +168,8 @@
                                 id: 'wifi_cant_connect',
                                 title: 'Wi-Fi will not connect',
                                 summary: 'Password ok but Windows refuses to join.',
-                                response: `1. Toggle Airplane mode on then off and restart the PC.
-2. Forget the Wi-Fi network (Settings → Network & internet → Wi-Fi) and reconnect with the password.
+                                response: `1. Toggle Airplane mode on then off (Win + A opens Quick Settings), then restart the PC.
+2. Forget the Wi-Fi network: Start > Settings (gear) > Network & internet > Wi-Fi > Manage known networks > pick your network > Forget, then reconnect with the password.
 3. Reboot the router/modem and ensure the SSID is broadcasting on 2.4 GHz or 5 GHz as needed.`,
                                 tags: ['wifi'],
                                 links: [
@@ -181,7 +181,7 @@
                                 title: 'Wi-Fi keeps dropping',
                                 summary: 'Connection cuts out every few minutes.',
                                 response: `1. Move closer to the router and keep the laptop away from microwaves or thick walls.
-2. Update the Wi-Fi adapter driver via Device Manager, then restart Windows.
+2. Update the Wi-Fi adapter driver: right-click Start > Device Manager > Network adapters > your Wi-Fi card > Update driver, then restart Windows.
 3. Restart the router; if multiple devices drop, change the wireless channel or split the 2.4/5 GHz bands.`,
                                 tags: ['wifi'],
                                 links: [
