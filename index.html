@@ -117,8 +117,9 @@
 
     </main>
     <script src="./public/app.js"></script>
+    
     <script>
-        (() => {
+        document.addEventListener('DOMContentLoaded', () => {
             const pingBtns = [document.getElementById('pingTestBtn'), document.getElementById('pingTestBtn2')].filter(Boolean);
             const pingResult = document.getElementById('pingResult');
             const deviceBtn = document.getElementById('deviceScanBtn');
@@ -130,29 +131,29 @@
 
             const runPing = async () => {
                 if (!pingResult) return;
-                pingBtns.forEach(b => b.disabled = true);
+                pingBtns.forEach((b) => (b.disabled = true));
                 pingResult.textContent = 'Testing...';
-                const start = performance.now();
+                const startTime = performance.now();
                 try {
                     await fetch('https://www.google.com/generate_204', { cache: 'no-store' });
-                    const ms = Math.round(performance.now() - start);
+                    const ms = Math.round(performance.now() - startTime);
                     pingResult.textContent = `Online, ~${ms} ms`;
                 } catch (e) {
                     pingResult.textContent = 'Offline or blocked';
                 } finally {
-                    pingBtns.forEach(b => b.disabled = false);
+                    pingBtns.forEach((b) => (b.disabled = false));
                 }
             };
 
-            pingBtns.forEach(btn => btn.addEventListener('click', runPing));
+            pingBtns.forEach((btn) => btn.addEventListener('click', runPing));
 
-            if (deviceBtn && deviceResult && navigator.mediaDevices?.enumerateDevices) {
+            if (deviceBtn && deviceResult && navigator.mediaDevices && navigator.mediaDevices.enumerateDevices) {
                 deviceBtn.addEventListener('click', async () => {
                     deviceBtn.disabled = true;
                     deviceResult.textContent = 'Scanning...';
                     try {
                         const devices = await navigator.mediaDevices.enumerateDevices();
-                        const lines = devices.map(d => `${d.kind}: ${d.label || 'Unnamed'} (${d.deviceId.slice(0,6)}...)`);
+                        const lines = devices.map((d) => `${d.kind}: ${d.label || 'Unnamed'} (${d.deviceId.slice(0, 6)}...)`);
                         deviceResult.textContent = lines.length ? lines.join('
 ') : 'No devices reported.';
                     } catch (e) {
@@ -185,8 +186,9 @@ Device pixel ratio: ${dpr}
 Color scheme: ${dark ? 'Dark' : 'Light'}`;
                 });
             }
-        })();
+        });
     </script>
+
 
     <script>
         (() => {
