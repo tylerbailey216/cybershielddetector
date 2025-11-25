@@ -59,6 +59,7 @@
                                 links: [
                                     { label: 'Microsoft support article', url: 'https://support.microsoft.com/search?query=Microsoft%20support%20article%20Windows' },
                                     { label: 'Microsoft update fix video', url: 'https://www.youtube.com/watch?v=udsJGOEEjAQ' },
+                                    { label: 'Short demo: run Windows Update', url: 'https://youtube.com/shorts/M0YP2vPdKGc?feature=share' },
                                 ],
                             },
                             {
