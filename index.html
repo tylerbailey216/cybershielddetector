@@ -52,6 +52,49 @@
             </div>
         </section>
 
+        <section class="tree-card" style="margin-top: 18px;">
+            <div class="tree-header" style="align-items: flex-start; gap: 8px;">
+                <div>
+                    <p class="node-path">Diagnostics</p>
+                    <h2>Quick checks & scripts</h2>
+                    <p class="node-summary">Run a quick network ping test or copy a safe PowerShell snippet to collect info.</p>
+                </div>
+                <div class="tree-controls" style="gap: 8px;">
+                    <button class="ghost" id="pingTestBtn">Run ping test</button>
+                    <span id="pingResult" class="node-summary" style="min-width: 160px;"></span>
+                </div>
+            </div>
+            <div class="node-body" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 12px;">
+                <div class="child-card">
+                    <h3>Wi‑Fi & network</h3>
+                    <p class="node-summary">Collect adapter info and test connectivity.</p>
+                    <button class="ghost" data-command="ipconfig /all; ping 8.8.8.8; tracert 8.8.8.8">Copy network script</button>
+                </div>
+                <div class="child-card">
+                    <h3>Sound & mic</h3>
+                    <p class="node-summary">Launch Windows audio troubleshooter.</p>
+                    <button class="ghost" data-command="msdt.exe /id AudioPlaybackDiagnostic">Copy playback troubleshooter</button>
+                    <button class="ghost" data-command="msdt.exe /id AudioRecordingDiagnostic" style="margin-top: 6px;">Copy mic troubleshooter</button>
+                </div>
+                <div class="child-card">
+                    <h3>Bluetooth & input</h3>
+                    <p class="node-summary">List BT, keyboard, and mouse devices.</p>
+                    <button class="ghost" data-command="Get-PnpDevice -Class Bluetooth; Get-PnpDevice -Class Keyboard,Mouse">Copy BT/input script</button>
+                </div>
+                <div class="child-card">
+                    <h3>Camera & printer</h3>
+                    <p class="node-summary">Open camera privacy settings and list printers/queues.</p>
+                    <button class="ghost" data-command="start ms-settings:privacy-webcam">Copy camera settings launcher</button>
+                    <button class="ghost" data-command="Get-Printer; Get-PrintJob -ComputerName localhost" style="margin-top: 6px;">Copy printer script</button>
+                </div>
+                <div class="child-card">
+                    <h3>Storage & performance</h3>
+                    <p class="node-summary">Check free space and disk health.</p>
+                    <button class="ghost" data-command="Get-PSDrive -PSProvider FileSystem; wmic diskdrive get status">Copy storage script</button>
+                </div>
+            </div>
+        </section>
+
         <section class="tree-card" id="treePanel">
             <div class="tree-header">
                 <div>
@@ -128,6 +171,45 @@
 
     </main>
     <script src="./public/app.js"></script>
+    <script>
+        (() => {
+            const pingBtn = document.getElementById('pingTestBtn');
+            const pingResult = document.getElementById('pingResult');
+            const copyButtons = Array.from(document.querySelectorAll('button[data-command]'));
+
+            const runPing = async () => {
+                if (!pingBtn || !pingResult) return;
+                pingBtn.disabled = true;
+                pingResult.textContent = 'Testing...';
+                const start = performance.now();
+                try {
+                    await fetch('https://www.google.com/generate_204', { cache: 'no-store' });
+                    const ms = Math.round(performance.now() - start);
+                    pingResult.textContent = `Online, ~${ms} ms`;
+                } catch (e) {
+                    pingResult.textContent = 'Offline or blocked';
+                } finally {
+                    pingBtn.disabled = false;
+                }
+            };
+
+            if (pingBtn) pingBtn.addEventListener('click', runPing);
+
+            copyButtons.forEach((btn) => {
+                btn.addEventListener('click', async () => {
+                    const cmd = btn.getAttribute('data-command') || '';
+                    try {
+                        await navigator.clipboard.writeText(cmd);
+                        const old = btn.textContent;
+                        btn.textContent = 'Copied';
+                        setTimeout(() => (btn.textContent = old), 1400);
+                    } catch (e) {
+                        alert('Copy failed. You can copy this manually:\n\n' + cmd);
+                    }
+                });
+            });
+        })();
+    </script>
     <script>
         (() => {
             const stage = document.querySelector('[data-role="affirmation-stage"]');
