@@ -52,7 +52,7 @@
                 <div>
                     <p class="node-path">Diagnostics</p>
                     <h2>Quick checks & scripts</h2>
-                    <p class="node-summary">Run a quick network ping test or copy a safe PowerShell snippet to collect info.</p>
+                    <p class="node-summary">Click “Copy” to grab a safe PowerShell command, then paste it into Windows Terminal (Win(logo)+X > Windows Terminal) and press Enter.</p>
                 </div>
                 <div class="tree-controls" style="gap: 8px;">
                     <button class="ghost" id="pingTestBtn">Run ping test</button>
@@ -61,31 +61,60 @@
             </div>
             <div class="node-body" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 12px;">
                 <div class="child-card">
+                    <h3>How to run</h3>
+                    <p class="node-summary">1) Click a “Copy” button. 2) Press Win(logo)+X, open Windows Terminal (PowerShell). 3) Right-click to paste, press Enter. These commands only read system info or launch built-in troubleshooters.</p>
+                </div>
+                <div class="child-card">
                     <h3>Wi‑Fi & network</h3>
                     <p class="node-summary">Collect adapter info and test connectivity.</p>
                     <button class="ghost" data-command="ipconfig /all; ping 8.8.8.8; tracert 8.8.8.8">Copy network script</button>
                 </div>
                 <div class="child-card">
                     <h3>Sound & mic</h3>
-                    <p class="node-summary">Launch Windows audio troubleshooter.</p>
+                    <p class="node-summary">Launch Windows audio troubleshooters.</p>
                     <button class="ghost" data-command="msdt.exe /id AudioPlaybackDiagnostic">Copy playback troubleshooter</button>
                     <button class="ghost" data-command="msdt.exe /id AudioRecordingDiagnostic" style="margin-top: 6px;">Copy mic troubleshooter</button>
                 </div>
                 <div class="child-card">
                     <h3>Bluetooth & input</h3>
-                    <p class="node-summary">List BT, keyboard, and mouse devices.</p>
-                    <button class="ghost" data-command="Get-PnpDevice -Class Bluetooth; Get-PnpDevice -Class Keyboard,Mouse">Copy BT/input script</button>
+                    <p class="node-summary">List Bluetooth, keyboard, mouse devices.</p>
+                    <button class="ghost" data-command="Get-PnpDevice -Class Bluetooth,Keyboard,Mouse | Format-Table -AutoSize">Copy BT/input script</button>
+                </div>
+                <div class="child-card">
+                    <h3>Hardware & accessories</h3>
+                    <p class="node-summary">Show USB/HID devices for peripherals.</p>
+                    <button class="ghost" data-command="Get-PnpDevice -Class USB,HIDClass | Format-Table -AutoSize">Copy hardware script</button>
                 </div>
                 <div class="child-card">
                     <h3>Camera & printer</h3>
                     <p class="node-summary">Open camera privacy settings and list printers/queues.</p>
                     <button class="ghost" data-command="start ms-settings:privacy-webcam">Copy camera settings launcher</button>
-                    <button class="ghost" data-command="Get-Printer; Get-PrintJob -ComputerName localhost" style="margin-top: 6px;">Copy printer script</button>
+                    <button class="ghost" data-command="Get-PnpDevice -Class Camera | Format-Table -AutoSize; Get-Printer; Get-PrintJob -ComputerName localhost" style="margin-top: 6px;">Copy camera/printer script</button>
+                </div>
+                <div class="child-card">
+                    <h3>Mouse, keyboard & touchpad</h3>
+                    <p class="node-summary">Check HID devices and touchpad settings.</p>
+                    <button class="ghost" data-command="Get-PnpDevice -Class HIDClass,Keyboard,Mouse | Format-Table -AutoSize; start ms-settings:devices-touchpad">Copy input script</button>
+                </div>
+                <div class="child-card">
+                    <h3>Display & personalization</h3>
+                    <p class="node-summary">Show resolution and current wallpaper.</p>
+                    <button class="ghost" data-command="Get-CimInstance Win32_VideoController | Select Name,CurrentHorizontalResolution,CurrentVerticalResolution; Get-ItemProperty 'HKCU:\\Control Panel\\Desktop' -Name WallPaper">Copy display script</button>
+                </div>
+                <div class="child-card">
+                    <h3>Apps</h3>
+                    <p class="node-summary">Top CPU/RAM processes.</p>
+                    <button class="ghost" data-command="Get-Process | Sort-Object CPU -Descending | Select -First 10 Name,CPU,Id; Get-Process | Sort-Object WS -Descending | Select -First 10 Name,WS,Id">Copy apps script</button>
+                </div>
+                <div class="child-card">
+                    <h3>Browser cleanup</h3>
+                    <p class="node-summary">Open Edge clear-data page.</p>
+                    <button class="ghost" data-command="start msedge://settings/clearBrowserData">Copy browser cleanup</button>
                 </div>
                 <div class="child-card">
                     <h3>Storage & performance</h3>
                     <p class="node-summary">Check free space and disk health.</p>
-                    <button class="ghost" data-command="Get-PSDrive -PSProvider FileSystem; wmic diskdrive get status">Copy storage script</button>
+                    <button class="ghost" data-command="Get-PSDrive -PSProvider FileSystem | Format-Table -AutoSize; wmic diskdrive get status">Copy storage script</button>
                 </div>
             </div>
         </section>
