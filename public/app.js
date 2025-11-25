@@ -1282,9 +1282,13 @@
         }
     });
 
-    els.startBtn.addEventListener('click', () => {
-        startTree();
-    });
+    if (els.startBtn) {
+        els.startBtn.addEventListener('click', () => {
+            startTree();
+        });
+    }
+    // Auto-load the tree on page ready so the UI always initializes even if the button click is blocked.
+    startTree();
 
     // Optional embed button (may not exist in all versions)
     if (els.embedBtn && els.embedCode) {

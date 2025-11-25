@@ -1280,9 +1280,12 @@
         }
     });
 
-    els.startBtn.addEventListener('click', () => {
-        startTree();
-    });
+    if (els.startBtn) {
+        els.startBtn.addEventListener('click', () => {
+            startTree();
+        });
+    }
+    startTree();
 
     // Optional embed button (may not exist in all versions)
     if (els.embedBtn && els.embedCode) {
