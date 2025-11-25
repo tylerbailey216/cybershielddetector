@@ -161,7 +161,7 @@
                         id: 'connectivity_network',
                         title: 'Wi-Fi & network',
                         summary: 'Stay online at home or on the go.',
-                        response: `Resolve dropped or missing network connections with these quick branches.`,
+                        response: `Simple Wi?Fi help: 1) Win(logo)+A toggle Wi?Fi/Airplane; 2) Forget/rejoin the network in Settings (gear icon) > Network & internet > Wi?Fi; 3) Restart router/PC and stand close to the router.`,
                         tags: ['network', 'wifi'],
                         children: [
                             {
@@ -994,7 +994,7 @@
                 id: 'hardware_accessories',
                 title: 'Hardware · Accessories',
                 summary: 'Printers, webcams, Bluetooth peripherals.',
-                response: `Use this branch for the tricky devices that live at the edges: printers, webcams, headsets, and Bluetooth earbuds.`,
+                response: `Use this branch for tricky gear. Simple mode: 1) Check power/cables/Wi?Fi lights; 2) Settings (gear icon) > Bluetooth & devices for printers/webcams/headsets; 3) If missing, unplug/replug or reinstall with the vendor app.`,
                 tags: ['peripherals'],
                 children: [
                     {
