@@ -673,6 +673,26 @@ code {
 @media (min-width: 1025px) {
     .hero-shell .floating-badges {
         display: flex;
+        position: absolute;
+        inset: auto;
+        top: 50%;
+        right: -140px;
+        transform: translateY(-50%);
+        align-items: center;
+        gap: 12px;
+    }
+    .hero-shell .floating-badge {
+        position: relative;
+        width: 200px;
+        text-align: center;
+        pointer-events: none;
+    }
+    .tablet-interactive-hint {
+        position: absolute;
+        bottom: -18px;
+        left: 50%;
+        transform: translateX(-50%);
+        margin-top: 0;
     }
 }
 
@@ -708,6 +728,12 @@ code {
     /* Ensure badges stay hidden on very small screens */
     .hero-shell .floating-badges {
         display: none !important;
+    }
+    .tablet-interactive-hint {
+        font-size: 0.82rem;
+        margin-top: 8px;
+        position: static;
+        transform: none;
     }
     .tablet-interactive-hint {
         font-size: 0.82rem;
