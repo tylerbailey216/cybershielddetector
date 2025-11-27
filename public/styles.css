@@ -346,12 +346,13 @@ body::before {
     position: absolute;
     inset: 0;
     pointer-events: none;
-    display: flex;
+    display: none; /* hidden by default; re-enabled only on large screens */
     flex-direction: column;
     gap: 12px;
     justify-content: center;
     align-items: flex-end;
     padding-right: 12px;
+    z-index: 0; /* keep badges under the tablet */
 }
 
 .floating-badge {
@@ -1413,7 +1414,43 @@ a:focus-visible {
         scale(0.95);
 }
 
+/* Default: hide the tablet logo so it never covers the avatar on mobile/tablet */
+.tablet-screen-logo {
+    display: none !important;
+    opacity: 0 !important;
+    visibility: hidden !important;
+}
 
+/* Only show the tablet logo on larger screens where it won't obstruct */
+@media (min-width: 1201px) {
+    .tablet-screen-logo {
+        display: block !important;
+        opacity: 0.5 !important;
+        visibility: visible !important;
+    }
+}
+
+/* Only show badges on larger screens */
+@media (min-width: 1025px) {
+    .hero-shell .floating-badges {
+        display: flex;
+    }
+}
+
+
+
+@media (max-width: 900px) {
+    /* On phones/tablets: hide floating badges entirely so they never cover the avatar/tablet */
+    .hero-shell .floating-badges {
+        display: none !important;
+    }
+    /* Keep the front tablet logo hidden on small screens */
+    .tablet-screen-logo {
+        display: none !important;
+        opacity: 0 !important;
+        visibility: hidden !important;
+    }
+}
 
 @media (max-width: 720px) {
     body {
@@ -1459,38 +1496,9 @@ a:focus-visible {
         transform-origin: center;
         transform: scale(0.88);
     }
+    /* Ensure badges stay hidden on very small screens */
     .hero-shell .floating-badges {
-        position: absolute;
-        inset: -6px;
-        pointer-events: none;
-    }
-    .hero-shell .floating-badge {
-        position: absolute;
-        width: 150px;
-        text-align: center;
-        pointer-events: auto;
-        font-size: 0.78rem;
-        padding: 6px 12px;
-    }
-    .hero-shell .floating-badge:nth-child(1) {
-        top: 28%;
-        left: -14px;
-        transform: translate(-100%, -50%);
-    }
-    .hero-shell .floating-badge:nth-child(2) {
-        top: 28%;
-        right: -14px;
-        transform: translate(100%, -50%);
-    }
-    .hero-shell .floating-badge:nth-child(3) {
-        top: 86%;
-        left: -14px;
-        transform: translate(-100%, -50%);
-    }
-    .hero-shell .floating-badge:nth-child(4) {
-        top: 86%;
-        right: -14px;
-        transform: translate(100%, -50%);
+        display: none !important;
     }
     .tree-header {
         flex-direction: column;
