@@ -113,6 +113,36 @@
             <p>Lightweight, client-side heuristics to flag risky links.</p>
             <button class="ghost" type="button" data-target="#tool-url" aria-label="Open URL safety tool">Open</button>
         </div>
+                <div class="utility-card">
+                    <h3>Receipt generator</h3>
+            <p>Make a quick text receipt and copy or download it.</p>
+            <button class="ghost" type="button" data-target="#tool-receipt" aria-label="Open receipt tool">Open</button>
+        </div>
+                <div class="utility-card">
+                    <h3>Watermark tool</h3>
+            <p>Add a text watermark to an image in-browser.</p>
+            <button class="ghost" type="button" data-target="#tool-watermark" aria-label="Open watermark tool">Open</button>
+        </div>
+                <div class="utility-card">
+                    <h3>Timers & focus</h3>
+            <p>Pomodoro, stopwatch, and quick countdowns.</p>
+            <button class="ghost" type="button" data-target="#tool-timers" aria-label="Open timers tool">Open</button>
+        </div>
+                <div class="utility-card">
+                    <h3>Randomizer</h3>
+            <p>Flip a coin or roll a dice instantly.</p>
+            <button class="ghost" type="button" data-target="#tool-random" aria-label="Open random tool">Open</button>
+        </div>
+                <div class="utility-card">
+                    <h3>Fake login detector</h3>
+            <p>Heuristics to spot suspicious login pages by URL.</p>
+            <button class="ghost" type="button" data-target="#tool-login" aria-label="Open login detector">Open</button>
+        </div>
+                <div class="utility-card">
+                    <h3>Meeting countdown</h3>
+            <p>Set a meeting time and watch the countdown.</p>
+            <button class="ghost" type="button" data-target="#tool-countdown" aria-label="Open meeting countdown">Open</button>
+        </div>
     </div>
 </section><section class="tree-card utilities-section" id="utilities-panels">
     <div class="tree-header">
@@ -224,6 +254,68 @@
             <input type="url" id="urlInput" placeholder="https://example.com" aria-label="URL to check">
             <button class="ghost" type="button" id="urlCheck">Check URL</button>
             <div id="urlResult" class="node-summary"></div>
+        </div>
+                <div class="utility-card" id="tool-receipt">
+                    <h3>Receipt generator</h3>
+            <p>Generate a simple receipt with date/time and totals.</p>
+            <input type="text" id="recBiz" placeholder="Business name">
+            <input type="text" id="recItem" placeholder="Item description">
+            <input type="number" step="0.01" id="recAmt" placeholder="Amount (e.g., 49.99)">
+            <button class="ghost" type="button" id="recBuild">Build receipt</button>
+            <textarea id="recOut" rows="5" readonly placeholder="Receipt will appear here"></textarea>
+            <div style="display:flex; gap:8px; flex-wrap:wrap;">
+                <button class="ghost" type="button" id="recCopy">Copy</button>
+                <button class="ghost" type="button" id="recDownload">Download .txt</button>
+            </div>
+        </div>
+                <div class="utility-card" id="tool-watermark">
+                    <h3>Watermark tool</h3>
+            <p>Add a text watermark to your image locally.</p>
+            <input id="wmInput" type="file" accept="image/*" aria-label="Image for watermark">
+            <input type="text" id="wmText" placeholder="Watermark text">
+            <button class="ghost" type="button" id="wmApply">Apply watermark</button>
+            <div id="wmInfo" class="node-summary"></div>
+            <a id="wmDownload" class="ghost" style="display:none; margin-top:6px;" download="watermarked.jpg">Download watermarked</a>
+        </div>
+                <div class="utility-card" id="tool-timers">
+                    <h3>Timers & focus</h3>
+            <p>Pomodoro, stopwatch, and a basic timer.</p>
+            <div style="display:flex; gap:8px; flex-wrap:wrap;">
+                <input type="number" id="pomoFocus" value="25" style="width:80px"> <span>min focus</span>
+                <input type="number" id="pomoBreak" value="5" style="width:80px"> <span>min break</span>
+            </div>
+            <button class="ghost" type="button" id="pomoStart">Start Pomodoro</button>
+            <button class="ghost" type="button" id="pomoStop">Stop</button>
+            <div id="pomoStatus" class="node-summary">Idle</div>
+            <hr style="border-color:rgba(255,255,255,0.08);">
+            <div style="display:flex; gap:8px; flex-wrap:wrap;">
+                <button class="ghost" type="button" id="swStart">Start/Stop</button>
+                <button class="ghost" type="button" id="swReset">Reset</button>
+            </div>
+            <div id="swStatus" class="node-summary">00:00</div>
+        </div>
+                <div class="utility-card" id="tool-random">
+                    <h3>Randomizer</h3>
+            <p>Flip a coin or roll a six-sided dice.</p>
+            <div style="display:flex; gap:8px; flex-wrap:wrap;">
+                <button class="ghost" type="button" id="coinFlip">Flip coin</button>
+                <button class="ghost" type="button" id="diceRoll">Roll dice</button>
+            </div>
+            <div id="randResult" class="node-summary"></div>
+        </div>
+                <div class="utility-card" id="tool-login">
+                    <h3>Fake login detector</h3>
+            <p>Heuristics on the login URL to flag risks.</p>
+            <input type="url" id="loginUrl" placeholder="https://example.com/login" aria-label="Login URL">
+            <button class="ghost" type="button" id="loginCheck">Check</button>
+            <div id="loginResult" class="node-summary"></div>
+        </div>
+                <div class="utility-card" id="tool-countdown">
+                    <h3>Meeting countdown</h3>
+            <p>Pick a meeting time to see remaining time.</p>
+            <input type="datetime-local" id="meetTime">
+            <button class="ghost" type="button" id="meetStart">Start countdown</button>
+            <div id="meetStatus" class="node-summary">Not set</div>
         </div>
     </div>
 </section>
@@ -718,6 +810,251 @@
                 }
                 const res = checkUrl(val);
                 urlResult.innerHTML = res.map((r) => `${badgeFor(r.level)} ${r.text}`).join('<br>');
+            });
+
+            // Receipt generator
+            const recBiz = document.getElementById('recBiz');
+            const recItem = document.getElementById('recItem');
+            const recAmt = document.getElementById('recAmt');
+            const recBuild = document.getElementById('recBuild');
+            const recOut = document.getElementById('recOut');
+            const recCopy = document.getElementById('recCopy');
+            const recDownload = document.getElementById('recDownload');
+            const buildReceipt = () => {
+                const biz = (recBiz?.value || 'Tech Support Bro').trim();
+                const item = (recItem?.value || 'Service').trim();
+                const amt = parseFloat(recAmt?.value || '0') || 0;
+                const now = new Date();
+                const dateStr = now.toLocaleString();
+                const subtotal = amt;
+                const tax = +(subtotal * 0.07).toFixed(2);
+                const total = +(subtotal + tax).toFixed(2);
+                const body = [
+                    `Receipt`,
+                    `-------------------------`,
+                    `Business: ${biz}`,
+                    `Date: ${dateStr}`,
+                    ``,
+                    `Item: ${item}`,
+                    `Amount: $${subtotal.toFixed(2)}`,
+                    `Tax (est 7%): $${tax.toFixed(2)}`,
+                    `Total: $${total.toFixed(2)}`,
+                    ``,
+                    `Thank you!`
+                ].join('\\n');
+                if (recOut) recOut.value = body;
+                return body;
+            };
+            recBuild?.addEventListener('click', buildReceipt);
+            recCopy?.addEventListener('click', async () => {
+                const text = buildReceipt();
+                try {
+                    await navigator.clipboard.writeText(text);
+                    recCopy.textContent = 'Copied';
+                    setTimeout(() => (recCopy.textContent = 'Copy'), 1200);
+                } catch (e) {
+                    alert('Copy failed. You can copy manually:\\n\\n' + text);
+                }
+            });
+            recDownload?.addEventListener('click', () => {
+                const text = buildReceipt();
+                const blob = new Blob([text], { type: 'text/plain' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = 'receipt.txt';
+                a.click();
+                URL.revokeObjectURL(url);
+            });
+
+            // Watermark tool
+            const wmInput = document.getElementById('wmInput');
+            const wmText = document.getElementById('wmText');
+            const wmApply = document.getElementById('wmApply');
+            const wmInfo = document.getElementById('wmInfo');
+            const wmDownload = document.getElementById('wmDownload');
+            wmApply?.addEventListener('click', () => {
+                const file = wmInput?.files?.[0];
+                const text = (wmText?.value || 'CONFIDENTIAL').trim();
+                if (!file) {
+                    if (wmInfo) wmInfo.textContent = 'Choose an image first.';
+                    return;
+                }
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    const img = new Image();
+                    img.onload = () => {
+                        const canvas = document.createElement('canvas');
+                        canvas.width = img.width;
+                        canvas.height = img.height;
+                        const ctx = canvas.getContext('2d');
+                        ctx.drawImage(img, 0, 0);
+                        ctx.globalAlpha = 0.35;
+                        ctx.fillStyle = '#ffffff';
+                        ctx.font = `${Math.max(24, canvas.width / 15)}px sans-serif`;
+                        ctx.textAlign = 'center';
+                        ctx.textBaseline = 'middle';
+                        ctx.translate(canvas.width / 2, canvas.height / 2);
+                        ctx.rotate(-Math.PI / 6);
+                        ctx.fillText(text, 0, 0);
+                        canvas.toBlob((blob) => {
+                            if (blob) {
+                                const url = URL.createObjectURL(blob);
+                                if (wmDownload) {
+                                    wmDownload.href = url;
+                                    wmDownload.style.display = 'inline-flex';
+                                }
+                                if (wmInfo) wmInfo.textContent = 'Watermark applied. Download below.';
+                            }
+                        }, 'image/jpeg', 0.92);
+                    };
+                    img.src = e.target?.result;
+                };
+                reader.readAsDataURL(file);
+            });
+
+            // Timers: Pomodoro and stopwatch
+            const pomoFocus = document.getElementById('pomoFocus');
+            const pomoBreak = document.getElementById('pomoBreak');
+            const pomoStart = document.getElementById('pomoStart');
+            const pomoStop = document.getElementById('pomoStop');
+            const pomoStatus = document.getElementById('pomoStatus');
+            let pomoTimer = null;
+            let pomoMode = 'focus';
+            let pomoRemaining = 0;
+            const fmtTime = (s) => {
+                const m = Math.floor(s / 60).toString().padStart(2, '0');
+                const sec = Math.floor(s % 60).toString().padStart(2, '0');
+                return `${m}:${sec}`;
+            };
+            const tickPomo = () => {
+                if (pomoRemaining <= 0) {
+                    if (pomoMode === 'focus') {
+                        pomoMode = 'break';
+                        pomoRemaining = Math.max(1, parseInt(pomoBreak?.value || '5', 10) * 60);
+                    } else {
+                        pomoMode = 'focus';
+                        pomoRemaining = Math.max(1, parseInt(pomoFocus?.value || '25', 10) * 60);
+                    }
+                }
+                if (pomoStatus) pomoStatus.textContent = `${pomoMode} - ${fmtTime(pomoRemaining)}`;
+                pomoRemaining -= 1;
+            };
+            pomoStart?.addEventListener('click', () => {
+                clearInterval(pomoTimer);
+                pomoMode = 'focus';
+                pomoRemaining = Math.max(1, parseInt(pomoFocus?.value || '25', 10) * 60);
+                tickPomo();
+                pomoTimer = setInterval(tickPomo, 1000);
+            });
+            pomoStop?.addEventListener('click', () => {
+                clearInterval(pomoTimer);
+                if (pomoStatus) pomoStatus.textContent = 'Idle';
+            });
+
+            const swStart = document.getElementById('swStart');
+            const swReset = document.getElementById('swReset');
+            const swStatus = document.getElementById('swStatus');
+            let swTimer = null;
+            let swRunning = false;
+            let swElapsed = 0;
+            const updateSW = () => {
+                if (swStatus) swStatus.textContent = fmtTime(swElapsed);
+            };
+            swStart?.addEventListener('click', () => {
+                if (swRunning) {
+                    clearInterval(swTimer);
+                    swRunning = false;
+                } else {
+                    swRunning = true;
+                    swTimer = setInterval(() => {
+                        swElapsed += 1;
+                        updateSW();
+                    }, 1000);
+                }
+            });
+            swReset?.addEventListener('click', () => {
+                clearInterval(swTimer);
+                swRunning = false;
+                swElapsed = 0;
+                updateSW();
+            });
+            updateSW();
+
+            // Randomizer
+            const coinFlip = document.getElementById('coinFlip');
+            const diceRoll = document.getElementById('diceRoll');
+            const randResult = document.getElementById('randResult');
+            coinFlip?.addEventListener('click', () => {
+                const res = Math.random() < 0.5 ? 'Heads' : 'Tails';
+                if (randResult) randResult.textContent = res;
+            });
+            diceRoll?.addEventListener('click', () => {
+                const res = Math.floor(Math.random() * 6) + 1;
+                if (randResult) randResult.textContent = `Dice: ${res}`;
+            });
+
+            // Fake login detector (URL heuristics)
+            const loginUrl = document.getElementById('loginUrl');
+            const loginCheck = document.getElementById('loginCheck');
+            const loginResult = document.getElementById('loginResult');
+            const loginHeuristics = (value) => {
+                const findings = [];
+                let parsed;
+                try {
+                    parsed = new URL(value);
+                } catch {
+                    findings.push({ level: 'red', text: 'Not a valid URL.' });
+                    return findings;
+                }
+                const host = parsed.hostname.toLowerCase();
+                if (parsed.protocol !== 'https:') findings.push({ level: 'red', text: 'Login over HTTP is unsafe.' });
+                if (hasPunycode(host)) findings.push({ level: 'red', text: 'Punycode/IDN detected (look-alike risk).' });
+                if (looksShortener(host)) findings.push({ level: 'yellow', text: 'Shortened link; destination hidden.' });
+                if ((parsed.pathname || '').toLowerCase().includes('login') === false && (parsed.pathname || '').toLowerCase().includes('signin') === false) {
+                    findings.push({ level: 'yellow', text: 'Path does not look like a login page; ensure the URL is correct.' });
+                }
+                if (parsed.username || parsed.password) findings.push({ level: 'red', text: 'Embedded credentials are suspicious.' });
+                if (!findings.length) findings.push({ level: 'green', text: 'No obvious red flags found, but verify the domain manually.' });
+                return findings;
+            };
+            loginCheck?.addEventListener('click', () => {
+                const val = loginUrl?.value.trim();
+                if (!val) {
+                    loginResult.textContent = 'Enter a login URL to check.';
+                    return;
+                }
+                const res = loginHeuristics(val);
+                loginResult.innerHTML = res.map((r) => `${badgeFor(r.level)} ${r.text}`).join('<br>');
+            });
+
+            // Meeting countdown
+            const meetTime = document.getElementById('meetTime');
+            const meetStart = document.getElementById('meetStart');
+            const meetStatus = document.getElementById('meetStatus');
+            let meetTimer = null;
+            const updateMeet = () => {
+                if (!meetTime?.value) {
+                    if (meetStatus) meetStatus.textContent = 'Not set';
+                    return;
+                }
+                const target = new Date(meetTime.value);
+                const now = new Date();
+                const diff = (target.getTime() - now.getTime()) / 1000;
+                if (diff <= 0) {
+                    if (meetStatus) meetStatus.textContent = 'Meeting time reached.';
+                    clearInterval(meetTimer);
+                    return;
+                }
+                const hours = Math.floor(diff / 3600);
+                const minutes = Math.floor((diff % 3600) / 60);
+                const seconds = Math.floor(diff % 60);
+                if (meetStatus) meetStatus.textContent = `${hours}h ${minutes}m ${seconds}s remaining`;
+            };
+            meetStart?.addEventListener('click', () => {
+                clearInterval(meetTimer);
+                updateMeet();
+                meetTimer = setInterval(updateMeet, 1000);
             });
 
             const linkInput = document.getElementById('linkInput');
