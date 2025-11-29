@@ -58,39 +58,110 @@
             </div>
             <div class="utilities-grid">
                 <div class="utility-card">
-                    <h3>📄 PDF mini-suite</h3>
+                    <h3>ðŸ“„ PDF mini-suite</h3>
                     <p>Merge, split, sign, and fill PDFs without leaving the page.</p>
-                    <button class="ghost" type="button" aria-label="Open PDF tool">Open</button>
+                    <button class="ghost" type="button" data-target="#tool-pdf" aria-label="Open PDF tool">Open</button>
                 </div>
                 <div class="utility-card">
-                    <h3>🖼️ Screenshots & images</h3>
+                    <h3>ðŸ–¼ï¸ Screenshots & images</h3>
                     <p>Capture/annotate, resize, or compress images for sharing.</p>
-                    <button class="ghost" type="button" aria-label="Open image tool">Open</button>
+                    <button class="ghost" type="button" data-target="#tool-image" aria-label="Open image tool">Open</button>
                 </div>
                 <div class="utility-card">
-                    <h3>⌨️ Snippets & canned replies</h3>
+                    <h3>âŒ¨ï¸ Snippets & canned replies</h3>
                     <p>Save quick text snippets and paste canned responses with one click.</p>
-                    <button class="ghost" type="button" aria-label="Open snippets tool">Open</button>
+                    <button class="ghost" type="button" data-target="#tool-snippets" aria-label="Open snippets tool">Open</button>
                 </div>
                 <div class="utility-card">
-                    <h3>🔗 Short links + QR</h3>
+                    <h3>ðŸ”— Short links + QR</h3>
                     <p>Create short links with basic click counts and matching QR codes.</p>
-                    <button class="ghost" type="button" aria-label="Open link tool">Open</button>
+                    <button class="ghost" type="button" data-target="#tool-links" aria-label="Open link tool">Open</button>
                 </div>
                 <div class="utility-card">
-                    <h3>🕑 Time zones & scheduling</h3>
+                    <h3>ðŸ•‘ Time zones & scheduling</h3>
                     <p>Find overlap across time zones and draft a scheduler blurb.</p>
-                    <button class="ghost" type="button" aria-label="Open time zone tool">Open</button>
+                    <button class="ghost" type="button" data-target="#tool-time" aria-label="Open time zone tool">Open</button>
                 </div>
                 <div class="utility-card">
-                    <h3>📊 CSV cleanup + OCR</h3>
+                    <h3>ðŸ“Š CSV cleanup + OCR</h3>
                     <p>Trim/dedupe CSVs and convert images/PDFs to text with OCR.</p>
-                    <button class="ghost" type="button" aria-label="Open data tool">Open</button>
+                    <button class="ghost" type="button" data-target="#tool-data" aria-label="Open data tool">Open</button>
                 </div>
                 <div class="utility-card">
-                    <h3>🔒 Passwords & pastebin</h3>
+                    <h3>ðŸ”’ Passwords & pastebin</h3>
                     <p>Generate strong passwords and share short-lived secure snippets.</p>
-                    <button class="ghost" type="button" aria-label="Open security tool">Open</button>
+                    <button class="ghost" type="button" data-target="#tool-security" aria-label="Open security tool">Open</button>
+                </div>
+            </div>
+        </section>
+
+        <section class="tree-card utilities-section" id="utilities-panels">
+            <div class="tree-header">
+                <div>
+                    <p class="node-path">Tools</p>
+                    <h2>Swiss army toolset</h2>
+                    <p class="node-summary">Simple panels you can tap to get the job done. Copy/download as you go.</p>
+                </div>
+            </div>
+            <div class="utilities-grid">
+                <div class="utility-card" id="tool-pdf">
+                    <h3>ðŸ“„ PDF mini-suite</h3>
+                    <p>Merge or split PDFs here; signing/filling support coming next.</p>
+                    <input id="pdfInput" type="file" accept="application/pdf" multiple aria-label="PDF files">
+                    <button class="ghost" type="button" id="pdfProcess">Merge / Split (coming soon)</button>
+                    <div id="pdfOutput" class="node-summary"></div>
+                </div>
+                <div class="utility-card" id="tool-image">
+                    <h3>ðŸ–¼ï¸ Screenshots & images</h3>
+                    <p>Drop an image to resize/compress. Annotate with your screenshot tool, then upload.</p>
+                    <input id="imageInput" type="file" accept="image/*" aria-label="Image file">
+                    <div style="display:flex; gap:8px; flex-wrap:wrap;">
+                        <label style="font-size:0.9rem; color: var(--text-muted);">Max side (px): <input id="imageMax" type="number" value="1280" style="width:90px"></label>
+                        <label style="font-size:0.9rem; color: var(--text-muted);">Quality: <input id="imageQuality" type="number" min="0.1" max="1" step="0.1" value="0.8" style="width:70px"></label>
+                    </div>
+                    <button class="ghost" type="button" id="imageProcess">Compress / Resize</button>
+                    <div id="imageInfo" class="node-summary"></div>
+                    <a id="imageDownload" class="ghost" style="display:none; margin-top:6px;" download="compressed.jpg">Download image</a>
+                </div>
+                <div class="utility-card" id="tool-snippets">
+                    <h3>âŒ¨ï¸ Snippets & replies</h3>
+                    <p>Save a quick reply and copy it with one tap.</p>
+                    <textarea id="snippetInput" rows="3" placeholder="Type your canned reply..."></textarea>
+                    <button class="ghost" type="button" id="snippetCopy">Copy snippet</button>
+                </div>
+                <div class="utility-card" id="tool-links">
+                    <h3>ðŸ”— Short links + QR</h3>
+                    <p>Paste a URL, generate a short link + QR (placeholder).</p>
+                    <input type="url" id="linkInput" placeholder="https://example.com" aria-label="Long URL">
+                    <button class="ghost" type="button" id="linkMake">Generate</button>
+                    <div id="linkOutput" class="node-summary"></div>
+                    <img id="qrImage" alt="QR code" style="display:none; width:120px; height:120px; border-radius: 10px; border:1px solid rgba(255,255,255,0.08);">
+                </div>
+                <div class="utility-card" id="tool-time">
+                    <h3>ðŸ•‘ Time zones</h3>
+                    <p>Pick two zones and see local time for each.</p>
+                    <input type="text" id="tzA" placeholder="e.g., America/New_York" aria-label="Time zone A">
+                    <input type="text" id="tzB" placeholder="e.g., Europe/London" aria-label="Time zone B">
+                    <div id="tzOutput" class="node-summary">Enter IANA zones to compare.</div>
+                </div>
+                <div class="utility-card" id="tool-data">
+                    <h3>ðŸ“Š CSV cleanup + OCR</h3>
+                    <p>Upload CSV to trim/dedupe; upload image/PDF for OCR (placeholder).</p>
+                    <input id="dataFile" type="file" accept=".csv, text/csv, application/pdf, image/*" aria-label="CSV or image">
+                    <div style="display:flex; gap:8px; flex-wrap:wrap; margin-top:6px;">
+                        <button class="ghost" type="button" id="dataClean">Clean CSV</button>
+                        <button class="ghost" type="button" id="dataOCR">Run OCR (coming soon)</button>
+                    </div>
+                    <textarea id="dataOutput" rows="4" placeholder="Cleaned CSV will appear here..."></textarea>
+                </div>
+                <div class="utility-card" id="tool-security">
+                    <h3>ðŸ”’ Passwords & pastebin</h3>
+                    <p>Generate a strong password and copy it.</p>
+                    <input type="text" id="pwdOutput" readonly aria-label="Generated password">
+                    <div style="display:flex; gap:8px; flex-wrap:wrap;">
+                        <button class="ghost" type="button" id="pwdGen">Generate</button>
+                        <button class="ghost" type="button" id="pwdCopy">Copy</button>
+                    </div>
                 </div>
             </div>
         </section>
@@ -100,12 +171,12 @@
                 <div>
                     <p class="node-path">Start here</p>
                     <h2>How this tool works</h2>
-                    <p class="node-summary">Tap “Start troubleshooting” first, then pick your category. Follow the branching steps, and use Back or Start over anytime.</p>
+                    <p class="node-summary">Tap â€œStart troubleshootingâ€ first, then pick your category. Follow the branching steps, and use Back or Start over anytime.</p>
                 </div>
             </div>
             <div class="node-body">
                 <div class="node-response">
-                    <strong>What to expect:</strong> click “Start troubleshooting,” choose your device/issue, then follow clear step-by-step actions with official links. Use Back to adjust or Start over to reset. Nothing is stored or sent—everything runs in your browser.
+                    <strong>What to expect:</strong> click â€œStart troubleshooting,â€ choose your device/issue, then follow clear step-by-step actions with official links. Use Back to adjust or Start over to reset. Nothing is stored or sentâ€”everything runs in your browser.
                     <ul class="node-summary" style="margin-top: 10px; text-align: left;">
                         <li>[WiFi] toggles: Windows Start > Settings > Network & Internet > Wi-Fi; iOS Settings > Wi-Fi; Android quick settings pull-down.</li>
                         <li>[Gear] Settings opens device menus (Windows gear icon, iOS/Android Settings app).</li>
@@ -196,7 +267,178 @@
 
     </main>
     <script src="./app.js"></script>
+    <script>
+        (() => {
+            const scrollButtons = document.querySelectorAll('[data-target]');
+            scrollButtons.forEach((btn) => {
+                btn.addEventListener('click', () => {
+                    const target = document.querySelector(btn.getAttribute('data-target'));
+                    if (target) {
+                        target.classList.add('pulse');
+                        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                        setTimeout(() => target.classList.remove('pulse'), 650);
+                    }
+                });
+            });
+
+            const snippetInput = document.getElementById('snippetInput');
+            const snippetCopy = document.getElementById('snippetCopy');
+            snippetCopy?.addEventListener('click', async () => {
+                const text = snippetInput?.value || '';
+                try {
+                    await navigator.clipboard.writeText(text);
+                    snippetCopy.textContent = 'Copied';
+                    setTimeout(() => (snippetCopy.textContent = 'Copy snippet'), 1200);
+                } catch (e) {
+                    alert('Copy failed. You can copy manually:\n\n' + text);
+                }
+            });
+
+            const pwdOutput = document.getElementById('pwdOutput');
+            const pwdGen = document.getElementById('pwdGen');
+            const pwdCopy = document.getElementById('pwdCopy');
+            const makePwd = () => {
+                const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz23456789!@#$%^&*';
+                let out = '';
+                for (let i = 0; i < 16; i++) out += chars[Math.floor(Math.random() * chars.length)];
+                return out;
+            };
+            pwdGen?.addEventListener('click', () => {
+                if (pwdOutput) pwdOutput.value = makePwd();
+            });
+            pwdCopy?.addEventListener('click', async () => {
+                const text = pwdOutput?.value || '';
+                try {
+                    await navigator.clipboard.writeText(text);
+                    pwdCopy.textContent = 'Copied';
+                    setTimeout(() => (pwdCopy.textContent = 'Copy'), 1200);
+                } catch (e) {
+                    alert('Copy failed. You can copy manually:\n\n' + text);
+                }
+            });
+
+            const linkInput = document.getElementById('linkInput');
+            const linkMake = document.getElementById('linkMake');
+            const linkOutput = document.getElementById('linkOutput');
+            const qrImage = document.getElementById('qrImage');
+            const isValidUrl = (value) => {
+                try { new URL(value); return true; } catch { return false; }
+            };
+            linkMake?.addEventListener('click', () => {
+                const url = linkInput?.value.trim();
+                if (!url || !isValidUrl(url)) {
+                    linkOutput.textContent = 'Enter a valid URL (https://...)';
+                    if (qrImage) qrImage.style.display = 'none';
+                    return;
+                }
+                linkOutput.innerHTML = `Short link (placeholder): <a href="${url}" target="_blank" rel="noopener">${url}</a><br>QR generated below.`;
+                if (qrImage) {
+                    qrImage.src = `https://api.qrserver.com/v1/create-qr-code/?size=140x140&data=${encodeURIComponent(url)}`;
+                    qrImage.style.display = 'block';
+                }
+            });
+
+            const tzA = document.getElementById('tzA');
+            const tzB = document.getElementById('tzB');
+            const tzOutput = document.getElementById('tzOutput');
+            const formatZone = (zone) => {
+                try {
+                    return new Intl.DateTimeFormat('en-US', {
+                        timeZone: zone,
+                        hour: '2-digit',
+                        minute: '2-digit',
+                        weekday: 'short',
+                        month: 'short',
+                        day: '2-digit'
+                    }).format(new Date());
+                } catch {
+                    return null;
+                }
+            };
+            const updateTZ = () => {
+                const a = tzA?.value.trim();
+                const b = tzB?.value.trim();
+                const fa = a ? formatZone(a) : null;
+                const fb = b ? formatZone(b) : null;
+                if (fa && fb) {
+                    tzOutput.textContent = `${a}: ${fa} | ${b}: ${fb}`;
+                } else {
+                    tzOutput.textContent = 'Enter IANA time zones (e.g., America/New_York, Europe/London).';
+                }
+            };
+            tzA?.addEventListener('change', updateTZ);
+            tzB?.addEventListener('change', updateTZ);
+
+            const dataFile = document.getElementById('dataFile');
+            const dataClean = document.getElementById('dataClean');
+            const dataOutput = document.getElementById('dataOutput');
+            dataClean?.addEventListener('click', () => {
+                const file = dataFile?.files?.[0];
+                if (!file) {
+                    dataOutput.value = 'Choose a CSV file first.';
+                    return;
+                }
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    const text = e.target?.result || '';
+                    const rows = text.split(/\r?\n/).map((r) => r.trim()).filter(Boolean);
+                    const cleaned = Array.from(new Set(rows)).join('\n');
+                    dataOutput.value = cleaned;
+                };
+                reader.readAsText(file);
+            });
+
+            const imageInput = document.getElementById('imageInput');
+            const imageMax = document.getElementById('imageMax');
+            const imageQuality = document.getElementById('imageQuality');
+            const imageInfo = document.getElementById('imageInfo');
+            const imageDownload = document.getElementById('imageDownload');
+            const imageProcess = document.getElementById('imageProcess');
+            imageProcess?.addEventListener('click', () => {
+                const file = imageInput?.files?.[0];
+                if (!file) {
+                    imageInfo.textContent = 'Choose an image first.';
+                    return;
+                }
+                const maxSide = Math.max(300, parseInt(imageMax?.value || '1280', 10));
+                const quality = Math.min(1, Math.max(0.1, parseFloat(imageQuality?.value || '0.8')));
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    const img = new Image();
+                    img.onload = () => {
+                        const canvas = document.createElement('canvas');
+                        let { width, height } = img;
+                        if (width > height && width > maxSide) {
+                            height = Math.round((height / width) * maxSide);
+                            width = maxSide;
+                        } else if (height > width && height > maxSide) {
+                            width = Math.round((width / height) * maxSide);
+                            height = maxSide;
+                        }
+                        canvas.width = width;
+                        canvas.height = height;
+                        const ctx = canvas.getContext('2d');
+                        ctx.drawImage(img, 0, 0, width, height);
+                        canvas.toBlob(
+                            (blob) => {
+                                if (blob) {
+                                    const url = URL.createObjectURL(blob);
+                                    imageDownload.href = url;
+                                    imageDownload.download = 'compressed.jpg';
+                                    imageDownload.style.display = 'inline-flex';
+                                    imageInfo.textContent = `Compressed to ${width}x${height} at quality ${quality}`;
+                                }
+                            },
+                            'image/jpeg',
+                            quality
+                        );
+                    };
+                    img.src = e.target?.result;
+                };
+                reader.readAsDataURL(file);
+            });
+        })();
+    </script>
 </body>
 </html>
-
 
