@@ -1351,6 +1351,26 @@
         setInterval(updateTime, 30 * 1000);
         setInterval(nextAffirmation, 10 * 1000);
         if (nextBtn) nextBtn.addEventListener('click', nextAffirmation);
+
+        // Light tilt/drag effect for the virtual phone
+        const stage = document.querySelector('[data-role=\"affirmation-stage\"]');
+        const rig = document.querySelector('[data-role=\"affirmation-rig\"]');
+        if (stage && rig) {
+            const maxTilt = 12;
+            const resetTilt = () => {
+                rig.style.transform = 'rotateX(0deg) rotateY(0deg)';
+            };
+            stage.addEventListener('pointermove', (e) => {
+                const rect = stage.getBoundingClientRect();
+                const x = ((e.clientX - rect.left) / rect.width) * 2 - 1;
+                const y = ((e.clientY - rect.top) / rect.height) * 2 - 1;
+                const rotY = x * maxTilt;
+                const rotX = -y * maxTilt;
+                rig.style.transform = `rotateX(${rotX}deg) rotateY(${rotY}deg)`;
+            });
+            stage.addEventListener('pointerleave', resetTilt);
+            stage.addEventListener('pointerup', resetTilt);
+        }
     })();
 })();
 
