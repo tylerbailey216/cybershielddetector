@@ -8,6 +8,13 @@
     <script src="https://unpkg.com/pdf-lib/dist/pdf-lib.min.js"></script>
 </head>
 <body>
+    <nav style="position:sticky;top:0;z-index:999;display:flex;gap:12px;align-items:center;padding:10px 14px;background:rgba(16,18,30,0.8);backdrop-filter:blur(8px);">
+        <a href="#tools" style="color:#9fe8ff;text-decoration:none;font-weight:600;">Tools</a>
+        <a href="#troubleshooting" style="color:#9fe8ff;text-decoration:none;font-weight:600;">Troubleshooting</a>
+        <a href="#wellness" style="color:#9fe8ff;text-decoration:none;font-weight:600;">Wellness</a>
+        <a href="#about" style="color:#9fe8ff;text-decoration:none;font-weight:600;">About</a>
+        <a href="#privacy" style="color:#9fe8ff;text-decoration:none;font-weight:600;">Privacy</a>
+    </nav>
     <main class="layout">
         <section class="hero hero-shell">
             <div class="hero-content">
@@ -51,7 +58,7 @@
             </div>
         </section>
 
-        <section class="tree-card utilities-section">
+        <section class="tree-card utilities-section" id="tools">
     <div class="tree-header">
         <div>
             <p class="node-path">Office utilities</p>
@@ -343,7 +350,7 @@
             </div>
         </section>
 
-        <section class="tree-card" id="treePanel">
+        <section class="tree-card" id="troubleshooting">
             <div class="tree-header">
                 <div>
                     <p class="node-path" id="nodePath">Start</p>
@@ -366,7 +373,7 @@
             </div>
         </section>
 
-        <section class="vibe-section" id="affirmationExperience">
+        <section class="vibe-section" id="wellness">
             <div class="vibe-copy">
                 <p class="eyebrow">Mental reset</p>
                 <h2>Virtual phone affirmations</h2>
@@ -417,7 +424,7 @@
             </div>
         </section>
 
-        <section class="privacy-note">
+        <section class="privacy-note" id="privacy">
             Privacy: We don't collect personal data. This tool runs locally in your browser; no analytics or telemetry are sent.
         </section>
 
@@ -1078,6 +1085,7 @@
                 if (!aboutHost) return;
                 const about = document.createElement('section');
                 about.className = 'tree-card';
+                about.id = 'about';
                 about.innerHTML = `
                     <div class="tree-header">
                         <div>
