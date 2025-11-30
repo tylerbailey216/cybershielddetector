@@ -254,7 +254,7 @@
 3. Run Error Checking from File Explorer -> drive Properties -> Tools.`,
                                 tags: ['usb'],
                                 links: [
-                                    { label: 'Microsoft: Windows can't find USB device', url: 'https://support.microsoft.com/windows/what-to-do-if-windows-11-or-windows-10-can-t-find-a-usb-device-ceddd7a6-1ef0-adaa-0f19-013ba6c2b4cf' },
+                                    { label: "Microsoft: Windows can't find USB device", url: 'https://support.microsoft.com/windows/what-to-do-if-windows-11-or-windows-10-can-t-find-a-usb-device-ceddd7a6-1ef0-adaa-0f19-013ba6c2b4cf' },
                                 ],
                             },
                         ],
