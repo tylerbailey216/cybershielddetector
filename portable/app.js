@@ -1241,7 +1241,7 @@
     const startTree = () => {
         state.history = [DECISION_TREE];
         render();
-        els.panel.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        if (els.panel) { els.panel.scrollIntoView({ behavior: "smooth", block: "start" }); }
     };
 
     els.backBtn.addEventListener('click', () => {
@@ -1280,11 +1280,9 @@
         }
     });
 
-    if (els.startBtn) {
-        [els.startBtn, document.getElementById('inlineStartBtn')].forEach(btn => btn && btn.addEventListener('click', () => {
-            startTree();
-        });
-    }
+    [els.startBtn, document.getElementById('inlineStartBtn')].forEach(btn => btn && btn.addEventListener('click', () => {
+        startTree();
+    }));
     startTree();
 
     // Optional embed button (may not exist in all versions)

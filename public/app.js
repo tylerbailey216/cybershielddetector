@@ -1243,7 +1243,7 @@
     const startTree = () => {
         state.history = [DECISION_TREE];
         render();
-        els.panel.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        if (els.panel) { els.panel.scrollIntoView({ behavior: "smooth", block: "start" }); }
     };
 
     els.backBtn.addEventListener('click', () => {
@@ -1282,11 +1282,9 @@
         }
     });
 
-    if (els.startBtn) {
-        [els.startBtn, document.getElementById('inlineStartBtn')].forEach(btn => btn && btn.addEventListener('click', () => {
-            startTree();
-        });
-    }
+    [els.startBtn, document.getElementById('inlineStartBtn')].forEach(btn => btn && btn.addEventListener('click', () => {
+        startTree();
+    }));
     // Auto-load the tree on page ready so the UI always initializes even if the button click is blocked.
     startTree();
 
