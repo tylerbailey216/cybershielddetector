@@ -53,12 +53,60 @@
                 padding: 6px 8px;
             }
         }
+
+        /* Social safety tabs */
+        .tab-set {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-bottom: 16px;
+        }
+        .tab-button {
+            padding: 10px 14px;
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            background: var(--panel);
+            color: var(--text);
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .tab-button.active {
+            background: var(--accent-soft);
+            border-color: var(--accent);
+            color: var(--text);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.25);
+        }
+        .tab-panel {
+            display: none;
+            border-radius: 16px;
+            border: 1px dashed var(--border);
+            padding: 16px;
+            background: var(--panel);
+        }
+        .tab-panel.active { display: block; }
+        .tab-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px,1fr));
+            gap: 16px;
+        }
+        .tab-panel textarea,
+        .tab-panel input {
+            width: 100%;
+            padding: 10px 12px;
+            border-radius: 10px;
+            border: 1px solid var(--border);
+            background: var(--panel-strong);
+            color: var(--text);
+        }
+        .tab-panel .ghost {
+            margin-top: 8px;
+        }
     </style>
 </head>
 <body>
     <div class="floating-nav">
         <a href="#tools">Tools</a>
-        <a href="#treePanel">Troubleshooting</a>
+        <a href="#social">Social safety</a>
         <a href="#wellness">Wellness</a>
         <a href="#about">About</a>
         <a href="#privacy">Privacy</a>
@@ -68,7 +116,7 @@
             <div class="hero-content">
                 <img src="./techsupportbrologo.png" alt="Tech Support Bro" class="hero-logo">
                 <div class="hero-actions">
-                    <button id="startTree" class="primary">Start troubleshooting</button>
+                    <button class="primary" data-target="#tools">Open tools</button>
                     <a class="secondary" href="https://docs.google.com/forms/d/e/1FAIpQLSfoxhKvog1UU0YnpnK1U1toIyQkNborx3IAVtJOpc-5VwKhAg/viewform?usp=dialog" target="_blank" rel="noopener">
                         Escalate to Garin
                     </a>
@@ -105,46 +153,67 @@
                 </div>
             </div>
         </section>
-<section class="tree-card">
+<section class="tree-card" id="social">
             <div class="tree-header">
                 <div>
-                    <p class="node-path">Guided troubleshooting</p>
-                    <h2>How this tool works</h2>
-                    <p class="node-summary">Tap "Start troubleshooting" first, then pick your category. Follow the branching steps, and use Back or Start over anytime.</p>
+                    <p class="node-path">Social safety</p>
+                    <h2>Social Threat Triage</h2>
+                    <p class="node-summary">Assess links, messages, and profiles before you click. Nothing leaves your browser.</p>
                 </div>
             </div>
             <div class="node-body">
-                <div class="node-response">
-                    <strong>What to expect:</strong> click <button type="button" id="inlineStartBtn" class="primary" style="padding:6px 12px; font-size:0.95rem;">Start troubleshooting</button>, choose your device/issue, then follow clear step-by-step actions with official links. Use Back to adjust or Start over to reset. Nothing is stored or sent?everything runs in your browser.
-                    <ul class="node-summary" style="margin-top: 10px; text-align: left;">
-                        <li>[WiFi] toggles: Windows Start > Settings > Network & Internet > Wi-Fi; iOS Settings > Wi-Fi; Android quick settings pull-down.</li>
-                        <li>[Gear] Settings opens device menus (Windows gear icon, iOS/Android Settings app).</li>
-                        <li>[Power] Restart: hold power button, choose Restart (or Settings > System > Restart).</li>
-                        <li>[Back] Use Back/Start over anytime to change direction.</li>
-                    </ul>
+                <div class="tab-set" id="socialTabs">
+                    <button class="tab-button active" data-tab="link">Link inspector</button>
+                    <button class="tab-button" data-tab="message">Message scanner</button>
+                    <button class="tab-button" data-tab="impersonation">Impersonation checklist</button>
+                    <button class="tab-button" data-tab="summary">Risk summary</button>
                 </div>
-            </div>
-        </section>
-        <section class="tree-card" id="treePanel">
-            <div class="tree-header">
-                <div>
-                    <p class="node-path" id="nodePath">Start</p>
-                    <h2 id="nodeTitle">Choose a Help Topic</h2>
-                    <p class="node-summary" id="nodeSummary">Click "Start troubleshooting" to load the root of the decision tree.</p>
+
+                <div class="tab-panel active" data-panel="link">
+                    <div class="tab-grid">
+                        <div>
+                            <p class="node-summary">Paste a link to see the real domain, flags, and a cleaned version.</p>
+                            <input type="url" id="linkInputSocial" placeholder="https://example.com/..." aria-label="Link to inspect">
+                            <button class="ghost" type="button" id="linkCheckSocial">Inspect link</button>
+                        </div>
+                        <div>
+                            <div id="linkResultSocial" class="node-summary">No link inspected yet.</div>
+                            <div id="linkCleanSocial" class="node-summary"></div>
+                        </div>
+                    </div>
                 </div>
-                <div class="tree-controls">
-                    <button class="ghost" id="backBtn" disabled>Back</button>
-                    <button class="ghost" id="restartBtn" disabled>Start over</button>
-                    <button class="ghost" id="copyPlanBtn" disabled>Copy plan</button>
+
+                <div class="tab-panel" data-panel="message">
+                    <p class="node-summary">Scan a comment/DM for urgency, authority, and scammy phrasing.</p>
+                    <textarea id="msgInput" rows="4" placeholder="Paste the message or comment..."></textarea>
+                    <button class="ghost" type="button" id="msgScan">Scan message</button>
+                    <div id="msgResult" class="node-summary">No message scanned yet.</div>
                 </div>
-            </div>
-            <div class="node-body">
-                <div class="node-response" id="nodeResponse">
-                    The offline instructions will appear here after you pick a branch.
+
+                <div class="tab-panel" data-panel="impersonation">
+                    <p class="node-summary">Walk through a quick checklist to spot impersonation or fake pages.</p>
+                    <div class="tab-grid">
+                        <div>
+                            <label>Is the name/URL slightly misspelled? <input type="checkbox" id="impMisspell"></label><br>
+                            <label>Is the account new or low activity? <input type="checkbox" id="impNew"></label><br>
+                            <label>Comments/DMs closed or disabled? <input type="checkbox" id="impClosed"></label><br>
+                        </div>
+                        <div>
+                            <label>Verified or official badge missing? <input type="checkbox" id="impBadge"></label><br>
+                            <label>Urgent giveaway/crypto ask? <input type="checkbox" id="impAsk"></label><br>
+                            <label>Followers-to-engagement mismatch? <input type="checkbox" id="impEngagement"></label><br>
+                        </div>
+                    </div>
+                    <button class="ghost" type="button" id="impCheck">Check risk</button>
+                    <div id="impResult" class="node-summary">No checklist yet.</div>
                 </div>
-                <div class="node-tags" id="nodeTags"></div>
-                <div class="node-links" id="nodeLinks"></div>
-                <div class="node-children" id="nodeChildren"></div>
+
+                <div class="tab-panel" data-panel="summary">
+                    <p class="node-summary">Quick summary you can screenshot or share.</p>
+                    <textarea id="summaryNotes" rows="3" placeholder="Add notes or context (optional)"></textarea>
+                    <button class="ghost" type="button" id="summaryBuild">Build summary</button>
+                    <div id="summaryResult" class="node-summary">No summary yet.</div>
+                </div>
             </div>
         </section>
 <section class="tree-card utilities-section" id="tools">
@@ -510,6 +579,111 @@
                         setTimeout(() => target.classList.remove('pulse'), 650);
                     }
                 });
+            });
+
+            // Social safety tabs + heuristics (browser-only)
+            const tabButtons = document.querySelectorAll('.tab-button');
+            const tabPanels = document.querySelectorAll('.tab-panel');
+            tabButtons.forEach((btn) => {
+                btn.addEventListener('click', () => {
+                    const tab = btn.getAttribute('data-tab');
+                    tabButtons.forEach((b) => b.classList.toggle('active', b === btn));
+                    tabPanels.forEach((p) => p.classList.toggle('active', p.getAttribute('data-panel') === tab));
+                });
+            });
+
+            // Link inspector
+            const linkInputSocial = document.getElementById('linkInputSocial');
+            const linkCheckSocial = document.getElementById('linkCheckSocial');
+            const linkResultSocial = document.getElementById('linkResultSocial');
+            const linkCleanSocial = document.getElementById('linkCleanSocial');
+            const cleanTracking = (url) => {
+                try {
+                    const u = new URL(url);
+                    const params = new URLSearchParams(u.search);
+                    ['utm_source','utm_medium','utm_campaign','utm_term','utm_content','fbclid','gclid','mc_eid'].forEach((k) => params.delete(k));
+                    u.search = params.toString();
+                    return u.toString();
+                } catch {
+                    return url;
+                }
+            };
+            linkCheckSocial?.addEventListener('click', () => {
+                const raw = linkInputSocial?.value.trim();
+                if (!raw) {
+                    linkResultSocial.textContent = 'Enter a link to inspect.';
+                    linkCleanSocial.textContent = '';
+                    return;
+                }
+                let parsed;
+                const flags = [];
+                try {
+                    parsed = new URL(raw);
+                } catch {
+                    linkResultSocial.textContent = 'Not a valid URL. Check for typos.';
+                    linkCleanSocial.textContent = '';
+                    return;
+                }
+                const host = parsed.hostname;
+                if (/(\d+\.){3}\d+/.test(host)) flags.push('IP address instead of a named domain.');
+                if (host.split('.').length > 3) flags.push('Deep subdomain (could hide the real domain).');
+                if (/[0-9]{5,}/.test(host)) flags.push('Numbers in the domain may be a look-alike.');
+                if (/[^\x00-\x7F]/.test(host)) flags.push('Unicode characters detected (possible look-alike).');
+                if (parsed.pathname.toLowerCase().includes('login') === false && parsed.pathname.toLowerCase().includes('signin') === false && parsed.pathname.length > 1) {
+                    flags.push('Path does not look like a login page; verify before entering credentials.');
+                }
+                if (parsed.search.includes('base64') || parsed.href.toLowerCase().includes('data:')) flags.push('Obfuscated parameters detected.');
+                const cleaned = cleanTracking(raw);
+                linkResultSocial.innerHTML = `<strong>Domain:</strong> ${host}<br><strong>Path:</strong> ${parsed.pathname || '/'}<br><strong>Flags:</strong> ${flags.length ? flags.join(' ') : 'No obvious red flags.'}`;
+                linkCleanSocial.innerHTML = `<strong>Cleaned link:</strong> <a href="${cleaned}" target="_blank" rel="noopener">${cleaned}</a>`;
+            });
+
+            // Message scanner
+            const msgInput = document.getElementById('msgInput');
+            const msgScan = document.getElementById('msgScan');
+            const msgResult = document.getElementById('msgResult');
+            msgScan?.addEventListener('click', () => {
+                const text = (msgInput?.value || '').trim();
+                if (!text) {
+                    msgResult.textContent = 'Paste a message to scan.';
+                    return;
+                }
+                const flags = [];
+                const lower = text.toLowerCase();
+                if (/verify|suspend|locked|unauthorized/.test(lower)) flags.push('Account/security language detected.');
+                if (/immediately|urgent|24 hours|right now/.test(lower)) flags.push('Urgency or deadline language.');
+                if (/giveaway|winner|prize|lottery/.test(lower)) flags.push('Giveaway/lottery phrasing.');
+                if (/crypto|usdt|bitcoin|investment|roi/.test(lower)) flags.push('Crypto/investment solicitation.');
+                if (/payment|deposit|wire|western union|zelle/.test(lower)) flags.push('Payment request language.');
+                if (/click.*link|open.*link/.test(lower)) flags.push('Instruction to click a link.');
+                const risk = flags.length >= 3 ? 'High' : flags.length === 2 ? 'Medium' : flags.length === 1 ? 'Low' : 'Low';
+                msgResult.innerHTML = `<strong>Risk:</strong> ${risk}. ${flags.length ? flags.join(' ') : 'No strong scam patterns detected. Still verify the sender.'}`;
+            });
+
+            // Impersonation checklist
+            const impFields = ['impMisspell','impNew','impClosed','impBadge','impAsk','impEngagement'].map(id => document.getElementById(id));
+            const impCheck = document.getElementById('impCheck');
+            const impResult = document.getElementById('impResult');
+            impCheck?.addEventListener('click', () => {
+                const hits = impFields.reduce((acc, el) => acc + (el?.checked ? 1 : 0), 0);
+                const risk = hits >= 4 ? 'High' : hits >= 2 ? 'Medium' : 'Low';
+                impResult.innerHTML = `<strong>Impersonation likelihood:</strong> ${risk}. ${hits ? `${hits} red flag(s) checked.` : 'No checklist flags selected.'}`;
+            });
+
+            // Summary builder
+            const summaryNotes = document.getElementById('summaryNotes');
+            const summaryBuild = document.getElementById('summaryBuild');
+            const summaryResult = document.getElementById('summaryResult');
+            summaryBuild?.addEventListener('click', () => {
+                const notes = (summaryNotes?.value || '').trim();
+                const template = [
+                    'Social Threat Triage summary:',
+                    '- Links: inspect the real domain and remove tracking.',
+                    '- Messages: be wary of urgency, payment/crypto asks, and link requests.',
+                    '- Profiles: check for misspellings, new accounts, and engagement mismatch.',
+                    notes ? `Notes: ${notes}` : null
+                ].filter(Boolean).join('<br>');
+                summaryResult.innerHTML = template;
             });
 
             const pdfInput = document.getElementById('pdfInput');
