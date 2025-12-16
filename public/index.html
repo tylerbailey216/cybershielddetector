@@ -470,6 +470,9 @@
                     { regex: /(giveaway|winner|prize|lottery|claim)/i, label: 'Giveaway/lottery phrasing', weight: 1 },
                     { regex: /(crypto|usdt|bitcoin|investment|roi|forex)/i, label: 'Crypto/investment ask', weight: 2 },
                     { regex: /(payment|deposit|wire|western union|zelle|gift card|prepaid)/i, label: 'Payment request', weight: 2 },
+                    { regex: /(review.*(commission|pay|payment|refund|rebate)|commission.*review|pay.*for your review)/i, label: 'Paid reviews/commission offer', weight: 2 },
+                    { regex: /(amazon seller|amaz seller|amazon store)/i, label: 'Unsolicited Amazon seller outreach', weight: 2 },
+                    { regex: /(product testing|free sample|free product|try our product|gift for review|lingerie|sleepwear)/i, label: 'Unsolicited product/lingerie pitch', weight: 1 },
                     { regex: /(click.*link|open.*link|tap the link|login here)/i, label: 'Instruction to click a link', weight: 1 },
                     { regex: /(support agent|admin|representative|official)/i, label: 'Authority/impersonation tone', weight: 1 },
                     { regex: /(congratulations|limited time|exclusive)/i, label: 'Hype or bait language', weight: 1 }
