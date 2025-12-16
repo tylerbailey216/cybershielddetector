@@ -537,7 +537,7 @@
             const shorteners = new Set(['bit.ly','tinyurl.com','t.co','goo.gl','ow.ly','buff.ly','is.gd','rebrand.ly','cutt.ly','shorte.st','lnkd.in','bl.ink']);
             const riskyTlds = new Set(['zip','ru','cn','tk','ml','gq','ga','cf','work','top','quest','click','country','rest','cam']);
             const hasPunycode = (host) => host.includes('xn--');
-            const looksLikeIp = (host) => /^((\d{1,3}\.){3}\d{1,3})$/.test(host);
+            const looksLikeIp = (host) => /^(\d{1,3}\.){3}\d{1,3}$/.test(host);
             const countDots = (host) => (host.match(/\./g) || []).length;
             const riskyPathWords = ['login','signin','verify','account','secure','update','billing','invoice','prize','gift','bonus','free','btc','crypto','usdt','wallet','token','auth','reset'];
             const riskPill = (risk) => {
@@ -565,7 +565,7 @@
                 const path = parsed.pathname || '/';
                 if (parsed.protocol !== 'https:') { notes.push('Not using HTTPS.'); score += 2; }
                 if (looksLikeIp(host)) { notes.push('Bare IP instead of a named domain.'); score += 2; }
-                if (hasPunycode(host) || /[^ -]/.test(host)) { notes.push('Unicode/punycode characters detected.'); score += 2; }
+                if (hasPunycode(host) || /[^\x00-\x7F]/.test(host)) { notes.push('Unicode/punycode characters detected.'); score += 2; }
                 if (countDots(host) > 3) { notes.push('Deep subdomain structure.'); score += 1; }
                 if (riskyTlds.has(tld)) { notes.push(`Uncommon or risky TLD: .${tld}`); score += 2; }
                 if (shorteners.has(host)) { notes.push('Known link shortener; destination hidden.'); score += 2; }
@@ -718,5 +718,4 @@
     </script>
 </body>
 </html>
-
 
