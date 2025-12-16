@@ -214,7 +214,67 @@
                 </div>
             </div>
         </section>
-<section class="tree-card" id="about">
+        <section class="tree-card" id="addons">
+            <div class="tree-header">
+                <div>
+                    <p class="node-path">Security add-ons</p>
+                    <h2>Extra quick checks</h2>
+                    <p class="node-summary">Best-effort, browser-only helpers for link, QR, attachment, and profile safety.</p>
+                </div>
+            </div>
+            <div class="node-body addon-grid">
+                <div class="addon-card">
+                    <h3>Link intel booster</h3>
+                    <p class="node-summary">Paste a URL to see TLD risk, subdomain depth, and other red flags.</p>
+                    <input type="url" id="linkIntelInput" placeholder="https://example.com/path" aria-label="Link to analyze">
+                    <button class="ghost" type="button" id="linkIntelCheck">Check link</button>
+                    <div id="linkIntelResult" class="node-summary">No link checked yet.</div>
+                </div>
+                <div class="addon-card">
+                    <h3>Unshorten / redirect peek</h3>
+                    <p class="node-summary">See where a shortened link points before you click. Browser restrictions apply.</p>
+                    <input type="url" id="unshortenInput" placeholder="https://bit.ly/..." aria-label="Shortened link">
+                    <button class="ghost" type="button" id="unshortenCheck">Try to resolve</button>
+                    <div id="unshortenResult" class="node-summary">No link checked yet.</div>
+                </div>
+                <div class="addon-card">
+                    <h3>QR risk check</h3>
+                    <p class="node-summary">Paste the decoded QR text (URL/Wi‑Fi) to flag risky parts before scanning.</p>
+                    <textarea id="qrText" rows="3" placeholder="Paste QR payload or URL..." aria-label="QR payload"></textarea>
+                    <button class="ghost" type="button" id="qrCheck">Scan payload</button>
+                    <div id="qrResult" class="node-summary">No QR payload checked yet.</div>
+                </div>
+                <div class="addon-card">
+                    <h3>Attachment sanity</h3>
+                    <p class="node-summary">Spot dangerous double-extensions (e.g., invoice.pdf.exe) or script files.</p>
+                    <input type="text" id="attachName" placeholder="invoice.pdf.exe" aria-label="Attachment name">
+                    <button class="ghost" type="button" id="attachCheck">Check attachment</button>
+                    <div id="attachResult" class="node-summary">No attachment checked yet.</div>
+                </div>
+                <div class="addon-card">
+                    <h3>Profile risk score</h3>
+                    <p class="node-summary">Quick gut-check for new DMs: age, badge, follower/engagement balance.</p>
+                    <div class="mini-grid">
+                        <label>Account age (months) <input type="number" id="profAge" min="0" value="0"></label>
+                        <label>Followers <input type="number" id="profFollowers" min="0" value="0"></label>
+                        <label>Following <input type="number" id="profFollowing" min="0" value="0"></label>
+                        <label>Recent posts <input type="number" id="profPosts" min="0" value="0"></label>
+                        <label><input type="checkbox" id="profBadge"> Verified/official badge</label>
+                        <label>Bio/link keywords <input type="text" id="profBio" placeholder="support, giveaway, crypto..."></label>
+                    </div>
+                    <button class="ghost" type="button" id="profCheck">Score profile</button>
+                    <div id="profResult" class="node-summary">No profile scored yet.</div>
+                </div>
+                <div class="addon-card">
+                    <h3>Breach + MFA nudge</h3>
+                    <p class="node-summary">Enter an email to get an MFA reminder and a breach self-check link.</p>
+                    <input type="email" id="breachEmail" placeholder="you@example.com" aria-label="Email address">
+                    <button class="ghost" type="button" id="breachCheck">Get guidance</button>
+                    <div id="breachResult" class="node-summary">No email checked yet.</div>
+                </div>
+            </div>
+        </section>
+        <section class="tree-card" id="about">
             <div class="tree-header">
                 <div>
                     <p class="node-path">About</p>
@@ -472,10 +532,175 @@
                 ].filter(Boolean);
                 summaryResult.innerHTML = parts.join('<br>');
             });
+
+            // Shared helpers for link heuristics
+            const shorteners = new Set(['bit.ly','tinyurl.com','t.co','goo.gl','ow.ly','buff.ly','is.gd','rebrand.ly','cutt.ly','shorte.st','lnkd.in','bl.ink']);
+            const riskyTlds = new Set(['zip','ru','cn','tk','ml','gq','ga','cf','work','top','quest','click','country','rest','cam']);
+            const hasPunycode = (host) => host.includes('xn--');
+            const looksLikeIp = (host) => /^(\d{1,3}\.){3}\d{1,3}$/.test(host);
+            const countDots = (host) => (host.match(/\./g) || []).length;
+            const riskyPathWords = ['login','signin','verify','account','secure','update','billing','invoice','prize','gift','bonus','free','btc','crypto','usdt','wallet','token','auth','reset'];
+
+            const analyzeLinkBasic = (value) => {
+                let parsed;
+                const notes = [];
+                let score = 0;
+                try {
+                    parsed = new URL(value);
+                } catch {
+                    return { error: 'Not a valid URL. Check for typos.' };
+                }
+                const host = parsed.hostname.toLowerCase();
+                const tld = host.split('.').pop() || '';
+                const path = parsed.pathname || '/';
+                if (parsed.protocol !== 'https:') { notes.push('Not using HTTPS.'); score += 2; }
+                if (looksLikeIp(host)) { notes.push('Bare IP instead of a named domain.'); score += 2; }
+                if (hasPunycode(host) || /[^\x00-\x7F]/.test(host)) { notes.push('Unicode/punycode characters detected.'); score += 2; }
+                if (countDots(host) > 3) { notes.push('Deep subdomain structure.'); score += 1; }
+                if (riskyTlds.has(tld)) { notes.push(`Uncommon or risky TLD: .${tld}`); score += 2; }
+                if (shorteners.has(host)) { notes.push('Known link shortener; destination hidden.'); score += 2; }
+                if (/[0-9]{5,}/.test(host)) { notes.push('Heavy numeric hostname (possible look-alike).'); score += 1; }
+                if (parsed.port && !['80','443'].includes(parsed.port)) { notes.push(`Unusual port :${parsed.port}`); score += 1; }
+                if (parsed.search.includes('base64') || /(data:|%2f|%40|%3d)/i.test(parsed.search)) { notes.push('Obfuscated or encoded parameters.'); score += 1; }
+                if (riskyPathWords.some((w) => path.toLowerCase().includes(w))) { notes.push('Suspicious keywords in the path.'); score += 1; }
+                const risk = riskLabel(score >= 6 ? 6 : score); // cap to reuse labels
+                return { host, path, risk, notes };
+            };
+
+            // Link intel booster
+            const linkIntelInput = document.getElementById('linkIntelInput');
+            const linkIntelCheck = document.getElementById('linkIntelCheck');
+            const linkIntelResult = document.getElementById('linkIntelResult');
+            linkIntelCheck?.addEventListener('click', () => {
+                const raw = linkIntelInput?.value.trim();
+                if (!raw) { linkIntelResult.textContent = 'Enter a link to inspect.'; return; }
+                const res = analyzeLinkBasic(raw);
+                if (res.error) { linkIntelResult.textContent = res.error; return; }
+                const { host, path, risk, notes } = res;
+                const flags = notes.length ? `<ul>${notes.map((n) => `<li>${n}</li>`).join('')}</ul>` : 'No obvious red flags. Still verify manually.';
+                linkIntelResult.innerHTML = `<strong>Risk:</strong> ${risk}<br><strong>Domain:</strong> ${host}<br><strong>Path:</strong> ${path}<br>${flags}`;
+            });
+
+            // Unshorten / redirect peek (best-effort; may be blocked by CORS)
+            const unshortenInput = document.getElementById('unshortenInput');
+            const unshortenCheck = document.getElementById('unshortenCheck');
+            const unshortenResult = document.getElementById('unshortenResult');
+            unshortenCheck?.addEventListener('click', async () => {
+                const raw = unshortenInput?.value.trim();
+                if (!raw) { unshortenResult.textContent = 'Enter a shortened link to inspect.'; return; }
+                const res = analyzeLinkBasic(raw);
+                if (res.error) { unshortenResult.textContent = res.error; return; }
+                if (!shorteners.has(res.host)) {
+                    unshortenResult.innerHTML = `Not a known shortener. Domain: ${res.host}<br>Path: ${res.path}`;
+                    return;
+                }
+                unshortenResult.textContent = 'Trying to peek at the redirect (may be blocked by browser/CORS)...';
+                try {
+                    const resp = await fetch(raw, { method: 'HEAD', redirect: 'manual' });
+                    const loc = resp.headers.get('Location');
+                    if (loc) {
+                        const dest = analyzeLinkBasic(loc);
+                        const flags = dest.notes?.length ? dest.notes.join(' ') : 'No obvious red flags.';
+                        unshortenResult.innerHTML = `Likely destination: ${loc}<br>Risk: ${dest.risk}. ${flags}`;
+                    } else {
+                        unshortenResult.textContent = 'Could not read redirect target (no Location header).';
+                    }
+                } catch (e) {
+                    unshortenResult.textContent = 'Browser blocked the redirect peek. Preview manually in a safe sandbox if unsure.';
+                }
+            });
+
+            // QR risk check
+            const qrText = document.getElementById('qrText');
+            const qrCheck = document.getElementById('qrCheck');
+            const qrResult = document.getElementById('qrResult');
+            qrCheck?.addEventListener('click', () => {
+                const payload = (qrText?.value || '').trim();
+                if (!payload) { qrResult.textContent = 'Paste the decoded QR payload or URL.'; return; }
+                if (payload.toUpperCase().startsWith('WIFI:')) {
+                    const hasPass = payload.includes('P:') || payload.toUpperCase().includes('P:');
+                    qrResult.innerHTML = `Wi‑Fi QR detected.${hasPass ? ' Contains a password; confirm the source before connecting.' : ''} Verify the network name with the sender in another channel.`;
+                    return;
+                }
+                const res = analyzeLinkBasic(payload);
+                if (res.error) { qrResult.textContent = 'Not a URL or Wi‑Fi payload. If it is text, verify with the sender.'; return; }
+                const flags = res.notes.length ? `<ul>${res.notes.map((n) => `<li>${n}</li>`).join('')}</ul>` : 'No obvious red flags. Still verify manually.';
+                qrResult.innerHTML = `<strong>Risk:</strong> ${res.risk}<br>${flags}`;
+            });
+
+            // Attachment sanity
+            const attachName = document.getElementById('attachName');
+            const attachCheck = document.getElementById('attachCheck');
+            const attachResult = document.getElementById('attachResult');
+            attachCheck?.addEventListener('click', () => {
+                const name = (attachName?.value || '').trim();
+                if (!name) { attachResult.textContent = 'Enter a file name to check.'; return; }
+                const lower = name.toLowerCase();
+                const riskyExts = ['exe','js','vbs','bat','cmd','scr','ps1','jar','com','msi'];
+                const doubleExt = lower.match(/\.([a-z0-9]+)\.([a-z0-9]+)$/);
+                const findings = [];
+                if (doubleExt) {
+                    const [, mid, last] = doubleExt;
+                    if (riskyExts.includes(last)) findings.push(`Dangerous double-extension: .${mid}.${last}`);
+                }
+                const lastExt = (lower.split('.').pop() || '');
+                if (riskyExts.includes(lastExt)) findings.push(`Runs code (${lastExt}); only open if you trust the source and expected this file.`);
+                if (!findings.length) findings.push('No obvious extension red flags. Still scan with antivirus if unsure.');
+                const risk = findings.length > 1 ? 'High' : findings[0].startsWith('No obvious') ? 'Low' : 'Medium';
+                attachResult.innerHTML = `<strong>Risk:</strong> ${risk}<br><ul>${findings.map((f) => `<li>${f}</li>`).join('')}</ul>`;
+            });
+
+            // Profile risk score
+            const profAge = document.getElementById('profAge');
+            const profFollowers = document.getElementById('profFollowers');
+            const profFollowing = document.getElementById('profFollowing');
+            const profPosts = document.getElementById('profPosts');
+            const profBadge = document.getElementById('profBadge');
+            const profBio = document.getElementById('profBio');
+            const profCheck = document.getElementById('profCheck');
+            const profResult = document.getElementById('profResult');
+            profCheck?.addEventListener('click', () => {
+                const age = parseInt(profAge?.value || '0', 10);
+                const followers = parseInt(profFollowers?.value || '0', 10);
+                const following = parseInt(profFollowing?.value || '0', 10);
+                const posts = parseInt(profPosts?.value || '0', 10);
+                const hasBadge = !!profBadge?.checked;
+                const bio = (profBio?.value || '').toLowerCase();
+                let score = 0;
+                const notes = [];
+                if (age < 3) { score += 2; notes.push('Very new account.'); }
+                if (!hasBadge) { score += 1; notes.push('No official/verified badge.'); }
+                if (followers > 0 && following > followers * 5) { score += 2; notes.push('Follows far more than follow back.'); }
+                if (followers > 10000 && posts < 10) { score += 2; notes.push('High followers but low posts (could be bought).'); }
+                if (posts === 0) { score += 2; notes.push('No posts yet.'); }
+                if (/(support|agent|helpdesk|admin|official|giveaway|crypto|investment|refund)/i.test(bio)) { score += 2; notes.push('Bio/link uses support/giveaway/crypto language.'); }
+                const risk = riskLabel(score);
+                const list = notes.length ? `<ul>${notes.map((n) => `<li>${n}</li>`).join('')}</ul>` : 'Nothing obviously risky. Still verify identity in another channel.';
+                profResult.innerHTML = `<strong>Impersonation risk:</strong> ${risk}<br>${list}`;
+            });
+
+            // Breach + MFA nudge
+            const breachEmail = document.getElementById('breachEmail');
+            const breachCheck = document.getElementById('breachCheck');
+            const breachResult = document.getElementById('breachResult');
+            breachCheck?.addEventListener('click', () => {
+                const email = (breachEmail?.value || '').trim();
+                if (!email || !email.includes('@')) {
+                    breachResult.textContent = 'Enter a valid email to get guidance.';
+                    return;
+                }
+                const steps = [
+                    `Check for breaches: open https://haveibeenpwned.com/ (only on trusted networks).`,
+                    `Turn on MFA for this account and any linked services (prefer app-based codes or security keys).`,
+                    `Change password if reused anywhere; use a manager to create a unique one.`,
+                    `Review recent logins/security alerts for this account today.`,
+                    `Add/verify recovery methods (phone, backup codes) and remove any you do not recognize.`
+                ];
+                breachResult.innerHTML = `<strong>${email}</strong><br><ul>${steps.map((s) => `<li>${s}</li>`).join('')}</ul>`;
+            });
         })();
     </script>
 </body>
 </html>
-
 
 
