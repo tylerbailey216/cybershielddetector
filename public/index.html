@@ -1,10 +1,10 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tech Support Bro</title>
-    <link rel="stylesheet" href="./styles.css?v=tsb3">
+    <link rel="stylesheet" href="./public/styles.css?v=tsb3">
     <script src="https://unpkg.com/pdf-lib/dist/pdf-lib.min.js"></script>
     <style>
         .floating-nav {
@@ -105,7 +105,6 @@
 </head>
 <body>
     <div class="floating-nav">
-        <a href="#tools">Tools</a>
         <a href="#social">Social safety</a>
         <a href="#about">About</a>
         <a href="#privacy">Privacy</a>
@@ -115,13 +114,13 @@
             <div class="hero-content">
                 <img src="./techsupportbrologo.png" alt="Tech Support Bro" class="hero-logo">
                 <div class="hero-actions">
-                    <button class="primary" data-target="#tools">Open tools</button>
+                    <button class="primary" data-target="#social">Open social safety</button>
                     <a class="secondary" href="https://docs.google.com/forms/d/e/1FAIpQLSfoxhKvog1UU0YnpnK1U1toIyQkNborx3IAVtJOpc-5VwKhAg/viewform?usp=dialog" target="_blank" rel="noopener">
                         Escalate to Garin
                     </a>
                 </div>
-                <p class="node-summary" style="margin-top:8px;">A free, browser-only toolkit to fix common tech issues and speed up everyday office work.</p>
-                <p class="node-summary">Built for home users, students, and small offices.</p>
+                <p class="node-summary" style="margin-top:8px;">Browser-only safety checks for links, DMs, and impersonation before you click.</p>
+                <p class="node-summary">Nothing leaves your device. Built for home users, students, and small teams.</p>
             </div>
             <div class="hero-visual">
                 <div class="grid-lines"></div>
@@ -139,14 +138,14 @@
                                 <a href="https://www.youtube.com" target="_blank" rel="noopener">Open demo video</a>
                             </video>
                             <h2 class="tablet-title">Tech Support Bro</h2>
-                            <span class="tablet-caption">"What can I fix for you today?"</span>
+                            <span class="tablet-caption">"Let's make sure it's safe."</span>
                             <div class="tablet-screen-indicator"></div>
                         </div>
                     </div>
                     <div class="floating-badges">
-                        <div class="floating-badge">Fix my home Wi-Fi</div>
-                        <div class="floating-badge">Speed up my laptop</div>
-                        <div class="floating-badge">Reset forgotten passwords</div>
+                        <div class="floating-badge">Check a link for scams</div>
+                        <div class="floating-badge">Scan a DM or comment</div>
+                        <div class="floating-badge">Spot impersonation</div>
                     </div>
                     <div class="tablet-interactive-hint">Tap or click the tablet to interact</div>
                 </div>
@@ -489,57 +488,6 @@
     </div>
 </section>
 
-        <section class="vibe-section" id="wellness">
-            <div class="vibe-copy">
-                <p class="eyebrow">Mental reset</p>
-                <h2>Virtual phone affirmations</h2>
-                <p>
-                    Sometimes the fix is to pause for sixty seconds and hear a kind voice. Scroll into this lab to
-                    spin, tap, and read positive prompts before diving back into tough tickets.
-                </p>
-                <ul class="vibe-list">
-                    <li>Live loop of encouraging affirmations curated for late-night tech support sessions.</li>
-                    <li>Interactive 3D-inspired phone shell that reacts to your pointer drags.</li>
-                    <li>Quick action button cycles to the next vibe whenever you need another boost.</li>
-                </ul>
-                <div class="vibe-actions">
-                    <button type="button" class="ghost" id="affirmationNext">Inspire me again</button>
-                    <span class="vibe-caption">Gently scroll past the troubleshooting menus to reach this tool anytime.</span>
-                </div>
-            </div>
-            <div class="vibe-phone-column">
-                <div class="vibe-phone-glow"></div>
-                <div class="vibe-phone-stage" data-role="affirmation-stage">
-                    <div class="vibe-phone-rig" data-role="affirmation-rig">
-                        <div class="vibe-phone-shell">
-                            <span class="phone-signal"></span>
-                            <div class="vibe-phone-screen" id="affirmationScreen">
-                                <span class="screen-inner-shadow" aria-hidden="true"></span>
-                                <span class="screen-reflection" aria-hidden="true"></span>
-                                <div class="screen-status">
-                                <span id="affirmationTime">11:11</span>
-                                <span class="signal-indicator" aria-label="Signal strength">
-                                    <span class="signal-bar bar-1"></span>
-                                    <span class="signal-bar bar-2"></span>
-                                    <span class="signal-bar bar-3"></span>
-                                    <span class="signal-bar bar-4"></span>
-                                </span>
-                            </div>
-                                <div class="affirmation-tag speech-bubble bubble-tag bubble-layer-2" id="affirmationTag">Grounding</div>
-                                <blockquote class="speech-bubble bubble-message bubble-layer-3" id="affirmationText">Your calm is contagious.</blockquote>
-                                <p class="affirmation-meta speech-bubble bubble-meta bubble-layer-2" id="affirmationSource">- Message from 'G'</p>
-                                <div class="affirmation-ticker bubble-ticker" id="affirmationTicker"></div>
-                            </div>
-                            <div class="phone-notch">
-                                <span class="notch-speaker"></span>
-                                <span class="notch-camera"></span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
         <section class="tree-card" id="about">
             <div class="tree-header">
                 <div>
@@ -561,7 +509,6 @@
         </section>
 
     </main>
-    <script src="./app.js?v=tsb3"></script>
     <script>
         (() => {
             // Always start at top; prevent scroll restoration
@@ -591,82 +538,197 @@
                 });
             });
 
+            const riskLabel = (score) => {
+                if (score >= 6) return 'High';
+                if (score >= 3) return 'Medium';
+                return 'Low';
+            };
+
             // Link inspector
             const linkInputSocial = document.getElementById('linkInputSocial');
             const linkCheckSocial = document.getElementById('linkCheckSocial');
             const linkResultSocial = document.getElementById('linkResultSocial');
             const linkCleanSocial = document.getElementById('linkCleanSocial');
+            let lastLinkSummary = null;
+
+            const trackingParams = ['utm_source','utm_medium','utm_campaign','utm_term','utm_content','utm_id','fbclid','gclid','msclkid','mc_eid','ref','affid'];
+            const suspiciousTldsSocial = ['zip','ru','cn','tk','ml','gq','ga','cf','work','top','quest','click','country','rest'];
+            const shorteners = ['bit.ly','tinyurl.com','t.co','goo.gl','ow.ly','buff.ly','is.gd','rebrand.ly','cutt.ly','shorte.st','lnkd.in','bl.ink'];
+            const riskyWords = ['login','signin','verify','account','secure','update','billing','invoice','prize','gift','bonus','free','btc','crypto','usdt','wallet','token','auth','reset'];
+
             const cleanTracking = (url) => {
                 try {
                     const u = new URL(url);
                     const params = new URLSearchParams(u.search);
-                    ['utm_source','utm_medium','utm_campaign','utm_term','utm_content','fbclid','gclid','mc_eid'].forEach((k) => params.delete(k));
+                    trackingParams.forEach((k) => params.delete(k));
                     u.search = params.toString();
                     return u.toString();
                 } catch {
                     return url;
                 }
             };
-            linkCheckSocial?.addEventListener('click', () => {
-                const raw = linkInputSocial?.value.trim();
-                if (!raw) {
-                    linkResultSocial.textContent = 'Enter a link to inspect.';
-                    linkCleanSocial.textContent = '';
-                    return;
-                }
+
+            const analyzeLink = (raw) => {
                 let parsed;
                 const flags = [];
+                let score = 0;
                 try {
                     parsed = new URL(raw);
                 } catch {
-                    linkResultSocial.textContent = 'Not a valid URL. Check for typos.';
-                    linkCleanSocial.textContent = '';
+                    return { error: 'Not a valid URL. Check for typos.' };
+                }
+                const host = parsed.hostname.toLowerCase();
+                const path = parsed.pathname || '/';
+
+                if (parsed.protocol !== 'https:') {
+                    flags.push('Not using HTTPS.');
+                    score += 2;
+                }
+                if (/^(\d{1,3}\.){3}\d{1,3}$/.test(host)) {
+                    flags.push('IP address instead of a named domain.');
+                    score += 2;
+                }
+                if (host.includes('xn--') || /[^\x00-\x7F]/.test(host)) {
+                    flags.push('Unicode/punycode characters detected (possible look-alike).');
+                    score += 2;
+                }
+                const hostParts = host.split('.');
+                const tld = hostParts.pop() || '';
+                if (hostParts.length > 2) {
+                    flags.push('Deep subdomain (could hide the real domain).');
+                    score += 1;
+                }
+                if (suspiciousTldsSocial.includes(tld)) {
+                    flags.push(`Uncommon TLD: .${tld}`);
+                    score += 2;
+                }
+                if (shorteners.some((s) => host.endsWith(s.replace(/^www\./, '')))) {
+                    flags.push('Link shortener detected (destination unknown).');
+                    score += 2;
+                }
+                if (/[0-9]{4,}/.test(host)) {
+                    flags.push('Heavy numeric domain (possible look-alike).');
+                    score += 1;
+                }
+                if (parsed.port && !['80','443'].includes(parsed.port)) {
+                    flags.push(`Unusual port :${parsed.port}`);
+                    score += 1;
+                }
+                if (parsed.search.includes('base64') || parsed.href.toLowerCase().includes('data:')) {
+                    flags.push('Obfuscated parameters detected.');
+                    score += 2;
+                }
+                if (/(%2f|%40|%3d)/i.test(parsed.search)) {
+                    flags.push('Encoded characters in query (could mask intent).');
+                    score += 1;
+                }
+                if (riskyWords.some((word) => path.toLowerCase().includes(word))) {
+                    flags.push('Suspicious keywords in the path.');
+                    score += 1;
+                }
+
+                const cleaned = cleanTracking(raw);
+                const risk = riskLabel(score + flags.length);
+                return {
+                    host,
+                    path,
+                    cleaned,
+                    flags,
+                    risk
+                };
+            };
+
+            linkCheckSocial?.addEventListener('click', () => {
+                const raw = linkInputSocial?.value.trim();
+                linkResultSocial.textContent = '';
+                linkCleanSocial.textContent = '';
+
+                if (!raw) {
+                    linkResultSocial.textContent = 'Enter a link to inspect.';
+                    lastLinkSummary = null;
                     return;
                 }
-                const host = parsed.hostname;
-                if (/(\d+\.){3}\d+/.test(host)) flags.push('IP address instead of a named domain.');
-                if (host.split('.').length > 3) flags.push('Deep subdomain (could hide the real domain).');
-                if (/[0-9]{5,}/.test(host)) flags.push('Numbers in the domain may be a look-alike.');
-                if (/[^\x00-\x7F]/.test(host)) flags.push('Unicode characters detected (possible look-alike).');
-                if (parsed.pathname.toLowerCase().includes('login') === false && parsed.pathname.toLowerCase().includes('signin') === false && parsed.pathname.length > 1) {
-                    flags.push('Path does not look like a login page; verify before entering credentials.');
+
+                const result = analyzeLink(raw);
+                if (result.error) {
+                    linkResultSocial.textContent = result.error;
+                    lastLinkSummary = null;
+                    return;
                 }
-                if (parsed.search.includes('base64') || parsed.href.toLowerCase().includes('data:')) flags.push('Obfuscated parameters detected.');
-                const cleaned = cleanTracking(raw);
-                linkResultSocial.innerHTML = `<strong>Domain:</strong> ${host}<br><strong>Path:</strong> ${parsed.pathname || '/'}<br><strong>Flags:</strong> ${flags.length ? flags.join(' ') : 'No obvious red flags.'}`;
+
+                const { host, path, flags, cleaned, risk } = result;
+                const flagList = flags.length ? `<ul>${flags.map((f) => `<li>${f}</li>`).join('')}</ul>` : 'No obvious red flags. Still stay cautious.';
+                linkResultSocial.innerHTML = `<strong>Risk:</strong> ${risk}<br><strong>Domain:</strong> ${host}<br><strong>Path:</strong> ${path}<br>${flagList}`;
                 linkCleanSocial.innerHTML = `<strong>Cleaned link:</strong> <a href="${cleaned}" target="_blank" rel="noopener">${cleaned}</a>`;
+                lastLinkSummary = { risk, flags, cleaned };
             });
 
             // Message scanner
             const msgInput = document.getElementById('msgInput');
             const msgScan = document.getElementById('msgScan');
             const msgResult = document.getElementById('msgResult');
+            let lastMsgSummary = null;
+
             msgScan?.addEventListener('click', () => {
                 const text = (msgInput?.value || '').trim();
+                msgResult.textContent = '';
                 if (!text) {
                     msgResult.textContent = 'Paste a message to scan.';
+                    lastMsgSummary = null;
                     return;
                 }
-                const flags = [];
                 const lower = text.toLowerCase();
-                if (/verify|suspend|locked|unauthorized/.test(lower)) flags.push('Account/security language detected.');
-                if (/immediately|urgent|24 hours|right now/.test(lower)) flags.push('Urgency or deadline language.');
-                if (/giveaway|winner|prize|lottery/.test(lower)) flags.push('Giveaway/lottery phrasing.');
-                if (/crypto|usdt|bitcoin|investment|roi/.test(lower)) flags.push('Crypto/investment solicitation.');
-                if (/payment|deposit|wire|western union|zelle/.test(lower)) flags.push('Payment request language.');
-                if (/click.*link|open.*link/.test(lower)) flags.push('Instruction to click a link.');
-                const risk = flags.length >= 3 ? 'High' : flags.length === 2 ? 'Medium' : flags.length === 1 ? 'Low' : 'Low';
-                msgResult.innerHTML = `<strong>Risk:</strong> ${risk}. ${flags.length ? flags.join(' ') : 'No strong scam patterns detected. Still verify the sender.'}`;
+                const patterns = [
+                    { regex: /(verify|suspend|locked|reset|appeal|violation|ticket)/i, label: 'Account/security language', weight: 2 },
+                    { regex: /(immediately|urgent|24 hours|right now|act now|final notice)/i, label: 'Urgency or deadline', weight: 2 },
+                    { regex: /(giveaway|winner|prize|lottery|claim)/i, label: 'Giveaway/lottery phrasing', weight: 1 },
+                    { regex: /(crypto|usdt|bitcoin|investment|roi|forex)/i, label: 'Crypto/investment ask', weight: 2 },
+                    { regex: /(payment|deposit|wire|western union|zelle|gift card|prepaid)/i, label: 'Payment request', weight: 2 },
+                    { regex: /(click.*link|open.*link|tap the link|login here)/i, label: 'Instruction to click a link', weight: 1 },
+                    { regex: /(support agent|admin|representative|official)/i, label: 'Authority/impersonation tone', weight: 1 },
+                    { regex: /(congratulations|limited time|exclusive)/i, label: 'Hype or bait language', weight: 1 }
+                ];
+                let score = 0;
+                const hits = [];
+                patterns.forEach((p) => {
+                    if (p.regex.test(lower)) {
+                        score += p.weight;
+                        hits.push(p.label);
+                    }
+                });
+                const risk = riskLabel(score);
+                const hitList = hits.length ? `<ul>${hits.map((h) => `<li>${h}</li>`).join('')}</ul>` : 'No strong scam patterns detected. Still verify the sender and context.';
+                msgResult.innerHTML = `<strong>Risk:</strong> ${risk}${hits.length ? '' : ''}<br>${hitList}`;
+                lastMsgSummary = { risk, hits };
             });
 
             // Impersonation checklist
-            const impFields = ['impMisspell','impNew','impClosed','impBadge','impAsk','impEngagement'].map(id => document.getElementById(id));
+            const impChecks = [
+                { id: 'impMisspell', label: 'Name/URL looks misspelled', weight: 2 },
+                { id: 'impNew', label: 'New account or low activity', weight: 2 },
+                { id: 'impClosed', label: 'Comments/DMs closed or limited', weight: 1 },
+                { id: 'impBadge', label: 'Missing official badge where expected', weight: 2 },
+                { id: 'impAsk', label: 'Urgent giveaway/crypto ask', weight: 2 },
+                { id: 'impEngagement', label: 'Followers-to-engagement mismatch', weight: 1 }
+            ];
             const impCheck = document.getElementById('impCheck');
             const impResult = document.getElementById('impResult');
+            let lastImpSummary = null;
+
             impCheck?.addEventListener('click', () => {
-                const hits = impFields.reduce((acc, el) => acc + (el?.checked ? 1 : 0), 0);
-                const risk = hits >= 4 ? 'High' : hits >= 2 ? 'Medium' : 'Low';
-                impResult.innerHTML = `<strong>Impersonation likelihood:</strong> ${risk}. ${hits ? `${hits} red flag(s) checked.` : 'No checklist flags selected.'}`;
+                let score = 0;
+                const hits = [];
+                impChecks.forEach(({ id, label, weight }) => {
+                    const el = document.getElementById(id);
+                    if (el?.checked) {
+                        score += weight;
+                        hits.push(label);
+                    }
+                });
+                const risk = riskLabel(score);
+                const hitList = hits.length ? `<ul>${hits.map((h) => `<li>${h}</li>`).join('')}</ul>` : 'No checklist flags selected.';
+                impResult.innerHTML = `<strong>Impersonation likelihood:</strong> ${risk}<br>${hitList}`;
+                lastImpSummary = { risk, hits };
             });
 
             // Summary builder
@@ -675,14 +737,14 @@
             const summaryResult = document.getElementById('summaryResult');
             summaryBuild?.addEventListener('click', () => {
                 const notes = (summaryNotes?.value || '').trim();
-                const template = [
+                const parts = [
                     'Social Threat Triage summary:',
-                    '- Links: inspect the real domain and remove tracking.',
-                    '- Messages: be wary of urgency, payment/crypto asks, and link requests.',
-                    '- Profiles: check for misspellings, new accounts, and engagement mismatch.',
+                    lastLinkSummary ? `- Link: ${lastLinkSummary.risk} risk${lastLinkSummary.flags?.length ? ` (${lastLinkSummary.flags.length} flag(s))` : ''}.` : '- Link: not checked yet.',
+                    lastMsgSummary ? `- Message: ${lastMsgSummary.risk} risk${lastMsgSummary.hits?.length ? ` (${lastMsgSummary.hits.length} pattern(s))` : ''}.` : '- Message: not checked yet.',
+                    lastImpSummary ? `- Impersonation: ${lastImpSummary.risk} likelihood${lastImpSummary.hits?.length ? ` (${lastImpSummary.hits.length} flag(s))` : ''}.` : '- Impersonation: not checked yet.',
                     notes ? `Notes: ${notes}` : null
-                ].filter(Boolean).join('<br>');
-                summaryResult.innerHTML = template;
+                ].filter(Boolean);
+                summaryResult.innerHTML = parts.join('<br>');
             });
 
             const pdfInput = document.getElementById('pdfInput');
@@ -1421,10 +1483,6 @@
     </script>
 </body>
 </html>
-
-
-
-
 
 
 

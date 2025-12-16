@@ -113,6 +113,7 @@ body::before {
 .hero-visual {
     position: relative;
     min-height: 360px;
+    pointer-events: none;
 }
 
 .eyebrow {
@@ -232,10 +233,7 @@ body::before {
     align-items: center;
     justify-content: center;
     perspective: 1200px;
-    cursor: grab;
-    user-select: none;
-    touch-action: none;
-    pointer-events: auto;
+    pointer-events: none;
 }
 
 .tablet-interactive-hint {
@@ -357,7 +355,7 @@ body::before {
     position: absolute;
     inset: 0;
     pointer-events: none;
-    display: none; /* hidden by default; re-enabled only on large screens */
+    display: flex;
     flex-direction: column;
     gap: 12px;
     justify-content: center;
@@ -1721,4 +1719,3 @@ a:focus-visible {
         font-size: 1.1rem;
     }
 }
-
