@@ -239,7 +239,7 @@
                 </div>
                 <div class="addon-card">
                     <h3>QR risk check</h3>
-                    <p class="node-summary">Paste the decoded QR text (URL/Wi‑Fi) to flag risky parts before scanning.</p>
+                    <p class="node-summary">Paste the decoded QR text (URL/Wi-Fi) to flag risky parts before scanning.</p>
                     <textarea id="qrText" rows="3" placeholder="Paste QR payload or URL..." aria-label="QR payload"></textarea>
                     <button class="ghost" type="button" id="qrCheck">Scan payload</button>
                     <div id="qrResult" class="node-summary">No QR payload checked yet.</div>
@@ -533,14 +533,24 @@
                 summaryResult.innerHTML = parts.join('<br>');
             });
 
-            // Shared helpers for link heuristics
+            // Shared helpers for link heuristics + visuals
             const shorteners = new Set(['bit.ly','tinyurl.com','t.co','goo.gl','ow.ly','buff.ly','is.gd','rebrand.ly','cutt.ly','shorte.st','lnkd.in','bl.ink']);
             const riskyTlds = new Set(['zip','ru','cn','tk','ml','gq','ga','cf','work','top','quest','click','country','rest','cam']);
             const hasPunycode = (host) => host.includes('xn--');
-            const looksLikeIp = (host) => /^(\d{1,3}\.){3}\d{1,3}$/.test(host);
+            const looksLikeIp = (host) => /^((\d{1,3}\.){3}\d{1,3})$/.test(host);
             const countDots = (host) => (host.match(/\./g) || []).length;
             const riskyPathWords = ['login','signin','verify','account','secure','update','billing','invoice','prize','gift','bonus','free','btc','crypto','usdt','wallet','token','auth','reset'];
-
+            const riskPill = (risk) => {
+                const color = risk === 'High' ? '#f56262' : risk === 'Medium' ? '#f5c862' : '#6ae28c';
+                const text = risk || 'Info';
+                return `<span class="risk-pill" style="background:${color}20;border:1px solid ${color}55;color:${color};">${text}</span>`;
+            };
+            const renderList = (items) => items && items.length ? `<ul class="flag-list">${items.map((n) => `<li>${n}</li>`).join('')}</ul>` : '<div class="node-summary">No obvious red flags. Still verify manually.</div>';
+            const renderResultCard = (target, { risk, title, lines, notes }) => {
+                if (!target) return;
+                const heading = [risk ? riskPill(risk) : '', title ? `<strong>${title}</strong>` : ''].filter(Boolean).join(' ');
+                target.innerHTML = `<div class="result-card">${heading ? `<div class="result-head">${heading}</div>` : ''}${lines ? `<div class="result-body">${lines}</div>` : ''}${notes ? renderList(notes) : ''}</div>`;
+            };
             const analyzeLinkBasic = (value) => {
                 let parsed;
                 const notes = [];
@@ -555,7 +565,7 @@
                 const path = parsed.pathname || '/';
                 if (parsed.protocol !== 'https:') { notes.push('Not using HTTPS.'); score += 2; }
                 if (looksLikeIp(host)) { notes.push('Bare IP instead of a named domain.'); score += 2; }
-                if (hasPunycode(host) || /[^\x00-\x7F]/.test(host)) { notes.push('Unicode/punycode characters detected.'); score += 2; }
+                if (hasPunycode(host) || /[^ -]/.test(host)) { notes.push('Unicode/punycode characters detected.'); score += 2; }
                 if (countDots(host) > 3) { notes.push('Deep subdomain structure.'); score += 1; }
                 if (riskyTlds.has(tld)) { notes.push(`Uncommon or risky TLD: .${tld}`); score += 2; }
                 if (shorteners.has(host)) { notes.push('Known link shortener; destination hidden.'); score += 2; }
@@ -563,7 +573,7 @@
                 if (parsed.port && !['80','443'].includes(parsed.port)) { notes.push(`Unusual port :${parsed.port}`); score += 1; }
                 if (parsed.search.includes('base64') || /(data:|%2f|%40|%3d)/i.test(parsed.search)) { notes.push('Obfuscated or encoded parameters.'); score += 1; }
                 if (riskyPathWords.some((w) => path.toLowerCase().includes(w))) { notes.push('Suspicious keywords in the path.'); score += 1; }
-                const risk = riskLabel(score >= 6 ? 6 : score); // cap to reuse labels
+                const risk = riskLabel(score >= 6 ? 6 : score);
                 return { host, path, risk, notes };
             };
 
@@ -577,8 +587,8 @@
                 const res = analyzeLinkBasic(raw);
                 if (res.error) { linkIntelResult.textContent = res.error; return; }
                 const { host, path, risk, notes } = res;
-                const flags = notes.length ? `<ul>${notes.map((n) => `<li>${n}</li>`).join('')}</ul>` : 'No obvious red flags. Still verify manually.';
-                linkIntelResult.innerHTML = `<strong>Risk:</strong> ${risk}<br><strong>Domain:</strong> ${host}<br><strong>Path:</strong> ${path}<br>${flags}`;
+                const lines = `<div><strong>Domain:</strong> ${host}<br><strong>Path:</strong> ${path}</div>`;
+                renderResultCard(linkIntelResult, { risk, title: 'Link intel', lines, notes });
             });
 
             // Unshorten / redirect peek (best-effort; may be blocked by CORS)
@@ -591,7 +601,7 @@
                 const res = analyzeLinkBasic(raw);
                 if (res.error) { unshortenResult.textContent = res.error; return; }
                 if (!shorteners.has(res.host)) {
-                    unshortenResult.innerHTML = `Not a known shortener. Domain: ${res.host}<br>Path: ${res.path}`;
+                    renderResultCard(unshortenResult, { risk: res.risk, title: 'Not a known shortener', lines: `Domain: ${res.host}<br>Path: ${res.path}`, notes: res.notes });
                     return;
                 }
                 unshortenResult.textContent = 'Trying to peek at the redirect (may be blocked by browser/CORS)...';
@@ -600,8 +610,12 @@
                     const loc = resp.headers.get('Location');
                     if (loc) {
                         const dest = analyzeLinkBasic(loc);
-                        const flags = dest.notes?.length ? dest.notes.join(' ') : 'No obvious red flags.';
-                        unshortenResult.innerHTML = `Likely destination: ${loc}<br>Risk: ${dest.risk}. ${flags}`;
+                        renderResultCard(unshortenResult, {
+                            risk: dest.risk,
+                            title: 'Redirect preview',
+                            lines: `Likely destination:<br>${loc}`,
+                            notes: dest.notes
+                        });
                     } else {
                         unshortenResult.textContent = 'Could not read redirect target (no Location header).';
                     }
@@ -619,13 +633,16 @@
                 if (!payload) { qrResult.textContent = 'Paste the decoded QR payload or URL.'; return; }
                 if (payload.toUpperCase().startsWith('WIFI:')) {
                     const hasPass = payload.includes('P:') || payload.toUpperCase().includes('P:');
-                    qrResult.innerHTML = `Wi‑Fi QR detected.${hasPass ? ' Contains a password; confirm the source before connecting.' : ''} Verify the network name with the sender in another channel.`;
+                    renderResultCard(qrResult, {
+                        title: 'Wi-Fi QR detected',
+                        lines: hasPass ? 'Contains a password; confirm the source before connecting.' : 'No password found in payload.',
+                        notes: ['Verify the network name with the sender in another channel.']
+                    });
                     return;
                 }
                 const res = analyzeLinkBasic(payload);
-                if (res.error) { qrResult.textContent = 'Not a URL or Wi‑Fi payload. If it is text, verify with the sender.'; return; }
-                const flags = res.notes.length ? `<ul>${res.notes.map((n) => `<li>${n}</li>`).join('')}</ul>` : 'No obvious red flags. Still verify manually.';
-                qrResult.innerHTML = `<strong>Risk:</strong> ${res.risk}<br>${flags}`;
+                if (res.error) { qrResult.textContent = 'Not a URL or Wi-Fi payload. If it is text, verify with the sender.'; return; }
+                renderResultCard(qrResult, { risk: res.risk, title: 'QR payload check', notes: res.notes });
             });
 
             // Attachment sanity
@@ -647,7 +664,7 @@
                 if (riskyExts.includes(lastExt)) findings.push(`Runs code (${lastExt}); only open if you trust the source and expected this file.`);
                 if (!findings.length) findings.push('No obvious extension red flags. Still scan with antivirus if unsure.');
                 const risk = findings.length > 1 ? 'High' : findings[0].startsWith('No obvious') ? 'Low' : 'Medium';
-                attachResult.innerHTML = `<strong>Risk:</strong> ${risk}<br><ul>${findings.map((f) => `<li>${f}</li>`).join('')}</ul>`;
+                renderResultCard(attachResult, { risk, title: name, notes: findings });
             });
 
             // Profile risk score
@@ -675,8 +692,7 @@
                 if (posts === 0) { score += 2; notes.push('No posts yet.'); }
                 if (/(support|agent|helpdesk|admin|official|giveaway|crypto|investment|refund)/i.test(bio)) { score += 2; notes.push('Bio/link uses support/giveaway/crypto language.'); }
                 const risk = riskLabel(score);
-                const list = notes.length ? `<ul>${notes.map((n) => `<li>${n}</li>`).join('')}</ul>` : 'Nothing obviously risky. Still verify identity in another channel.';
-                profResult.innerHTML = `<strong>Impersonation risk:</strong> ${risk}<br>${list}`;
+                renderResultCard(profResult, { risk, title: 'Profile check', notes });
             });
 
             // Breach + MFA nudge
@@ -696,7 +712,7 @@
                     `Review recent logins/security alerts for this account today.`,
                     `Add/verify recovery methods (phone, backup codes) and remove any you do not recognize.`
                 ];
-                breachResult.innerHTML = `<strong>${email}</strong><br><ul>${steps.map((s) => `<li>${s}</li>`).join('')}</ul>`;
+                renderResultCard(breachResult, { title: email, notes: steps });
             });
         })();
     </script>

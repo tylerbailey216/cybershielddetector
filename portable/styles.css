@@ -815,6 +815,44 @@ a:focus-visible {
     gap: 8px;
 }
 
+.result-card {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: 14px;
+    padding: 10px 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.result-head {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.result-body {
+    color: var(--text);
+    line-height: 1.45;
+}
+
+.risk-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 10px;
+    border-radius: 999px;
+    font-weight: 700;
+    font-size: 0.95rem;
+}
+
+.flag-list {
+    margin: 4px 0 0 14px;
+    color: var(--text-muted);
+    line-height: 1.5;
+}
+
 .sig-pad {
     border: 1px dashed rgba(255, 255, 255, 0.12);
     border-radius: 10px;
