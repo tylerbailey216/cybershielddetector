@@ -534,7 +534,7 @@
             });
 
             // Shared helpers for link heuristics + visuals
-            const shorteners = new Set(['bit.ly','tinyurl.com','t.co','goo.gl','ow.ly','buff.ly','is.gd','rebrand.ly','cutt.ly','shorte.st','lnkd.in','bl.ink']);
+            const shortenerSet = new Set(['bit.ly','tinyurl.com','t.co','goo.gl','ow.ly','buff.ly','is.gd','rebrand.ly','cutt.ly','shorte.st','lnkd.in','bl.ink']);
             const riskyTlds = new Set(['zip','ru','cn','tk','ml','gq','ga','cf','work','top','quest','click','country','rest','cam']);
             const hasPunycode = (host) => host.includes('xn--');
             const looksLikeIp = (host) => /^(\d{1,3}\.){3}\d{1,3}$/.test(host);
@@ -569,7 +569,7 @@
                 if (hasPunycode(host) || /[^\x00-\x7F]/.test(host)) { notes.push('Unicode/punycode characters detected.'); score += 2; }
                 if (countDots(host) > 3) { notes.push('Deep subdomain structure.'); score += 1; }
                 if (riskyTlds.has(tld)) { notes.push(`Uncommon or risky TLD: .${tld}`); score += 2; }
-                if ([host, hostRaw].some((h) => Array.from(shorteners).some((s) => h.endsWith(s)))) { notes.push('Known link shortener; destination hidden.'); score += 2; }
+                if ([host, hostRaw].some((h) => Array.from(shortenerSet).some((s) => h.endsWith(s)))) { notes.push('Known link shortener; destination hidden.'); score += 2; }
                 if (/[0-9]{5,}/.test(host)) { notes.push('Heavy numeric hostname (possible look-alike).'); score += 1; }
                 if (parsed.port && !['80','443'].includes(parsed.port)) { notes.push(`Unusual port :${parsed.port}`); score += 1; }
                 if (parsed.search.includes('base64') || /(data:|%2f|%40|%3d)/i.test(parsed.search)) { notes.push('Obfuscated or encoded parameters.'); score += 1; }
@@ -601,7 +601,7 @@
                 if (!raw) { unshortenResult.textContent = 'Enter a shortened link to inspect.'; return; }
                 const res = analyzeLinkBasic(raw);
                 if (res.error) { unshortenResult.textContent = res.error; return; }
-                const isShort = [res.host, res.host.replace(/^www\./, '')].some((h) => Array.from(shorteners).some((s) => h.endsWith(s)));
+                const isShort = [res.host, res.host.replace(/^www\./, '')].some((h) => Array.from(shortenerSet).some((s) => h.endsWith(s)));
                 if (!isShort) {
                     renderResultCard(unshortenResult, { risk: res.risk, title: 'Not a known shortener', lines: `Domain: ${res.host}<br>Path: ${res.path}`, notes: res.notes });
                     return;
