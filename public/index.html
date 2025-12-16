@@ -560,7 +560,8 @@
                 } catch {
                     return { error: 'Not a valid URL. Check for typos.' };
                 }
-                const host = parsed.hostname.toLowerCase();
+                const hostRaw = parsed.hostname.toLowerCase();
+                const host = hostRaw.replace(/^www\./, '');
                 const tld = host.split('.').pop() || '';
                 const path = parsed.pathname || '/';
                 if (parsed.protocol !== 'https:') { notes.push('Not using HTTPS.'); score += 2; }
@@ -568,13 +569,13 @@
                 if (hasPunycode(host) || /[^\x00-\x7F]/.test(host)) { notes.push('Unicode/punycode characters detected.'); score += 2; }
                 if (countDots(host) > 3) { notes.push('Deep subdomain structure.'); score += 1; }
                 if (riskyTlds.has(tld)) { notes.push(`Uncommon or risky TLD: .${tld}`); score += 2; }
-                if (shorteners.has(host)) { notes.push('Known link shortener; destination hidden.'); score += 2; }
+                if ([host, hostRaw].some((h) => Array.from(shorteners).some((s) => h.endsWith(s)))) { notes.push('Known link shortener; destination hidden.'); score += 2; }
                 if (/[0-9]{5,}/.test(host)) { notes.push('Heavy numeric hostname (possible look-alike).'); score += 1; }
                 if (parsed.port && !['80','443'].includes(parsed.port)) { notes.push(`Unusual port :${parsed.port}`); score += 1; }
                 if (parsed.search.includes('base64') || /(data:|%2f|%40|%3d)/i.test(parsed.search)) { notes.push('Obfuscated or encoded parameters.'); score += 1; }
                 if (riskyPathWords.some((w) => path.toLowerCase().includes(w))) { notes.push('Suspicious keywords in the path.'); score += 1; }
                 const risk = riskLabel(score >= 6 ? 6 : score);
-                return { host, path, risk, notes };
+                return { host: hostRaw, path, risk, notes };
             };
 
             // Link intel booster
@@ -600,7 +601,8 @@
                 if (!raw) { unshortenResult.textContent = 'Enter a shortened link to inspect.'; return; }
                 const res = analyzeLinkBasic(raw);
                 if (res.error) { unshortenResult.textContent = res.error; return; }
-                if (!shorteners.has(res.host)) {
+                const isShort = [res.host, res.host.replace(/^www\./, '')].some((h) => Array.from(shorteners).some((s) => h.endsWith(s)));
+                if (!isShort) {
                     renderResultCard(unshortenResult, { risk: res.risk, title: 'Not a known shortener', lines: `Domain: ${res.host}<br>Path: ${res.path}`, notes: res.notes });
                     return;
                 }
@@ -718,4 +720,3 @@
     </script>
 </body>
 </html>
-
