@@ -779,45 +779,6 @@ a:focus-visible {
     text-align: center;
 }
 
-.utilities-section {
-    margin-top: 18px;
-}
-
-.utilities-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-    gap: 14px;
-}
-
-.utility-card {
-    background: rgba(255, 255, 255, 0.03);
-    border: 1px solid rgba(255, 255, 255, 0.06);
-    border-radius: 18px;
-    padding: 14px 16px;
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-}
-
-.utility-card h3 {
-    margin: 0;
-    font-size: 1.05rem;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-}
-
-.utility-card p {
-    margin: 0;
-    color: var(--text-muted);
-    font-size: 0.95rem;
-    line-height: 1.45;
-}
-
-.utility-card .ghost {
-    align-self: flex-start;
-}
-
 .sig-pad {
     border: 1px dashed rgba(255, 255, 255, 0.12);
     border-radius: 10px;
@@ -832,22 +793,6 @@ a:focus-visible {
     gap: 8px;
     flex-wrap: wrap;
     margin-top: 6px;
-}
-
-.utilities-grid input,
-.utilities-grid textarea {
-    width: 100%;
-    background: rgba(255, 255, 255, 0.03);
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    border-radius: 10px;
-    padding: 8px 10px;
-    color: var(--text);
-    font: inherit;
-}
-
-.utilities-grid textarea {
-    resize: vertical;
-    min-height: 80px;
 }
 
 .pulse {
