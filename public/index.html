@@ -197,7 +197,13 @@
                 { regex: /(activation[- ]?id|activation id|case id)/i, label: 'Fake activation/case id', weight: 2 },
                 { regex: /(giveaway|winner|prize|lottery|claim)/i, label: 'Giveaway language', weight: 1 },
                 { regex: /(crypto|usdt|bitcoin|investment|roi|forex)/i, label: 'Crypto/investment ask', weight: 2 },
-                { regex: /(support agent|admin|representative|official)/i, label: 'Authority/impersonation tone', weight: 1 }
+                { regex: /(support agent|admin|representative|official)/i, label: 'Authority/impersonation tone', weight: 1 },
+                { regex: /(reading|tarot|zodiac|signs|astrology)/i, label: 'Astrology/reading solicitation', weight: 4 },
+                { regex: /(random from my followers|pick(?:ing)? random|consider you in a reading)/i, label: 'Random follower selection lure', weight: 4 },
+                { regex: /(blessings|love and light)/i, label: 'Emotion bait language', weight: 3 },
+                { regex: /(business chat|business chats|facebook user|page is unavailable on messenger|your privacy)/i, label: 'Generic shell / unavailable page', weight: 3 },
+                { regex: /(thanks for supporting my page|would you like me to consider you)/i, label: 'Unsolicited outreach solicitation', weight: 3 },
+                { regex: /(what.?s your zodiac|zodiac signs)/i, label: 'Zodiac prompt', weight: 3 }
             ];
             let score = 0;
             const hits = [];
@@ -255,13 +261,14 @@
             return results;
         };
 
-        const combineRisk = (msgRisk, linkFindings, osintFindings) => {
+        const combineRisk = (msgRisk, linkFindings, osintFindings, hasTextHits) => {
             const osintHit = osintFindings?.some((o) => o.phish === true || o.urlhaus === true);
             const linkHigh = linkFindings?.some((l) => l.risk === 'Dangerous');
             if (osintHit || linkHigh) return 'Dangerous';
             if (msgRisk === 'Dangerous') return 'Dangerous';
             const linkWarn = linkFindings?.some((l) => l.risk === 'Caution');
             if (msgRisk === 'Caution' || linkWarn) return 'Caution';
+            if (hasTextHits) return 'Caution';
             return 'Safe';
         };
 
@@ -286,10 +293,13 @@
                     if (o.phish === true || o.urlhaus === true) reasons.push(`${o.url} flagged by OSINT`);
                 });
             }
-            let finalRisk = combineRisk(msgFinding.risk, linkFindings, osintFindings);
-            if (origin === 'screenshot' && urls.length && finalRisk === 'Safe') {
-                finalRisk = 'Caution';
-                reasons.push('Screenshot scan: links detected; proceed cautiously.');
+            let finalRisk = combineRisk(msgFinding.risk, linkFindings, osintFindings, msgFinding.hits.length > 0);
+            if (origin === 'screenshot') {
+                const hasSignals = urls.length || msgFinding.hits.length;
+                if (finalRisk === 'Safe') {
+                    finalRisk = hasSignals ? 'Caution' : 'Caution';
+                    reasons.push('Screenshot scan: treated as caution to avoid false negatives.');
+                }
             }
             setVerdict(finalRisk, reasons);
             renderLinks(linkFindings);
