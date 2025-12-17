@@ -3,124 +3,25 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tech Support Bro</title>
-    <link rel="stylesheet" href="./public/styles.css?v=tsb3">
-    <script src="https://unpkg.com/pdf-lib/dist/pdf-lib.min.js"></script>
-    <style>
-        .floating-nav {
-            position: fixed;
-            right: 12px;
-            top: 50%;
-            transform: translateY(-50%);
-            z-index: 999;
-            display: flex;
-            flex-direction: column;
-            gap: 6px;
-            padding: 10px;
-            background: rgba(16, 18, 30, 0.88);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            border-radius: 14px;
-            backdrop-filter: blur(10px);
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.35);
-        }
-        .floating-nav a {
-            color: #9fe8ff;
-            text-decoration: none;
-            font-weight: 700;
-            font-size: 15px;
-            padding: 8px 12px;
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 10px;
-            border: 1px solid rgba(255, 255, 255, 0.06);
-        }
-        .floating-nav a:hover {
-            background: rgba(159, 232, 255, 0.12);
-        }
-        @media (max-width: 768px) {
-            .floating-nav {
-                top: auto;
-                bottom: 14px;
-                right: 10px;
-                transform: none;
-                flex-direction: row;
-                flex-wrap: wrap;
-                gap: 6px;
-                width: calc(100% - 32px);
-                justify-content: center;
-            }
-            .floating-nav a {
-                font-size: 12px;
-                padding: 6px 8px;
-            }
-        }
-
-        /* Social safety tabs */
-        .tab-set {
-            display: flex;
-            gap: 10px;
-            flex-wrap: wrap;
-            margin-bottom: 16px;
-        }
-        .tab-button {
-            padding: 10px 14px;
-            border-radius: 12px;
-            border: 1px solid var(--border);
-            background: var(--panel);
-            color: var(--text);
-            cursor: pointer;
-            transition: all 0.2s ease;
-        }
-        .tab-button.active {
-            background: var(--accent-soft);
-            border-color: var(--accent);
-            color: var(--text);
-            box-shadow: 0 10px 30px rgba(0,0,0,0.25);
-        }
-        .tab-panel {
-            display: none;
-            border-radius: 16px;
-            border: 1px dashed var(--border);
-            padding: 16px;
-            background: var(--panel);
-        }
-        .tab-panel.active { display: block; }
-        .tab-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(260px,1fr));
-            gap: 16px;
-        }
-        .tab-panel textarea,
-        .tab-panel input {
-            width: 100%;
-            padding: 10px 12px;
-            border-radius: 10px;
-            border: 1px solid var(--border);
-            background: var(--panel-strong);
-            color: var(--text);
-        }
-        .tab-panel .ghost {
-            margin-top: 8px;
-        }
-    </style>
+    <title>Phishing &amp; Impersonation Guard</title>
+    <link rel="stylesheet" href="/styles.css?v=tsb5">
+    <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
 </head>
 <body>
-    <div class="floating-nav">
-        <a href="#social">Social safety</a>
-        <a href="#about">About</a>
-        <a href="#privacy">Privacy</a>
-    </div>
     <main class="layout">
         <section class="hero hero-shell">
             <div class="hero-content">
                 <img src="./techsupportbrologo.png" alt="Tech Support Bro" class="hero-logo">
+                <p class="node-summary">Single-purpose: scan links, DMs, and screenshots for phishing and impersonation. Clear verdicts, no clicks required.</p>
                 <div class="hero-actions">
-                    <button class="primary" data-target="#social">Open social safety</button>
-                    <a class="secondary" href="https://docs.google.com/forms/d/e/1FAIpQLSfoxhKvog1UU0YnpnK1U1toIyQkNborx3IAVtJOpc-5VwKhAg/viewform?usp=dialog" target="_blank" rel="noopener">
-                        Escalate to Garin
-                    </a>
+                    <button class="primary" data-target="#guard">Open the guard</button>
+                    <a class="secondary" href="https://docs.google.com/forms/d/e/1FAIpQLSfoxhKvog1UU0YnpnK1U1toIyQkNborx3IAVtJOpc-5VwKhAg/viewform?usp=dialog" target="_blank" rel="noopener">Escalate to Garin</a>
                 </div>
-                <p class="node-summary" style="margin-top:8px;">Browser-only safety checks for links, DMs, and impersonation before you click.</p>
-                <p class="node-summary">Nothing leaves your device. Built for home users, students, and small teams.</p>
+                <ul class="hero-highlights">
+                    <li>OCR screenshot scan (links stay non-clickable)</li>
+                    <li>OSINT feeds: phish.sinking.yachts, URLHaus</li>
+                    <li>Brand impersonation + obfuscated path detection</li>
+                </ul>
             </div>
             <div class="hero-visual">
                 <div class="grid-lines"></div>
@@ -133,595 +34,299 @@
                         </div>
                         <div class="tablet-screen">
                             <video autoplay muted loop playsinline>
-                                <source src="./public/ITChatBuddyAvatar.mp4" type="video/mp4">
-                                <source src="./public/ITChatBuddyAvatar.mov" type="video/quicktime">
-                                <a href="https://www.youtube.com" target="_blank" rel="noopener">Open demo video</a>
+                                <source src="/ITChatBuddyAvatar.mp4" type="video/mp4">
+                                <source src="/ITChatBuddyAvatar.mov" type="video/quicktime">
                             </video>
-                            <h2 class="tablet-title">Tech Support Bro</h2>
-                            <span class="tablet-caption">"Let's make sure it's safe."</span>
+                            <div class="tablet-title">Safety demo</div>
+                            <div class="tablet-caption">Video preview (non-clickable)</div>
                             <div class="tablet-screen-indicator"></div>
                         </div>
                     </div>
-                    <div class="floating-badges">
-                        <div class="floating-badge">Check a link for scams</div>
-                        <div class="floating-badge">Scan a DM or comment</div>
-                        <div class="floating-badge">Spot impersonation</div>
-                    </div>
-                    <div class="tablet-interactive-hint">Tap or click the tablet to interact</div>
                 </div>
+                <div class="floating-badges">
+                    <div class="floating-badge">Never click to check</div>
+                    <div class="floating-badge">Brand impersonation guard</div>
+                    <div class="floating-badge">OCR screenshot scan</div>
+                </div>
+                <div class="tablet-interactive-hint">Autoplaying avatar preview; links stay disabled.</div>
             </div>
         </section>
-<section class="tree-card" id="social">
+
+        <section class="tree-card" id="guard">
             <div class="tree-header">
                 <div>
-                    <p class="node-path">Social safety</p>
-                    <h2>Social Threat Triage</h2>
-                    <p class="node-summary">Assess links, messages, and profiles before you click. Nothing leaves your browser.</p>
+                    <p class="node-path">Safety guard</p>
+                    <h2>Phishing &amp; Impersonation Guard</h2>
+                    <p class="node-summary">Paste text or drop a screenshot. We extract links, run heuristics + OSINT, and give a clear verdict.</p>
                 </div>
             </div>
             <div class="node-body">
-                <div class="tab-set" id="socialTabs">
-                    <button class="tab-button active" data-tab="link">Link inspector</button>
-                    <button class="tab-button" data-tab="message">Message scanner</button>
-                    <button class="tab-button" data-tab="impersonation">Impersonation checklist</button>
-                    <button class="tab-button" data-tab="summary">Risk summary</button>
-                </div>
-
-                <div class="tab-panel active" data-panel="link">
-                    <div class="tab-grid">
-                        <div>
-                            <p class="node-summary">Paste a link to see the real domain, flags, and a cleaned version.</p>
-                            <input type="url" id="linkInputSocial" placeholder="https://example.com/..." aria-label="Link to inspect">
-                            <button class="ghost" type="button" id="linkCheckSocial">Inspect link</button>
-                        </div>
-                        <div>
-                            <div id="linkResultSocial" class="node-summary">No link inspected yet.</div>
-                            <div id="linkCleanSocial" class="node-summary"></div>
-                        </div>
+                <div class="addon-grid">
+                    <div class="addon-card">
+                        <h3>Text / Link check</h3>
+                        <p class="node-summary">Paste a DM, comment, or email text. Links stay non-clickable.</p>
+                        <textarea id="textInput" rows="6" placeholder="Paste the message or link..."></textarea>
+                        <button class="ghost" type="button" id="scanText">Scan text</button>
+                        <div id="textStatus" class="node-summary">Idle</div>
+                    </div>
+                    <div class="addon-card">
+                        <h3>Screenshot scan</h3>
+                        <p class="node-summary">Upload PNG/JPG. OCR runs locally; extracted links are shown as text.</p>
+                        <input type="file" id="shotInput" accept="image/png,image/jpeg">
+                        <button class="ghost" type="button" id="scanShot">Scan screenshot</button>
+                        <div id="shotStatus" class="node-summary">Idle</div>
+                    </div>
+                    <div class="addon-card">
+                        <h3>Verdict</h3>
+                        <div id="verdictPill" class="risk-pill" style="background:#f5c86220;border:1px solid #f5c86255;color:#f5c862;">Pending</div>
+                        <div id="reasonList" class="node-summary" style="margin-top:10px;">No scan yet.</div>
+                    </div>
+                    <div class="addon-card">
+                        <h3>Extracted links</h3>
+                        <div id="linksBlock" class="node-summary">None yet.</div>
+                    </div>
+                    <div class="addon-card">
+                        <h3>OSINT checks</h3>
+                        <div id="osintBlock" class="node-summary">None yet.</div>
                     </div>
                 </div>
-
-                <div class="tab-panel" data-panel="message">
-                    <p class="node-summary">Scan a comment/DM for urgency, authority, and scammy phrasing.</p>
-                    <textarea id="msgInput" rows="4" placeholder="Paste the message or comment..."></textarea>
-                    <button class="ghost" type="button" id="msgScan">Scan message</button>
-                    <div id="msgResult" class="node-summary">No message scanned yet.</div>
-                </div>
-
-                <div class="tab-panel" data-panel="impersonation">
-                    <p class="node-summary">Walk through a quick checklist to spot impersonation or fake pages.</p>
-                    <div class="tab-grid">
-                        <div>
-                            <label>Is the name/URL slightly misspelled? <input type="checkbox" id="impMisspell"></label><br>
-                            <label>Is the account new or low activity? <input type="checkbox" id="impNew"></label><br>
-                            <label>Comments/DMs closed or disabled? <input type="checkbox" id="impClosed"></label><br>
-                        </div>
-                        <div>
-                            <label>Verified or official badge missing? <input type="checkbox" id="impBadge"></label><br>
-                            <label>Urgent giveaway/crypto ask? <input type="checkbox" id="impAsk"></label><br>
-                            <label>Followers-to-engagement mismatch? <input type="checkbox" id="impEngagement"></label><br>
-                        </div>
-                    </div>
-                    <button class="ghost" type="button" id="impCheck">Check risk</button>
-                    <div id="impResult" class="node-summary">No checklist yet.</div>
-                </div>
-
-                <div class="tab-panel" data-panel="summary">
-                    <p class="node-summary">Quick summary you can screenshot or share.</p>
-                    <textarea id="summaryNotes" rows="3" placeholder="Add notes or context (optional)"></textarea>
-                    <button class="ghost" type="button" id="summaryBuild">Build summary</button>
-                    <div id="summaryResult" class="node-summary">No summary yet.</div>
-                </div>
-            </div>
-        </section>
-        <section class="tree-card" id="addons">
-            <div class="tree-header">
-                <div>
-                    <p class="node-path">Security add-ons</p>
-                    <h2>Extra quick checks</h2>
-                    <p class="node-summary">Best-effort, browser-only helpers for link, QR, attachment, and profile safety.</p>
-                </div>
-            </div>
-            <div class="node-body addon-grid">
-                <div class="addon-card">
-                    <h3>Link intel booster</h3>
-                    <p class="node-summary">Paste a URL to see TLD risk, subdomain depth, and other red flags.</p>
-                    <input type="url" id="linkIntelInput" placeholder="https://example.com/path" aria-label="Link to analyze">
-                    <button class="ghost" type="button" id="linkIntelCheck">Check link</button>
-                    <div id="linkIntelResult" class="node-summary">No link checked yet.</div>
-                </div>
-                <div class="addon-card">
-                    <h3>Unshorten / redirect peek</h3>
-                    <p class="node-summary">See where a shortened link points before you click. Browser restrictions apply.</p>
-                    <input type="url" id="unshortenInput" placeholder="https://bit.ly/..." aria-label="Shortened link">
-                    <button class="ghost" type="button" id="unshortenCheck">Try to resolve</button>
-                    <div id="unshortenResult" class="node-summary">No link checked yet.</div>
-                </div>
-                <div class="addon-card">
-                    <h3>QR risk check</h3>
-                    <p class="node-summary">Paste the decoded QR text (URL/Wi-Fi) to flag risky parts before scanning.</p>
-                    <textarea id="qrText" rows="3" placeholder="Paste QR payload or URL..." aria-label="QR payload"></textarea>
-                    <button class="ghost" type="button" id="qrCheck">Scan payload</button>
-                    <div id="qrResult" class="node-summary">No QR payload checked yet.</div>
-                </div>
-                <div class="addon-card">
-                    <h3>Attachment sanity</h3>
-                    <p class="node-summary">Spot dangerous double-extensions (e.g., invoice.pdf.exe) or script files.</p>
-                    <input type="text" id="attachName" placeholder="invoice.pdf.exe" aria-label="Attachment name">
-                    <button class="ghost" type="button" id="attachCheck">Check attachment</button>
-                    <div id="attachResult" class="node-summary">No attachment checked yet.</div>
-                </div>
-                <div class="addon-card">
-                    <h3>Profile risk score</h3>
-                    <p class="node-summary">Quick gut-check for new DMs: age, badge, follower/engagement balance.</p>
-                    <div class="mini-grid">
-                        <label>Account age (months) <input type="number" id="profAge" min="0" value="0"></label>
-                        <label>Followers <input type="number" id="profFollowers" min="0" value="0"></label>
-                        <label>Following <input type="number" id="profFollowing" min="0" value="0"></label>
-                        <label>Recent posts <input type="number" id="profPosts" min="0" value="0"></label>
-                        <label><input type="checkbox" id="profBadge"> Verified/official badge</label>
-                        <label>Bio/link keywords <input type="text" id="profBio" placeholder="support, giveaway, crypto..."></label>
-                    </div>
-                    <button class="ghost" type="button" id="profCheck">Score profile</button>
-                    <div id="profResult" class="node-summary">No profile scored yet.</div>
-                </div>
-                <div class="addon-card">
-                    <h3>Breach + MFA nudge</h3>
-                    <p class="node-summary">Enter an email to get an MFA reminder and a breach self-check link.</p>
-                    <input type="email" id="breachEmail" placeholder="you@example.com" aria-label="Email address">
-                    <button class="ghost" type="button" id="breachCheck">Get guidance</button>
-                    <div id="breachResult" class="node-summary">No email checked yet.</div>
-                </div>
-            </div>
-        </section>
-        <section class="tree-card" id="about">
-            <div class="tree-header">
-                <div>
-                    <p class="node-path">About</p>
-                    <h2>Who is Tech Support Bro?</h2>
-                    <p class="node-summary">Built by Garin Bailey, Senior IT Specialist (field-tested support, no data collection).</p>
-                </div>
-            </div>
-            <div class="node-body">
-                <div class="node-response">
-                    <p>I help people solve everyday tech problems without collecting their data. This tool runs in your browser only and is not a replacement for your company IT policies.</p>
-                    <p style="margin-top:8px;">Connect: <a href="https://www.linkedin.com/in/gbailey216/" target="_blank" rel="noopener">LinkedIn</a></p>
-                </div>
             </div>
         </section>
 
-        <section class="privacy-note" id="privacy">
-            Privacy: We don't collect personal data. This tool runs locally in your browser; no analytics or telemetry are sent.
+        <section class="privacy-note">
+            Privacy: OCR and heuristics run in your browser. Link intel hits public feeds (phish.sinking.yachts, URLHaus) only when online with the local server.
         </section>
-
     </main>
+
     <script>
-        (() => {
-            // Always start at top; prevent scroll restoration
-            if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
-            window.scrollTo({ top: 0, left: 0, behavior: 'auto' });
+    (() => {
+        const verdictPill = document.getElementById('verdictPill');
+        const reasonList = document.getElementById('reasonList');
+        const linksBlock = document.getElementById('linksBlock');
+        const osintBlock = document.getElementById('osintBlock');
+        const textInput = document.getElementById('textInput');
+        const scanText = document.getElementById('scanText');
+        const textStatus = document.getElementById('textStatus');
+        const shotInput = document.getElementById('shotInput');
+        const scanShot = document.getElementById('scanShot');
+        const shotStatus = document.getElementById('shotStatus');
 
-            const scrollButtons = document.querySelectorAll('[data-target]');
-            scrollButtons.forEach((btn) => {
-                btn.addEventListener('click', () => {
-                    const target = document.querySelector(btn.getAttribute('data-target'));
-                    if (target) {
-                        target.classList.add('pulse');
-                        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                        setTimeout(() => target.classList.remove('pulse'), 650);
-                    }
-                });
-            });
+        const suspiciousTlds = new Set(['zip','ru','cn','tk','ml','gq','ga','cf','work','top','quest','click','country','rest','cam']);
+        const shortenerSet = new Set(['bit.ly','tinyurl.com','t.co','goo.gl','ow.ly','buff.ly','is.gd','rebrand.ly','cutt.ly','shorte.st','lnkd.in','bl.ink']);
+        const riskyPathWords = ['login','signin','verify','account','secure','update','billing','invoice','prize','gift','bonus','free','btc','crypto','usdt','wallet','token','auth','reset','payment','appleid','icloud','account-lock','lock-account','reactivate','suspend'];
+        const brandWords = ['apple','appleid','icloud','appstore','itunes','meta','facebook','instagram','whatsapp','paypal','bank','usps','ups'];
+        const trustedAppleDomains = ['apple.com','icloud.com','appleid.apple.com'];
+        const suspiciousDomains = new Set(['brainstormlabserver.com','acftop.com','muet.brainstormlabserver.com']);
 
-            // Social safety tabs + heuristics (browser-only)
-            const tabButtons = document.querySelectorAll('.tab-button');
-            const tabPanels = document.querySelectorAll('.tab-panel');
-            tabButtons.forEach((btn) => {
-                btn.addEventListener('click', () => {
-                    const tab = btn.getAttribute('data-tab');
-                    tabButtons.forEach((b) => b.classList.toggle('active', b === btn));
-                    tabPanels.forEach((p) => p.classList.toggle('active', p.getAttribute('data-panel') === tab));
-                });
-            });
+        const riskLabel = (score) => score >= 4 ? 'Dangerous' : score >= 2 ? 'Caution' : 'Safe';
+        const looksLikeIp = (host) => /^(\d{1,3}\.){3}\d{1,3}$/.test(host);
+        const hasPunycode = (host) => host.includes('xn--') || /[^\x00-\x7F]/.test(host);
+        const countDots = (host) => (host.match(/\./g) || []).length;
+        const isObfuscatedPath = (path) => {
+            const trimmed = (path || '/').replace(/^\/+/, '');
+            if (!trimmed) return false;
+            if (trimmed.length >= 20 && /^[A-Za-z0-9/+_.-]+$/.test(trimmed)) {
+                const hasLetters = /[A-Za-z]/.test(trimmed);
+                const hasDigits = /\d/.test(trimmed);
+                const hasSeparators = /[-_/?.=&]/.test(trimmed);
+                if (hasLetters && hasDigits && !hasSeparators) return true;
+            }
+            return false;
+        };
 
-            const riskLabel = (score) => {
-                if (score >= 6) return 'High';
-                if (score >= 3) return 'Medium';
-                return 'Low';
-            };
-
-            // Link inspector
-            const linkInputSocial = document.getElementById('linkInputSocial');
-            const linkCheckSocial = document.getElementById('linkCheckSocial');
-            const linkResultSocial = document.getElementById('linkResultSocial');
-            const linkCleanSocial = document.getElementById('linkCleanSocial');
-            let lastLinkSummary = null;
-
-            const trackingParams = ['utm_source','utm_medium','utm_campaign','utm_term','utm_content','utm_id','fbclid','gclid','msclkid','mc_eid','ref','affid'];
-            const suspiciousTldsSocial = ['zip','ru','cn','tk','ml','gq','ga','cf','work','top','quest','click','country','rest'];
-            const shorteners = ['bit.ly','tinyurl.com','t.co','goo.gl','ow.ly','buff.ly','is.gd','rebrand.ly','cutt.ly','shorte.st','lnkd.in','bl.ink'];
-            const riskyWords = ['login','signin','verify','account','secure','update','billing','invoice','prize','gift','bonus','free','btc','crypto','usdt','wallet','token','auth','reset'];
-
-            const cleanTracking = (url) => {
-                try {
-                    const u = new URL(url);
-                    const params = new URLSearchParams(u.search);
-                    trackingParams.forEach((k) => params.delete(k));
-                    u.search = params.toString();
-                    return u.toString();
-                } catch {
-                    return url;
-                }
-            };
-
-            const analyzeLink = (raw) => {
-                let parsed;
-                const flags = [];
-                let score = 0;
-                try {
-                    parsed = new URL(raw);
-                } catch {
-                    return { error: 'Not a valid URL. Check for typos.' };
-                }
-                const host = parsed.hostname.toLowerCase();
-                const path = parsed.pathname || '/';
-
-                if (parsed.protocol !== 'https:') {
-                    flags.push('Not using HTTPS.');
-                    score += 2;
-                }
-                if (/^(\d{1,3}\.){3}\d{1,3}$/.test(host)) {
-                    flags.push('IP address instead of a named domain.');
-                    score += 2;
-                }
-                if (host.includes('xn--') || /[^\x00-\x7F]/.test(host)) {
-                    flags.push('Unicode/punycode characters detected (possible look-alike).');
-                    score += 2;
-                }
-                const hostParts = host.split('.');
-                const tld = hostParts.pop() || '';
-                if (hostParts.length > 2) {
-                    flags.push('Deep subdomain (could hide the real domain).');
-                    score += 1;
-                }
-                if (suspiciousTldsSocial.includes(tld)) {
-                    flags.push(`Uncommon TLD: .${tld}`);
-                    score += 2;
-                }
-                if (shorteners.some((s) => host.endsWith(s.replace(/^www\./, '')))) {
-                    flags.push('Link shortener detected (destination unknown).');
-                    score += 2;
-                }
-                if (/[0-9]{4,}/.test(host)) {
-                    flags.push('Heavy numeric domain (possible look-alike).');
-                    score += 1;
-                }
-                if (parsed.port && !['80','443'].includes(parsed.port)) {
-                    flags.push(`Unusual port :${parsed.port}`);
-                    score += 1;
-                }
-                if (parsed.search.includes('base64') || parsed.href.toLowerCase().includes('data:')) {
-                    flags.push('Obfuscated parameters detected.');
-                    score += 2;
-                }
-                if (/(%2f|%40|%3d)/i.test(parsed.search)) {
-                    flags.push('Encoded characters in query (could mask intent).');
-                    score += 1;
-                }
-                if (riskyWords.some((word) => path.toLowerCase().includes(word))) {
-                    flags.push('Suspicious keywords in the path.');
-                    score += 1;
-                }
-
-                const cleaned = cleanTracking(raw);
-                const risk = riskLabel(score + flags.length);
-                return {
-                    host,
-                    path,
-                    cleaned,
-                    flags,
-                    risk
-                };
-            };
-
-            linkCheckSocial?.addEventListener('click', () => {
-                const raw = linkInputSocial?.value.trim();
-                linkResultSocial.textContent = '';
-                linkCleanSocial.textContent = '';
-
-                if (!raw) {
-                    linkResultSocial.textContent = 'Enter a link to inspect.';
-                    lastLinkSummary = null;
-                    return;
-                }
-
-                const result = analyzeLink(raw);
-                if (result.error) {
-                    linkResultSocial.textContent = result.error;
-                    lastLinkSummary = null;
-                    return;
-                }
-
-                const { host, path, flags, cleaned, risk } = result;
-                const flagList = flags.length ? `<ul>${flags.map((f) => `<li>${f}</li>`).join('')}</ul>` : 'No obvious red flags. Still stay cautious.';
-                linkResultSocial.innerHTML = `<strong>Risk:</strong> ${risk}<br><strong>Domain:</strong> ${host}<br><strong>Path:</strong> ${path}<br>${flagList}`;
-                linkCleanSocial.innerHTML = `<strong>Cleaned link:</strong> <a href="${cleaned}" target="_blank" rel="noopener">${cleaned}</a>`;
-                lastLinkSummary = { risk, flags, cleaned };
-            });
-
-            // Message scanner
-            const msgInput = document.getElementById('msgInput');
-            const msgScan = document.getElementById('msgScan');
-            const msgResult = document.getElementById('msgResult');
-            let lastMsgSummary = null;
-
-            msgScan?.addEventListener('click', () => {
-                const text = (msgInput?.value || '').trim();
-                msgResult.textContent = '';
-                if (!text) {
-                    msgResult.textContent = 'Paste a message to scan.';
-                    lastMsgSummary = null;
-                    return;
-                }
-                const lower = text.toLowerCase();
-                const patterns = [
-                    { regex: /(verify|suspend|locked|reset|appeal|violation|ticket)/i, label: 'Account/security language', weight: 2 },
-                    { regex: /(immediately|urgent|24 hours|right now|act now|final notice)/i, label: 'Urgency or deadline', weight: 2 },
-                    { regex: /(giveaway|winner|prize|lottery|claim)/i, label: 'Giveaway/lottery phrasing', weight: 1 },
-                    { regex: /(crypto|usdt|bitcoin|investment|roi|forex)/i, label: 'Crypto/investment ask', weight: 2 },
-                    { regex: /(payment|deposit|wire|western union|zelle|gift card|prepaid)/i, label: 'Payment request', weight: 2 },
-                    { regex: /(review.*(commission|pay|payment|refund|rebate)|commission.*review|pay.*for your review)/i, label: 'Paid reviews/commission offer', weight: 2 },
-                    { regex: /(commission|referral|payout)/i, label: 'Commission payout mentioned', weight: 1 },
-                    { regex: /(amazon seller|amaz seller|amazon store)/i, label: 'Unsolicited Amazon seller outreach', weight: 2 },
-                    { regex: /(product testing|free sample|free product|try our product|gift for review|lingerie|sleepwear)/i, label: 'Unsolicited product/lingerie pitch', weight: 1 },
-                    { regex: /(click.*link|open.*link|tap the link|login here)/i, label: 'Instruction to click a link', weight: 1 },
-                    { regex: /(support agent|admin|representative|official)/i, label: 'Authority/impersonation tone', weight: 1 },
-                    { regex: /(congratulations|limited time|exclusive)/i, label: 'Hype or bait language', weight: 1 }
-                ];
-                let score = 0;
-                const hits = [];
-                patterns.forEach((p) => {
-                    if (p.regex.test(lower)) {
-                        score += p.weight;
-                        hits.push(p.label);
-                    }
-                });
-                // Adjust thresholds to catch softer-but-spammy pitches
-                const risk = score >= 5 ? 'High' : score >= 2 ? 'Medium' : 'Low';
-                const hitList = hits.length ? `<ul>${hits.map((h) => `<li>${h}</li>`).join('')}</ul>` : 'No strong scam patterns detected. Still verify the sender and context.';
-                msgResult.innerHTML = `<strong>Risk:</strong> ${risk}${hits.length ? '' : ''}<br>${hitList}`;
-                lastMsgSummary = { risk, hits };
-            });
-
-            // Impersonation checklist
-            const impChecks = [
-                { id: 'impMisspell', label: 'Name/URL looks misspelled', weight: 2 },
-                { id: 'impNew', label: 'New account or low activity', weight: 2 },
-                { id: 'impClosed', label: 'Comments/DMs closed or limited', weight: 1 },
-                { id: 'impBadge', label: 'Missing official badge where expected', weight: 2 },
-                { id: 'impAsk', label: 'Urgent giveaway/crypto ask', weight: 2 },
-                { id: 'impEngagement', label: 'Followers-to-engagement mismatch', weight: 1 }
+        const extractUrls = (text) => {
+            const found = new Set();
+            const patterns = [
+                /(https?:\/\/[^\s"'<>]+)/gi,
+                /(www\.[^\s"'<>]+)/gi,
+                /([a-zA-Z0-9.-]+\.[a-zA-Z]{2,})(\/[^\s"'<>]*)?/gi, // bare domains
             ];
-            const impCheck = document.getElementById('impCheck');
-            const impResult = document.getElementById('impResult');
-            let lastImpSummary = null;
-
-            impCheck?.addEventListener('click', () => {
-                let score = 0;
-                const hits = [];
-                impChecks.forEach(({ id, label, weight }) => {
-                    const el = document.getElementById(id);
-                    if (el?.checked) {
-                        score += weight;
-                        hits.push(label);
-                    }
-                });
-                const risk = riskLabel(score);
-                const hitList = hits.length ? `<ul>${hits.map((h) => `<li>${h}</li>`).join('')}</ul>` : 'No checklist flags selected.';
-                impResult.innerHTML = `<strong>Impersonation likelihood:</strong> ${risk}<br>${hitList}`;
-                lastImpSummary = { risk, hits };
+            patterns.forEach((regex) => {
+                for (const match of text.matchAll(regex)) {
+                    let url = match[0];
+                    if (!/^https?:\/\//i.test(url)) url = 'https://' + url;
+                    url = url.replace(/[,.;:]+$/, ''); // trim trailing punctuation
+                    try {
+                        const u = new URL(url);
+                        u.hash = '';
+                        found.add(u.toString().toLowerCase());
+                    } catch {}
+                }
             });
+            return Array.from(found).slice(0, 8);
+        };
 
-            // Summary builder
-            const summaryNotes = document.getElementById('summaryNotes');
-            const summaryBuild = document.getElementById('summaryBuild');
-            const summaryResult = document.getElementById('summaryResult');
-            summaryBuild?.addEventListener('click', () => {
-                const notes = (summaryNotes?.value || '').trim();
-                const parts = [
-                    'Social Threat Triage summary:',
-                    lastLinkSummary ? `- Link: ${lastLinkSummary.risk} risk${lastLinkSummary.flags?.length ? ` (${lastLinkSummary.flags.length} flag(s))` : ''}.` : '- Link: not checked yet.',
-                    lastMsgSummary ? `- Message: ${lastMsgSummary.risk} risk${lastMsgSummary.hits?.length ? ` (${lastMsgSummary.hits.length} pattern(s))` : ''}.` : '- Message: not checked yet.',
-                    lastImpSummary ? `- Impersonation: ${lastImpSummary.risk} likelihood${lastImpSummary.hits?.length ? ` (${lastImpSummary.hits.length} flag(s))` : ''}.` : '- Impersonation: not checked yet.',
-                    notes ? `Notes: ${notes}` : null
-                ].filter(Boolean);
-                summaryResult.innerHTML = parts.join('<br>');
-            });
+        const analyzeLinkHeuristics = (raw) => {
+            let parsed;
+            const flags = [];
+            let score = 0;
+            try { parsed = new URL(raw); } catch { return { error: 'Invalid URL' }; }
+            const hostRaw = parsed.hostname.toLowerCase();
+            const host = hostRaw.replace(/^www\./, '');
+            const hostLabel = host.split('.').slice(0, -1).join('.') || host.split('.')[0];
+            const tld = host.split('.').pop() || '';
+            const path = parsed.pathname || '/';
 
-            // Shared helpers for link heuristics + visuals
-            const shortenerSet = new Set(['bit.ly','tinyurl.com','t.co','goo.gl','ow.ly','buff.ly','is.gd','rebrand.ly','cutt.ly','shorte.st','lnkd.in','bl.ink']);
-            const riskyTlds = new Set(['zip','ru','cn','tk','ml','gq','ga','cf','work','top','quest','click','country','rest','cam']);
-            const hasPunycode = (host) => host.includes('xn--');
-            const looksLikeIp = (host) => /^(\d{1,3}\.){3}\d{1,3}$/.test(host);
-            const countDots = (host) => (host.match(/\./g) || []).length;
-            const riskyPathWords = ['login','signin','verify','account','secure','update','billing','invoice','prize','gift','bonus','free','btc','crypto','usdt','wallet','token','auth','reset'];
-            const riskPill = (risk) => {
-                const color = risk === 'High' ? '#f56262' : risk === 'Medium' ? '#f5c862' : '#6ae28c';
-                const text = risk || 'Info';
-                return `<span class="risk-pill" style="background:${color}20;border:1px solid ${color}55;color:${color};">${text}</span>`;
-            };
-            const renderList = (items) => items && items.length ? `<ul class="flag-list">${items.map((n) => `<li>${n}</li>`).join('')}</ul>` : '<div class="node-summary">No obvious red flags. Still verify manually.</div>';
-            const renderResultCard = (target, { risk, title, lines, notes }) => {
-                if (!target) return;
-                const heading = [risk ? riskPill(risk) : '', title ? `<strong>${title}</strong>` : ''].filter(Boolean).join(' ');
-                target.innerHTML = `<div class="result-card">${heading ? `<div class="result-head">${heading}</div>` : ''}${lines ? `<div class="result-body">${lines}</div>` : ''}${notes ? renderList(notes) : ''}</div>`;
-            };
-            const analyzeLinkBasic = (value) => {
-                let parsed;
-                const notes = [];
-                let score = 0;
+            if (parsed.protocol !== 'https:') { flags.push('Not using HTTPS'); score += 2; }
+            if (looksLikeIp(host)) { flags.push('Bare IP instead of domain'); score += 2; }
+            if (hasPunycode(host)) { flags.push('Unicode/punycode characters'); score += 2; }
+            if (countDots(host) > 3) { flags.push('Deep subdomain'); score += 1; }
+            if (suspiciousTlds.has(tld)) { flags.push(`Risky TLD .${tld}`); score += 2; }
+            if (shortenerSet.has(host)) { flags.push('Link shortener (destination hidden)'); score += 2; }
+            if (/[0-9]{5,}/.test(host)) { flags.push('Heavy numeric hostname'); score += 1; }
+            if (parsed.port && !['80','443'].includes(parsed.port)) { flags.push(`Unusual port :${parsed.port}`); score += 1; }
+            if (parsed.search.includes('base64') || /(data:|%2f|%40|%3d)/i.test(parsed.search)) { flags.push('Obfuscated parameters'); score += 1; }
+            if (riskyPathWords.some((w) => path.toLowerCase().includes(w))) { flags.push('Suspicious keywords in path'); score += 2; }
+            if (isObfuscatedPath(path)) { flags.push('Obfuscated path (random ID)'); score += 2; }
+            if (hostLabel.length <= 6 && (/\d/.test(hostLabel) || !/[aeiou]/i.test(hostLabel))) { flags.push('Random-looking host name'); score += 2; }
+            if (brandWords.some((w) => host.includes(w)) && !trustedAppleDomains.some((good) => host.endsWith(good))) { flags.push('Brand keyword without trusted domain'); score += 3; }
+            if (suspiciousDomains.has(host)) { flags.push('Known suspicious domain'); score += 4; }
+            const risk = riskLabel(score + flags.length);
+            return { host, path, risk, flags };
+        };
+
+        const analyzeMessageHeuristics = (text) => {
+            const patterns = [
+                { regex: /(verify|suspend|locked|reset|appeal|violation|ticket)/i, label: 'Account/security language', weight: 2 },
+                { regex: /(immediately|urgent|24 hours|right now|act now|final notice)/i, label: 'Urgency/deadline', weight: 2 },
+                { regex: /(payment|deposit|wire|zelle|cash app|gift card|prepaid)/i, label: 'Payment request', weight: 2 },
+                { regex: /(apple id|icloud|appleid|itunes|app store)/i, label: 'Apple brand targeting', weight: 3 },
+                { regex: /(locked account|account will be locked|account lock)/i, label: 'Account lock threat', weight: 3 },
+                { regex: /(update my payment details|update payment|billing update|payment declined)/i, label: 'Payment update demand', weight: 3 },
+                { regex: /(files (?:deleted|erased)|data (?:deleted|erased)|cloud storage.*at risk|irreversible termination|media files.*lost)/i, label: 'Data deletion scare', weight: 3 },
+                { regex: /(activation[- ]?id|activation id|case id)/i, label: 'Fake activation/case id', weight: 2 },
+                { regex: /(giveaway|winner|prize|lottery|claim)/i, label: 'Giveaway language', weight: 1 },
+                { regex: /(crypto|usdt|bitcoin|investment|roi|forex)/i, label: 'Crypto/investment ask', weight: 2 },
+                { regex: /(support agent|admin|representative|official)/i, label: 'Authority/impersonation tone', weight: 1 }
+            ];
+            let score = 0;
+            const hits = [];
+            const lower = text.toLowerCase();
+            patterns.forEach((p) => { if (p.regex.test(lower)) { score += p.weight; hits.push(p.label); } });
+            const risk = score >= 4 ? 'Dangerous' : score >= 2 ? 'Caution' : 'Safe';
+            return { risk, hits };
+        };
+
+        const setVerdict = (risk, reasons) => {
+            const color = risk === 'Dangerous' ? '#ff6b6b' : risk === 'Caution' ? '#f5c862' : '#5be18a';
+            verdictPill.textContent = risk;
+            verdictPill.style.background = `${color}20`;
+            verdictPill.style.border = `1px solid ${color}55`;
+            verdictPill.style.color = color;
+            reasonList.innerHTML = (reasons && reasons.length) ? `<ul class="flag-list">${reasons.map((r) => `<li>${r}</li>`).join('')}</ul>` : 'No clear issues detected. Still be cautious.';
+        };
+
+        const renderLinks = (items) => {
+            if (!items || !items.length) { linksBlock.textContent = 'No links found.'; return; }
+            linksBlock.innerHTML = items.map((i) => `<div class="node-summary" style="margin-bottom:8px;"><strong>${i.risk}</strong><br>${i.url}<br>${i.flags?.length ? i.flags.join('; ') : 'No flags'}</div>`).join('');
+        };
+
+        const renderOsint = (items) => {
+            if (!items || !items.length) { osintBlock.textContent = 'No OSINT lookups yet.'; return; }
+            osintBlock.innerHTML = items.map((i) => {
+                const phish = i.phish === true ? 'Flagged in phish feed' : i.phish === false ? 'Not in phish feed' : i.phish;
+                const urlhaus = i.urlhaus === true ? 'Listed in URLHaus' : i.urlhaus === false ? 'Not in URLHaus' : i.urlhaus;
+                return `<div class="node-summary" style="margin-bottom:8px;">${i.url}<br>${[phish, urlhaus].filter(Boolean).join(' | ')}</div>`;
+            }).join('');
+        };
+
+        const fetchOsintForLinks = async (urls) => {
+            const results = [];
+            for (const url of urls.slice(0, 5)) {
                 try {
-                    parsed = new URL(value);
-                } catch {
-                    return { error: 'Not a valid URL. Check for typos.' };
-                }
-                const hostRaw = parsed.hostname.toLowerCase();
-                const host = hostRaw.replace(/^www\./, '');
-                const tld = host.split('.').pop() || '';
-                const path = parsed.pathname || '/';
-                if (parsed.protocol !== 'https:') { notes.push('Not using HTTPS.'); score += 2; }
-                if (looksLikeIp(host)) { notes.push('Bare IP instead of a named domain.'); score += 2; }
-                if (hasPunycode(host) || /[^\x00-\x7F]/.test(host)) { notes.push('Unicode/punycode characters detected.'); score += 2; }
-                if (countDots(host) > 3) { notes.push('Deep subdomain structure.'); score += 1; }
-                if (riskyTlds.has(tld)) { notes.push(`Uncommon or risky TLD: .${tld}`); score += 2; }
-                if ([host, hostRaw].some((h) => Array.from(shortenerSet).some((s) => h.endsWith(s)))) { notes.push('Known link shortener; destination hidden.'); score += 2; }
-                if (/[0-9]{5,}/.test(host)) { notes.push('Heavy numeric hostname (possible look-alike).'); score += 1; }
-                if (parsed.port && !['80','443'].includes(parsed.port)) { notes.push(`Unusual port :${parsed.port}`); score += 1; }
-                if (parsed.search.includes('base64') || /(data:|%2f|%40|%3d)/i.test(parsed.search)) { notes.push('Obfuscated or encoded parameters.'); score += 1; }
-                if (riskyPathWords.some((w) => path.toLowerCase().includes(w))) { notes.push('Suspicious keywords in the path.'); score += 1; }
-                const risk = riskLabel(score >= 6 ? 6 : score);
-                return { host: hostRaw, path, risk, notes };
-            };
-
-            // Link intel booster
-            const linkIntelInput = document.getElementById('linkIntelInput');
-            const linkIntelCheck = document.getElementById('linkIntelCheck');
-            const linkIntelResult = document.getElementById('linkIntelResult');
-            linkIntelCheck?.addEventListener('click', () => {
-                const raw = linkIntelInput?.value.trim();
-                if (!raw) { linkIntelResult.textContent = 'Enter a link to inspect.'; return; }
-                const res = analyzeLinkBasic(raw);
-                if (res.error) { linkIntelResult.textContent = res.error; return; }
-                const { host, path, risk, notes } = res;
-                const lines = `<div><strong>Domain:</strong> ${host}<br><strong>Path:</strong> ${path}</div>`;
-                renderResultCard(linkIntelResult, { risk, title: 'Link intel', lines, notes });
-            });
-
-            // Unshorten / redirect peek (best-effort; may be blocked by CORS)
-            const unshortenInput = document.getElementById('unshortenInput');
-            const unshortenCheck = document.getElementById('unshortenCheck');
-            const unshortenResult = document.getElementById('unshortenResult');
-            unshortenCheck?.addEventListener('click', async () => {
-                const raw = unshortenInput?.value.trim();
-                if (!raw) { unshortenResult.textContent = 'Enter a shortened link to inspect.'; return; }
-                const res = analyzeLinkBasic(raw);
-                if (res.error) { unshortenResult.textContent = res.error; return; }
-                const isShort = [res.host, res.host.replace(/^www\./, '')].some((h) => Array.from(shortenerSet).some((s) => h.endsWith(s)));
-                if (!isShort) {
-                    renderResultCard(unshortenResult, { risk: res.risk, title: 'Not a known shortener', lines: `Domain: ${res.host}<br>Path: ${res.path}`, notes: res.notes });
-                    return;
-                }
-                unshortenResult.textContent = 'Trying to peek at the redirect (may be blocked by browser/CORS)...';
-                try {
-                    const resp = await fetch(raw, { method: 'HEAD', redirect: 'manual' });
-                    const loc = resp.headers.get('Location');
-                    if (loc) {
-                        const dest = analyzeLinkBasic(loc);
-                        renderResultCard(unshortenResult, {
-                            risk: dest.risk,
-                            title: 'Redirect preview',
-                            lines: `Likely destination:<br>${loc}`,
-                            notes: dest.notes
-                        });
-                    } else {
-                        unshortenResult.textContent = 'Could not read redirect target (no Location header).';
-                    }
-                } catch (e) {
-                    unshortenResult.textContent = 'Browser blocked the redirect peek. Preview manually in a safe sandbox if unsure.';
-                }
-            });
-
-            // QR risk check
-            const qrText = document.getElementById('qrText');
-            const qrCheck = document.getElementById('qrCheck');
-            const qrResult = document.getElementById('qrResult');
-            qrCheck?.addEventListener('click', () => {
-                const payload = (qrText?.value || '').trim();
-                if (!payload) { qrResult.textContent = 'Paste the decoded QR payload or URL.'; return; }
-                if (payload.toUpperCase().startsWith('WIFI:')) {
-                    const hasPass = payload.includes('P:') || payload.toUpperCase().includes('P:');
-                    renderResultCard(qrResult, {
-                        title: 'Wi-Fi QR detected',
-                        lines: hasPass ? 'Contains a password; confirm the source before connecting.' : 'No password found in payload.',
-                        notes: ['Verify the network name with the sender in another channel.']
+                    const resp = await fetch('/api/osint/link', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ url })
                     });
-                    return;
+                    if (!resp.ok) throw new Error('HTTP ' + resp.status);
+                    const data = await resp.json();
+                    const phish = data?.sources?.phishFeed;
+                    const urlhaus = data?.sources?.urlhaus;
+                    results.push({
+                        url,
+                        phish: phish?.flagged ?? phish?.error,
+                        urlhaus: urlhaus?.listed ?? urlhaus?.error
+                    });
+                } catch (e) {
+                    results.push({ url, phish: 'lookup failed', urlhaus: 'lookup failed' });
                 }
-                const res = analyzeLinkBasic(payload);
-                if (res.error) { qrResult.textContent = 'Not a URL or Wi-Fi payload. If it is text, verify with the sender.'; return; }
-                renderResultCard(qrResult, { risk: res.risk, title: 'QR payload check', notes: res.notes });
-            });
+            }
+            return results;
+        };
 
-            // Attachment sanity
-            const attachName = document.getElementById('attachName');
-            const attachCheck = document.getElementById('attachCheck');
-            const attachResult = document.getElementById('attachResult');
-            attachCheck?.addEventListener('click', () => {
-                const name = (attachName?.value || '').trim();
-                if (!name) { attachResult.textContent = 'Enter a file name to check.'; return; }
-                const lower = name.toLowerCase();
-                const riskyExts = ['exe','js','vbs','bat','cmd','scr','ps1','jar','com','msi'];
-                const doubleExt = lower.match(/\.([a-z0-9]+)\.([a-z0-9]+)$/);
-                const findings = [];
-                if (doubleExt) {
-                    const [, mid, last] = doubleExt;
-                    if (riskyExts.includes(last)) findings.push(`Dangerous double-extension: .${mid}.${last}`);
-                }
-                const lastExt = (lower.split('.').pop() || '');
-                if (riskyExts.includes(lastExt)) findings.push(`Runs code (${lastExt}); only open if you trust the source and expected this file.`);
-                if (!findings.length) findings.push('No obvious extension red flags. Still scan with antivirus if unsure.');
-                const risk = findings.length > 1 ? 'High' : findings[0].startsWith('No obvious') ? 'Low' : 'Medium';
-                renderResultCard(attachResult, { risk, title: name, notes: findings });
-            });
+        const combineRisk = (msgRisk, linkFindings, osintFindings) => {
+            const osintHit = osintFindings?.some((o) => o.phish === true || o.urlhaus === true);
+            const linkHigh = linkFindings?.some((l) => l.risk === 'Dangerous');
+            if (osintHit || linkHigh) return 'Dangerous';
+            if (msgRisk === 'Dangerous') return 'Dangerous';
+            const linkWarn = linkFindings?.some((l) => l.risk === 'Caution');
+            if (msgRisk === 'Caution' || linkWarn) return 'Caution';
+            return 'Safe';
+        };
 
-            // Profile risk score
-            const profAge = document.getElementById('profAge');
-            const profFollowers = document.getElementById('profFollowers');
-            const profFollowing = document.getElementById('profFollowing');
-            const profPosts = document.getElementById('profPosts');
-            const profBadge = document.getElementById('profBadge');
-            const profBio = document.getElementById('profBio');
-            const profCheck = document.getElementById('profCheck');
-            const profResult = document.getElementById('profResult');
-            profCheck?.addEventListener('click', () => {
-                const age = parseInt(profAge?.value || '0', 10);
-                const followers = parseInt(profFollowers?.value || '0', 10);
-                const following = parseInt(profFollowing?.value || '0', 10);
-                const posts = parseInt(profPosts?.value || '0', 10);
-                const hasBadge = !!profBadge?.checked;
-                const bio = (profBio?.value || '').toLowerCase();
-                let score = 0;
-                const notes = [];
-                if (age < 3) { score += 2; notes.push('Very new account.'); }
-                if (!hasBadge) { score += 1; notes.push('No official/verified badge.'); }
-                if (followers > 0 && following > followers * 5) { score += 2; notes.push('Follows far more than follow back.'); }
-                if (followers > 10000 && posts < 10) { score += 2; notes.push('High followers but low posts (could be bought).'); }
-                if (posts === 0) { score += 2; notes.push('No posts yet.'); }
-                if (/(support|agent|helpdesk|admin|official|giveaway|crypto|investment|refund)/i.test(bio)) { score += 2; notes.push('Bio/link uses support/giveaway/crypto language.'); }
-                const risk = riskLabel(score);
-                renderResultCard(profResult, { risk, title: 'Profile check', notes });
+        const analyzeTextFlow = async (text, setStatus, origin = 'text') => {
+            setStatus('Scanning...');
+            const urls = extractUrls(text);
+            const linkFindings = urls.map((url) => {
+                const res = analyzeLinkHeuristics(url);
+                return { url, risk: res.risk, flags: res.flags || [] };
             });
+            const msgFinding = analyzeMessageHeuristics(text);
+            let osintFindings = [];
+            if (urls.length) {
+                setStatus('Running OSINT lookups...');
+                osintFindings = await fetchOsintForLinks(urls);
+            }
+            const reasons = [];
+            if (msgFinding.hits.length) reasons.push(...msgFinding.hits);
+            linkFindings.forEach((l) => { reasons.push(`${l.url} → ${l.risk}${l.flags?.length ? ' (' + l.flags.join(', ') + ')' : ''}`); });
+            if (osintFindings.length) {
+                osintFindings.forEach((o) => {
+                    if (o.phish === true || o.urlhaus === true) reasons.push(`${o.url} flagged by OSINT`);
+                });
+            }
+            let finalRisk = combineRisk(msgFinding.risk, linkFindings, osintFindings);
+            if (origin === 'screenshot' && urls.length && finalRisk === 'Safe') {
+                finalRisk = 'Caution';
+                reasons.push('Screenshot scan: links detected; proceed cautiously.');
+            }
+            setVerdict(finalRisk, reasons);
+            renderLinks(linkFindings);
+            renderOsint(osintFindings);
+            setStatus('Done');
+        };
 
-            // Breach + MFA nudge
-            const breachEmail = document.getElementById('breachEmail');
-            const breachCheck = document.getElementById('breachCheck');
-            const breachResult = document.getElementById('breachResult');
-            breachCheck?.addEventListener('click', () => {
-                const email = (breachEmail?.value || '').trim();
-                if (!email || !email.includes('@')) {
-                    breachResult.textContent = 'Enter a valid email to get guidance.';
-                    return;
-                }
-                const steps = [
-                    `Check for breaches: open https://haveibeenpwned.com/ (only on trusted networks).`,
-                    `Turn on MFA for this account and any linked services (prefer app-based codes or security keys).`,
-                    `Change password if reused anywhere; use a manager to create a unique one.`,
-                    `Review recent logins/security alerts for this account today.`,
-                    `Add/verify recovery methods (phone, backup codes) and remove any you do not recognize.`
-                ];
-                renderResultCard(breachResult, { title: email, notes: steps });
+        scanText?.addEventListener('click', async () => {
+            const text = (textInput?.value || '').trim();
+            if (!text) { textStatus.textContent = 'Paste something to scan.'; return; }
+            await analyzeTextFlow(text, (msg) => textStatus.textContent = msg);
+        });
+
+        scanShot?.addEventListener('click', async () => {
+            const file = shotInput?.files?.[0];
+            if (!file) { shotStatus.textContent = 'Choose a screenshot first.'; return; }
+            shotStatus.textContent = 'Running OCR locally...';
+            try {
+                const { data } = await Tesseract.recognize(file, 'eng', { logger: () => {} });
+                const ocrText = (data?.text || '').trim();
+                if (!ocrText) { shotStatus.textContent = 'Could not read text from image.'; return; }
+                await analyzeTextFlow(ocrText, (msg) => shotStatus.textContent = msg, 'screenshot');
+                shotStatus.textContent = 'Done';
+            } catch (e) {
+                shotStatus.textContent = 'OCR failed. Try a clearer screenshot.';
+            }
+        });
+
+        // scroll helper
+        const scrollButtons = document.querySelectorAll('[data-target]');
+        scrollButtons.forEach((btn) => {
+            btn.addEventListener('click', () => {
+                const target = document.querySelector(btn.getAttribute('data-target'));
+                if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
             });
-        })();
+        });
+    })();
     </script>
 </body>
 </html>

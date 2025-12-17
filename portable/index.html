@@ -471,9 +471,12 @@
                     { regex: /(crypto|usdt|bitcoin|investment|roi|forex)/i, label: 'Crypto/investment ask', weight: 2 },
                     { regex: /(payment|deposit|wire|western union|zelle|gift card|prepaid)/i, label: 'Payment request', weight: 2 },
                     { regex: /(review.*(commission|pay|payment|refund|rebate)|commission.*review|pay.*for your review)/i, label: 'Paid reviews/commission offer', weight: 2 },
-                    { regex: /(commission|referral|payout)/i, label: 'Commission payout mentioned', weight: 1 },
+                    { regex: /(commission|referral|payout|bonus)/i, label: 'Commission/bonus mentioned', weight: 1 },
                     { regex: /(amazon seller|amaz seller|amazon store)/i, label: 'Unsolicited Amazon seller outreach', weight: 2 },
                     { regex: /(product testing|free sample|free product|try our product|gift for review|lingerie|sleepwear)/i, label: 'Unsolicited product/lingerie pitch', weight: 1 },
+                    { regex: /(weekly pay|week\\s*\\$\\s*\\d+|\\$\\s*\\d+\\s*weekly|extra bonus|signing bonus)/i, label: 'Too-good pay/bonus hook', weight: 2 },
+                    { regex: /(foundation|ngo|relief|charity).*(hiring|recruit|assistant|team)/i, label: 'Unsolicited NGO/charity job pitch', weight: 2 },
+                    { regex: /(virtual assistant|team assistant|remote assistant|personal assistant)/i, label: 'Unsolicited assistant job', weight: 1 },
                     { regex: /(click.*link|open.*link|tap the link|login here)/i, label: 'Instruction to click a link', weight: 1 },
                     { regex: /(support agent|admin|representative|official)/i, label: 'Authority/impersonation tone', weight: 1 },
                     { regex: /(congratulations|limited time|exclusive)/i, label: 'Hype or bait language', weight: 1 }

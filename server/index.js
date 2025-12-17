@@ -4,6 +4,7 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import { orchestrator } from './orchestrator.js';
 import { config, ensureConfig } from './config.js';
+import { osintService } from './osint.js';
 
 ensureConfig();
 
@@ -44,6 +45,46 @@ app.get('/api/health', (req, res) => {
     status: 'ok',
     offlineOnly: Boolean(config.offlineOnly),
   });
+});
+
+app.post('/api/osint/text', async (req, res) => {
+  const text = (req.body?.text || '').toString();
+  if (!text.trim()) {
+    res.status(400).json({ ok: false, error: 'Missing text' });
+    return;
+  }
+
+  try {
+    const intel = await osintService.inspectText(text);
+    res.json(intel);
+  } catch (error) {
+    console.error('[osint-text:error]', error);
+    res.status(500).json({
+      ok: false,
+      error: 'Unable to reach open-source intel feeds right now.',
+      detail: error?.message,
+    });
+  }
+});
+
+app.post('/api/osint/link', async (req, res) => {
+  const target = (req.body?.url || '').trim();
+  if (!target) {
+    res.status(400).json({ ok: false, error: 'Missing url' });
+    return;
+  }
+
+  try {
+    const intel = await osintService.inspectUrl(target);
+    res.json(intel);
+  } catch (error) {
+    console.error('[osint:error]', error);
+    res.status(500).json({
+      ok: false,
+      error: 'Unable to reach open-source intel feeds right now.',
+      detail: error?.message,
+    });
+  }
 });
 
 app.use((req, res, next) => {
