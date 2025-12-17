@@ -295,10 +295,13 @@
             }
             let finalRisk = combineRisk(msgFinding.risk, linkFindings, osintFindings, msgFinding.hits.length > 0);
             if (origin === 'screenshot') {
-                const hasSignals = urls.length || msgFinding.hits.length;
-                if (finalRisk === 'Safe') {
-                    finalRisk = hasSignals ? 'Caution' : 'Caution';
+                const hasSignals = urls.length || msgFinding.hits.length || text.trim().length > 0;
+                if (finalRisk === 'Safe' && hasSignals) {
+                    finalRisk = 'Caution';
                     reasons.push('Screenshot scan: treated as caution to avoid false negatives.');
+                } else if (finalRisk === 'Safe' && !hasSignals) {
+                    finalRisk = 'Caution';
+                    reasons.push('Screenshot scan: no text detected; treat with caution.');
                 }
             }
             setVerdict(finalRisk, reasons);
