@@ -89,6 +89,10 @@
                         <h3>OSINT checks</h3>
                         <div id="osintBlock" class="node-summary">None yet.</div>
                     </div>
+                    <div class="addon-card">
+                        <h3>OCR text (preview)</h3>
+                        <div id="ocrPreview" class="node-summary">No OCR text yet.</div>
+                    </div>
                 </div>
             </div>
         </section>
@@ -104,6 +108,7 @@
         const reasonList = document.getElementById('reasonList');
         const linksBlock = document.getElementById('linksBlock');
         const osintBlock = document.getElementById('osintBlock');
+        const ocrPreview = document.getElementById('ocrPreview');
         const textInput = document.getElementById('textInput');
         const scanText = document.getElementById('scanText');
         const textStatus = document.getElementById('textStatus');
@@ -185,6 +190,13 @@
             return { host, path, risk, flags };
         };
 
+        const forceDangerLabels = new Set([
+            'Astrology/reading solicitation',
+            'Random follower selection lure',
+            'Unsolicited outreach solicitation',
+            'Zodiac prompt'
+        ]);
+
         const analyzeMessageHeuristics = (text) => {
             const patterns = [
                 { regex: /(verify|suspend|locked|reset|appeal|violation|ticket)/i, label: 'Account/security language', weight: 2 },
@@ -236,6 +248,31 @@
             }).join('');
         };
 
+        const runOcr = async (file, highContrast = false) => {
+            if (!highContrast) {
+                const { data } = await Tesseract.recognize(file, 'eng', { logger: () => {} });
+                return (data?.text || '').trim();
+            }
+            const img = await createImageBitmap(file);
+            const canvas = document.createElement('canvas');
+            canvas.width = img.width;
+            canvas.height = img.height;
+            const ctx = canvas.getContext('2d');
+            ctx.drawImage(img, 0, 0);
+            const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+            const dataArr = imageData.data;
+            for (let i = 0; i < dataArr.length; i += 4) {
+                const r = dataArr[i], g = dataArr[i + 1], b = dataArr[i + 2];
+                const gray = 0.299 * r + 0.587 * g + 0.114 * b;
+                const val = gray > 170 ? 255 : 0;
+                dataArr[i] = dataArr[i + 1] = dataArr[i + 2] = val;
+            }
+            ctx.putImageData(imageData, 0, 0);
+            const blob = await new Promise((resolve) => canvas.toBlob(resolve, 'image/png'));
+            const { data } = await Tesseract.recognize(blob, 'eng', { logger: () => {} });
+            return (data?.text || '').trim();
+        };
+
         const fetchOsintForLinks = async (urls) => {
             const results = [];
             for (const url of urls.slice(0, 5)) {
@@ -261,11 +298,12 @@
             return results;
         };
 
-        const combineRisk = (msgRisk, linkFindings, osintFindings, hasTextHits) => {
+        const combineRisk = (msgRisk, linkFindings, osintFindings, hasTextHits, msgHits) => {
             const osintHit = osintFindings?.some((o) => o.phish === true || o.urlhaus === true);
             const linkHigh = linkFindings?.some((l) => l.risk === 'Dangerous');
+            const forceDanger = msgHits?.some((h) => forceDangerLabels.has(h));
             if (osintHit || linkHigh) return 'Dangerous';
-            if (msgRisk === 'Dangerous') return 'Dangerous';
+            if (msgRisk === 'Dangerous' || forceDanger) return 'Dangerous';
             const linkWarn = linkFindings?.some((l) => l.risk === 'Caution');
             if (msgRisk === 'Caution' || linkWarn) return 'Caution';
             if (hasTextHits) return 'Caution';
@@ -293,7 +331,7 @@
                     if (o.phish === true || o.urlhaus === true) reasons.push(`${o.url} flagged by OSINT`);
                 });
             }
-            let finalRisk = combineRisk(msgFinding.risk, linkFindings, osintFindings, msgFinding.hits.length > 0);
+            let finalRisk = combineRisk(msgFinding.risk, linkFindings, osintFindings, msgFinding.hits.length > 0, msgFinding.hits);
             if (origin === 'screenshot') {
                 const hasSignals = urls.length || msgFinding.hits.length || text.trim().length > 0;
                 if (finalRisk === 'Safe' && hasSignals) {
@@ -307,6 +345,10 @@
             setVerdict(finalRisk, reasons);
             renderLinks(linkFindings);
             renderOsint(osintFindings);
+            if (ocrPreview) {
+                const safeText = text ? text.replace(/</g, '&lt;').replace(/>/g, '&gt;') : 'No OCR text.';
+                ocrPreview.innerHTML = `<div class="node-summary" style="white-space:pre-wrap;">${safeText}</div>`;
+            }
             setStatus('Done');
         };
 
@@ -321,8 +363,12 @@
             if (!file) { shotStatus.textContent = 'Choose a screenshot first.'; return; }
             shotStatus.textContent = 'Running OCR locally...';
             try {
-                const { data } = await Tesseract.recognize(file, 'eng', { logger: () => {} });
-                const ocrText = (data?.text || '').trim();
+                let ocrText = await runOcr(file, false);
+                if (!ocrText || ocrText.length < 20) {
+                    shotStatus.textContent = 'OCR retry (high contrast)...';
+                    const altText = await runOcr(file, true);
+                    if (altText.length > ocrText.length) ocrText = altText;
+                }
                 if (!ocrText) { shotStatus.textContent = 'Could not read text from image.'; return; }
                 await analyzeTextFlow(ocrText, (msg) => shotStatus.textContent = msg, 'screenshot');
                 shotStatus.textContent = 'Done';
