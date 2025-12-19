@@ -692,6 +692,7 @@ button,
     grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
     gap: 14px;
     margin-top: 10px;
+    align-items: flex-start;
 }
 
 .addon-card {
@@ -702,6 +703,8 @@ button,
     display: flex;
     flex-direction: column;
     gap: 10px;
+    min-height: 0;
+    overflow: hidden;
 }
 
 .addon-card input,
@@ -716,6 +719,11 @@ button,
 }
 
 .addon-card textarea { resize: vertical; }
+
+.addon-card .node-summary {
+    word-break: break-word;
+    overflow-wrap: anywhere;
+}
 
 .mini-grid {
     display: grid;
@@ -735,6 +743,8 @@ button,
     background: rgba(255, 255, 255, 0.04);
     border-radius: 12px;
     border: 1px solid rgba(255, 255, 255, 0.06);
+    box-sizing: border-box;
+    display: block;
 }
 
 #linksBlock > div,
@@ -744,6 +754,7 @@ button,
     background: rgba(0, 0, 0, 0.2);
     border-radius: 10px;
     border: 1px solid rgba(255, 255, 255, 0.06);
+    box-sizing: border-box;
 }
 
 /* Prevent long links from overlapping other cards */
