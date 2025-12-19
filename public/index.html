@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Phishing &amp; Impersonation Guard</title>
-    <link rel="stylesheet" href="/styles.css?v=tsb21">
+    <link rel="stylesheet" href="/styles.css?v=tsb22">
     <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
 </head>
 <body>
@@ -122,6 +122,12 @@
         const brandWords = ['apple','appleid','icloud','appstore','itunes','meta','facebook','instagram','whatsapp','paypal','bank','usps','ups'];
         const trustedAppleDomains = ['apple.com','icloud.com','appleid.apple.com'];
         const suspiciousDomains = new Set(['brainstormlabserver.com','acftop.com','muet.brainstormlabserver.com']);
+        const trustedAllowlist = new Set([
+            'google.com','youtube.com','facebook.com','instagram.com','x.com','twitter.com',
+            'apple.com','icloud.com','paypal.com','amazon.com','microsoft.com','outlook.com',
+            'office.com','github.com','linkedin.com','bing.com','netflix.com'
+        ]);
+
 
         const riskLabel = (score) => score >= 4 ? 'Dangerous' : score >= 2 ? 'Caution' : 'Safe';
         const looksLikeIp = (host) => /^(\d{1,3}\.){3}\d{1,3}$/.test(host);
@@ -171,6 +177,9 @@
             const hostLabel = host.split('.').slice(0, -1).join('.') || host.split('.')[0];
             const tld = host.split('.').pop() || '';
             const path = parsed.pathname || '/';
+            const baseHost = host.split('.').slice(-2).join('.');
+            const pathSegments = (path || '/').split('/').filter(Boolean);
+            const hasRandomPath = pathSegments.some((seg) => seg.length >= 16 && /^[A-Za-z0-9]+$/.test(seg));
 
             if (parsed.protocol !== 'https:') { flags.push('Not using HTTPS'); score += 2; }
             if (looksLikeIp(host)) { flags.push('Bare IP instead of domain'); score += 2; }
@@ -183,9 +192,18 @@
             if (parsed.search.includes('base64') || /(data:|%2f|%40|%3d)/i.test(parsed.search)) { flags.push('Obfuscated parameters'); score += 1; }
             if (riskyPathWords.some((w) => path.toLowerCase().includes(w))) { flags.push('Suspicious keywords in path'); score += 2; }
             if (isObfuscatedPath(path)) { flags.push('Obfuscated path (random ID)'); score += 2; }
+            if (hasRandomPath) { flags.push('Random-looking path segment'); score += 2; }
             if (hostLabel.length <= 6 && (/\d/.test(hostLabel) || !/[aeiou]/i.test(hostLabel))) { flags.push('Random-looking host name'); score += 2; }
+            else {
+                const vowels = (hostLabel.match(/[aeiou]/gi) || []).length;
+                if (hostLabel.length <= 10 && vowels < 2) { flags.push('Unusual host pattern'); score += 1; }
+            }
             if (brandWords.some((w) => host.includes(w)) && !trustedAppleDomains.some((good) => host.endsWith(good))) { flags.push('Brand keyword without trusted domain'); score += 3; }
             if (suspiciousDomains.has(host)) { flags.push('Known suspicious domain'); score += 4; }
+            if (!trustedAllowlist.has(baseHost) && flags.length === 0) {
+                flags.push('Unknown domain (not allowlisted)');
+                score += 1;
+            }
             const risk = riskLabel(score + flags.length);
             return { host, path, risk, flags };
         };
