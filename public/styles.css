@@ -723,6 +723,19 @@ button,
     gap: 8px;
 }
 
+/* Prevent long links from overlapping other cards */
+#linksBlock,
+#osintBlock {
+    word-break: break-word;
+    overflow-wrap: anywhere;
+    white-space: normal;
+    max-height: 200px;
+    overflow-y: auto;
+    padding: 10px;
+    background: rgba(255, 255, 255, 0.04);
+    border-radius: 12px;
+}
+
 .result-card {
     background: rgba(255, 255, 255, 0.03);
     border: 1px solid rgba(255, 255, 255, 0.06);
