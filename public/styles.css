@@ -40,16 +40,16 @@
 
 :root {
     color-scheme: dark;
-    --bg: radial-gradient(circle at 10% 20%, rgba(0, 246, 255, 0.18), transparent 55%),
-           radial-gradient(circle at 90% 10%, rgba(255, 0, 255, 0.18), transparent 60%),
-           linear-gradient(135deg, #090014 0%, #14072d 60%, #05000e 100%);
-    --panel: rgba(17, 13, 33, 0.9);
-    --panel-strong: rgba(19, 16, 38, 0.95);
+    --bg: radial-gradient(circle at 15% 20%, rgba(0, 255, 132, 0.08), transparent 45%),
+           radial-gradient(circle at 85% 15%, rgba(0, 255, 132, 0.06), transparent 50%),
+           linear-gradient(145deg, #0a0c0f 0%, #11141b 55%, #0b0d11 100%);
+    --panel: rgba(18, 20, 26, 0.92);
+    --panel-strong: rgba(16, 18, 24, 0.95);
     --border: rgba(255, 255, 255, 0.08);
-    --accent: #00f6ff;
-    --accent-soft: rgba(0, 246, 255, 0.15);
-    --text: #f8f6ff;
-    --text-muted: rgba(248, 246, 255, 0.7);
+    --accent: #6dfc8c;
+    --accent-soft: rgba(109, 252, 140, 0.18);
+    --text: #f5f8f0;
+    --text-muted: rgba(245, 248, 240, 0.7);
     --shadow: 0 60px 120px -60px rgba(0, 0, 0, 0.9);
 }
 
@@ -74,9 +74,9 @@ body::before {
     content: '';
     position: fixed;
     inset: 0;
-    background: url('./techsupportbrologo.png') no-repeat center;
-    background-size: min(70vw, 900px);
-    opacity: 0.08;
+    background: url('./cybershieldlogo.png') no-repeat center;
+    background-size: min(60vw, 800px);
+    opacity: 0.05;
     filter: drop-shadow(0 40px 80px rgba(0, 0, 0, 0.6));
     pointer-events: none;
     z-index: 0;
@@ -160,7 +160,7 @@ body::before {
 
 .help-topic-image:hover {
     transform: translateY(-6px) scale(1.05);
-    filter: drop-shadow(0 15px 40px rgba(0, 246, 255, 0.7)) drop-shadow(0 8px 16px rgba(0, 0, 0, 0.4));
+    filter: drop-shadow(0 15px 40px rgba(109, 252, 140, 0.7)) drop-shadow(0 8px 16px rgba(0, 0, 0, 0.4));
 }
 
 .hero p {

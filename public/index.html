@@ -331,7 +331,7 @@
                     if (o.phish === true || o.urlhaus === true) reasons.push(`${o.url} flagged by OSINT`);
                 });
             }
-            let finalRisk = combineRisk(msgFinding.risk, linkFindings, osintFindings, msgFinding.hits.length > 0, msgFinding.hits);
+            let finalRisk = combineRisk(msgFinding.risk, linkFindings, osintFindings, msgFinding.hits.length > 0);
             if (origin === 'screenshot') {
                 const hasSignals = urls.length || msgFinding.hits.length || text.trim().length > 0;
                 if (finalRisk === 'Safe' && hasSignals) {
@@ -345,10 +345,6 @@
             setVerdict(finalRisk, reasons);
             renderLinks(linkFindings);
             renderOsint(osintFindings);
-            if (ocrPreview) {
-                const safeText = text ? text.replace(/</g, '&lt;').replace(/>/g, '&gt;') : 'No OCR text.';
-                ocrPreview.innerHTML = `<div class="node-summary" style="white-space:pre-wrap;">${safeText}</div>`;
-            }
             setStatus('Done');
         };
 
@@ -363,12 +359,8 @@
             if (!file) { shotStatus.textContent = 'Choose a screenshot first.'; return; }
             shotStatus.textContent = 'Running OCR locally...';
             try {
-                let ocrText = await runOcr(file, false);
-                if (!ocrText || ocrText.length < 20) {
-                    shotStatus.textContent = 'OCR retry (high contrast)...';
-                    const altText = await runOcr(file, true);
-                    if (altText.length > ocrText.length) ocrText = altText;
-                }
+                const { data } = await Tesseract.recognize(file, 'eng', { logger: () => {} });
+                const ocrText = (data?.text || '').trim();
                 if (!ocrText) { shotStatus.textContent = 'Could not read text from image.'; return; }
                 await analyzeTextFlow(ocrText, (msg) => shotStatus.textContent = msg, 'screenshot');
                 shotStatus.textContent = 'Done';
