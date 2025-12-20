@@ -4,19 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Phishing &amp; Impersonation Guard</title>
-    <link rel="stylesheet" href="/styles.css?v=tsb24">
+    <link rel="stylesheet" href="/styles.css?v=tsb18">
     <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
 </head>
 <body>
     <main class="layout">
         <section class="hero hero-shell">
             <div class="hero-content">
-                <img src="./techsupportbrologo.png" alt="Tech Support Bro" class="hero-logo">
-                <p class="node-summary">Single-purpose: scan links, DMs, and screenshots for phishing and impersonation. Clear verdicts, no clicks required.</p>
-                <div class="hero-actions">
-                    <button class="primary" data-target="#guard">Open the guard</button>
-                    <a class="secondary" href="https://docs.google.com/forms/d/e/1FAIpQLSfoxhKvog1UU0YnpnK1U1toIyQkNborx3IAVtJOpc-5VwKhAg/viewform?usp=dialog" target="_blank" rel="noopener">Escalate to Garin</a>
-                </div>
+                <p class="node-summary">Drop a link, message, or screenshot. We tell you if it looks risky - no clicks needed.</p>
                 <ul class="hero-highlights">
                     <li>OCR screenshot scan (links stay non-clickable)</li>
                     <li>OSINT feeds: phish.sinking.yachts, URLHaus</li>
@@ -25,30 +20,14 @@
             </div>
             <div class="hero-visual">
                 <div class="grid-lines"></div>
-                <div class="tablet-stage" id="tabletStage">
-                    <div class="tablet-shadow"></div>
-                    <div class="tablet" id="tabletModel">
-                        <div class="tablet-face"></div>
-                        <div class="tablet-back">
-                            <img class="tablet-back-logo" draggable="false" src="./techsupportbrologo.png" alt="Tech Support Bro logo">
-                        </div>
-                        <div class="tablet-screen">
-                            <video autoplay muted loop playsinline>
-                                <source src="/ITChatBuddyAvatar.mp4" type="video/mp4">
-                                <source src="/ITChatBuddyAvatar.mov" type="video/quicktime">
-                            </video>
-                            <div class="tablet-title">Safety demo</div>
-                            <div class="tablet-caption">Video preview (non-clickable)</div>
-                            <div class="tablet-screen-indicator"></div>
-                        </div>
-                    </div>
+                <div class="hero-logo-wrap">
+                    <img src="./cybershieldlogo.png" alt="Cyber Shield" class="hero-logo-large">
                 </div>
                 <div class="floating-badges">
                     <div class="floating-badge">Never click to check</div>
-                    <div class="floating-badge">Brand impersonation guard</div>
-                    <div class="floating-badge">OCR screenshot scan</div>
+                    <div class="floating-badge">Checks public threat lists</div>
+                    <div class="floating-badge">Screenshot scan (non-clickable links)</div>
                 </div>
-                <div class="tablet-interactive-hint">Autoplaying avatar preview; links stay disabled.</div>
             </div>
         </section>
 
@@ -66,6 +45,9 @@
                         <h3>Text / Link check</h3>
                         <p class="node-summary">Paste a DM, comment, or email text. Links stay non-clickable.</p>
                         <textarea id="textInput" rows="6" placeholder="Paste the message or link..."></textarea>
+                        <label class="node-summary" style="display:flex;align-items:center;gap:8px;margin:6px 0 2px;">
+                            <input type="checkbox" id="osintToggle" checked> <span>Run OSINT (slower)</span>
+                        </label>
                         <button class="ghost" type="button" id="scanText">Scan text</button>
                         <div id="textStatus" class="node-summary">Idle</div>
                     </div>
@@ -73,6 +55,9 @@
                         <h3>Screenshot scan</h3>
                         <p class="node-summary">Upload PNG/JPG. OCR runs locally; extracted links are shown as text.</p>
                         <input type="file" id="shotInput" accept="image/png,image/jpeg">
+                        <label class="node-summary" style="display:flex;align-items:center;gap:8px;margin:6px 0 2px;">
+                            <input type="checkbox" id="osintToggleShot" checked> <span>Run OSINT (slower)</span>
+                        </label>
                         <button class="ghost" type="button" id="scanShot">Scan screenshot</button>
                         <div id="shotStatus" class="node-summary">Idle</div>
                     </div>
@@ -88,6 +73,10 @@
                     <div class="addon-card">
                         <h3>OSINT checks</h3>
                         <div id="osintBlock" class="node-summary">None yet.</div>
+                        <div id="osintProgress" class="osint-progress" style="display:none;">
+                            <div id="osintProgressBar" class="osint-progress-bar"></div>
+                            <div id="osintProgressText" class="osint-progress-text">Running OSINT...</div>
+                        </div>
                     </div>
                     <div class="addon-card">
                         <h3>OCR text (preview)</h3>
@@ -100,6 +89,48 @@
         <section class="privacy-note">
             Privacy: OCR and heuristics run in your browser. Link intel hits public feeds (phish.sinking.yachts, URLHaus) only when online with the local server.
         </section>
+
+        <section class="tree-card">
+            <div class="tree-header">
+                <div>
+                    <p class="node-path">Support</p>
+                    <h2>If this helped you</h2>
+                    <p class="node-summary">Donations are always welcome and much appreciated but never required. Thank you for your support!</p>
+                </div>
+            </div>
+            <div class="node-body" style="display:flex; flex-direction:column; gap:14px; align-items:center;">
+                <div class="support-actions">
+                    <a class="pill-link" href="https://www.paypal.me/garinbailey1" target="_blank" rel="noopener">
+                        <img src="./support-paypal.svg" alt="PayPal">
+                        <span>@garinbailey1</span>
+                    </a>
+                    <a class="pill-link" href="https://cash.app/$gbailey216" target="_blank" rel="noopener">
+                        <img src="./Square_Cash_app_logo.svg" alt="Cash App">
+                        <span>$gbailey216</span>
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <section class="tree-card">
+            <div class="tree-header">
+                <div>
+                    <p class="node-path">About</p>
+                    <h2>Who is Do More With Less?</h2>
+                    <p class="node-summary">Built by Garin Bailey, Senior IT Specialist (field-tested support, no data collection).</p>
+                </div>
+            </div>
+            <div class="node-body" style="display:flex; flex-direction:column; gap:12px; align-items:center;">
+                <p class="support-copy">I help people solve everyday tech problems without collecting their data. This tool runs in your browser only and is not a replacement for your company IT policies.</p>
+                <div class="support-actions" style="flex-direction:row; align-items:center; justify-content:center; gap:10px;">
+                    <span class="node-summary">Connect:</span>
+                    <a class="pill-link" href="https://www.linkedin.com/in/gbailey216/" target="_blank" rel="noopener">
+                        <img src="./LinkedIn_icon.svg" alt="LinkedIn">
+                        <span>LinkedIn</span>
+                    </a>
+                </div>
+            </div>
+        </section>
     </main>
 
     <script>
@@ -108,6 +139,9 @@
         const reasonList = document.getElementById('reasonList');
         const linksBlock = document.getElementById('linksBlock');
         const osintBlock = document.getElementById('osintBlock');
+        const osintProgress = document.getElementById('osintProgress');
+        const osintProgressBar = document.getElementById('osintProgressBar');
+        const osintProgressText = document.getElementById('osintProgressText');
         const ocrPreview = document.getElementById('ocrPreview');
         const textInput = document.getElementById('textInput');
         const scanText = document.getElementById('scanText');
@@ -122,12 +156,6 @@
         const brandWords = ['apple','appleid','icloud','appstore','itunes','meta','facebook','instagram','whatsapp','paypal','bank','usps','ups'];
         const trustedAppleDomains = ['apple.com','icloud.com','appleid.apple.com'];
         const suspiciousDomains = new Set(['brainstormlabserver.com','acftop.com','muet.brainstormlabserver.com']);
-        const trustedAllowlist = new Set([
-            'google.com','youtube.com','facebook.com','instagram.com','x.com','twitter.com',
-            'apple.com','icloud.com','paypal.com','amazon.com','microsoft.com','outlook.com',
-            'office.com','github.com','linkedin.com','bing.com','netflix.com'
-        ]);
-
 
         const riskLabel = (score) => score >= 4 ? 'Dangerous' : score >= 2 ? 'Caution' : 'Safe';
         const looksLikeIp = (host) => /^(\d{1,3}\.){3}\d{1,3}$/.test(host);
@@ -146,47 +174,25 @@
         };
 
         const extractUrls = (text) => {
-            // Fix URLs split by newlines or whitespace between domain and path
-            const normalized = text
-                .replace(/(https?:\/\/[^\s\n]+)\s+\/([^\s]+)/gi, '$1/$2')
-                .replace(/([a-z0-9.-]+\.[a-z]{2,})\s+\/([^\s]+)/gi, '$1/$2')
-                .replace(/(https?:\/\/[^\s\n]+)\s*\n\s*(\/[^\s]+)/gi, '$1$2')
-                .replace(/([a-z0-9.-]+\.[a-z]{2,})\s*\n\s*(\/[^\s]+)/gi, '$1$2');
-            const collected = [];
+            const found = new Set();
             const patterns = [
                 /(https?:\/\/[^\s"'<>]+)/gi,
                 /(www\.[^\s"'<>]+)/gi,
                 /([a-zA-Z0-9.-]+\.[a-zA-Z]{2,})(\/[^\s"'<>]*)?/gi, // bare domains
             ];
             patterns.forEach((regex) => {
-                for (const match of normalized.matchAll(regex)) {
+                for (const match of text.matchAll(regex)) {
                     let url = match[0];
-                    const trimmed = url.trim();
-                    const isPathOnly = trimmed.startsWith('/');
-
-                    if (!isPathOnly) {
-                        if (!/^https?:\/\//i.test(url)) url = 'https://' + url;
-                        url = url.replace(/[,.;:]+$/, ''); // trim trailing punctuation
-                        collected.push(url);
-                    } else if (collected.length) {
-                        // Attach orphaned path to the previous URL
-                        const prev = collected[collected.length - 1];
-                        const merged = prev.replace(/\/+$/, '') + '/' + trimmed.replace(/^\/+/, '').replace(/[,.;:]+$/, '');
-                        collected[collected.length - 1] = merged;
-                    }
+                    if (!/^https?:\/\//i.test(url)) url = 'https://' + url;
+                    url = url.replace(/[,.;:]+$/, ''); // trim trailing punctuation
+                    try {
+                        const u = new URL(url);
+                        u.hash = '';
+                        found.add(u.toString().toLowerCase());
+                    } catch {}
                 }
             });
-            // Deduplicate while preserving order
-            const deduped = [];
-            const seen = new Set();
-            for (const u of collected) {
-                const key = u.toLowerCase();
-                if (seen.has(key)) continue;
-                seen.add(key);
-                deduped.push(u);
-                if (deduped.length >= 8) break;
-            }
-            return deduped;
+            return Array.from(found).slice(0, 8);
         };
 
         const analyzeLinkHeuristics = (raw) => {
@@ -199,9 +205,6 @@
             const hostLabel = host.split('.').slice(0, -1).join('.') || host.split('.')[0];
             const tld = host.split('.').pop() || '';
             const path = parsed.pathname || '/';
-            const baseHost = host.split('.').slice(-2).join('.');
-            const pathSegments = (path || '/').split('/').filter(Boolean);
-            const hasRandomPath = pathSegments.some((seg) => seg.length >= 16 && /^[A-Za-z0-9]+$/.test(seg));
 
             if (parsed.protocol !== 'https:') { flags.push('Not using HTTPS'); score += 2; }
             if (looksLikeIp(host)) { flags.push('Bare IP instead of domain'); score += 2; }
@@ -214,18 +217,9 @@
             if (parsed.search.includes('base64') || /(data:|%2f|%40|%3d)/i.test(parsed.search)) { flags.push('Obfuscated parameters'); score += 1; }
             if (riskyPathWords.some((w) => path.toLowerCase().includes(w))) { flags.push('Suspicious keywords in path'); score += 2; }
             if (isObfuscatedPath(path)) { flags.push('Obfuscated path (random ID)'); score += 2; }
-            if (hasRandomPath) { flags.push('Random-looking path segment'); score += 2; }
             if (hostLabel.length <= 6 && (/\d/.test(hostLabel) || !/[aeiou]/i.test(hostLabel))) { flags.push('Random-looking host name'); score += 2; }
-            else {
-                const vowels = (hostLabel.match(/[aeiou]/gi) || []).length;
-                if (hostLabel.length <= 10 && vowels < 2) { flags.push('Unusual host pattern'); score += 1; }
-            }
             if (brandWords.some((w) => host.includes(w)) && !trustedAppleDomains.some((good) => host.endsWith(good))) { flags.push('Brand keyword without trusted domain'); score += 3; }
             if (suspiciousDomains.has(host)) { flags.push('Known suspicious domain'); score += 4; }
-            if (!trustedAllowlist.has(baseHost) && flags.length === 0) {
-                flags.push('Unknown domain (not allowlisted)');
-                score += 1;
-            }
             const risk = riskLabel(score + flags.length);
             return { host, path, risk, flags };
         };
@@ -236,6 +230,28 @@
             'Unsolicited outreach solicitation',
             'Zodiac prompt'
         ]);
+
+        const hitDescriptions = {
+            'Account/security language': 'Mentions account or security reviews that scammers often use.',
+            'Urgency/deadline': 'Uses urgency or deadlines to force quick action.',
+            'Payment request': 'Asks for money or payment methods.',
+            'Apple brand targeting': 'References Apple services; verify the sender.',
+            'Account lock threat': 'Threatens an account lock to prompt clicks.',
+            'Payment update demand': 'Pushes a billing/payment update, common phish lure.',
+            'Data deletion scare': 'Claims data or files will be deleted soon.',
+            'Fake activation/case id': 'Uses activation/case IDs to seem official.',
+            'Giveaway language': 'Giveaway or lottery wording used as bait.',
+            'Crypto/investment ask': 'Investment/crypto solicitations are common scam hooks.',
+            'Authority/impersonation tone': 'Claims to be support/admin/official.',
+            'Astrology/reading solicitation': 'Unsolicited ?reading? style outreach.',
+            'Random follower selection lure': 'Says you were randomly selected; typical lure.',
+            'Emotion bait language': 'Emotional appeals used to build quick trust.',
+            'Generic shell / unavailable page': 'Generic profile wording that can hide identity.',
+            'Unsolicited outreach solicitation': 'Cold outreach asking for engagement.',
+            'Zodiac prompt': 'Zodiac prompts often show up in spammy outreach.'
+        };
+        const describeHit = (hit) => hitDescriptions[hit] || `Suspicious pattern: ${hit}`;
+
 
         const analyzeMessageHeuristics = (text) => {
             const patterns = [
@@ -265,13 +281,16 @@
             return { risk, hits };
         };
 
-        const setVerdict = (risk, reasons) => {
+        const setVerdict = (risk, reasons, confidence = null, guidance = '') => {
             const color = risk === 'Dangerous' ? '#ff6b6b' : risk === 'Caution' ? '#f5c862' : '#5be18a';
             verdictPill.textContent = risk;
             verdictPill.style.background = `${color}20`;
             verdictPill.style.border = `1px solid ${color}55`;
             verdictPill.style.color = color;
-            reasonList.innerHTML = (reasons && reasons.length) ? `<ul class="flag-list">${reasons.map((r) => `<li>${r}</li>`).join('')}</ul>` : 'No clear issues detected. Still be cautious.';
+            const confHtml = confidence ? `<div class="node-summary">Confidence: ${Math.round(confidence * 100)}%</div>` : '';
+            const guideHtml = guidance ? `<div class="node-summary">${guidance}</div>` : '';
+            const listHtml = (reasons && reasons.length) ? `<ul class="flag-list">${reasons.map((r) => `<li>${r}</li>`).join('')}</ul>` : 'No clear issues detected. Still be cautious.';
+            reasonList.innerHTML = confHtml + guideHtml + listHtml;
         };
 
         const renderLinks = (items) => {
@@ -288,57 +307,138 @@
             }).join('');
         };
 
-        const runOcr = async (file, highContrast = false) => {
-            if (!highContrast) {
-                const { data } = await Tesseract.recognize(file, 'eng', { logger: () => {} });
-                return (data?.text || '').trim();
+        const loadImageFlexible = async (file) => {
+            try { return await createImageBitmap(file); }
+            catch {
+                const blobUrl = URL.createObjectURL(file);
+                const img = await new Promise((resolve, reject) => {
+                    const el = new Image();
+                    el.onload = () => resolve(el);
+                    el.onerror = reject;
+                    el.src = blobUrl;
+                });
+                URL.revokeObjectURL(blobUrl);
+                return img;
             }
-            const img = await createImageBitmap(file);
+        };
+
+        const toCanvas = (source, { maxDim = 1200, highContrast = false, threshold = 175, invert = false } = {}) => {
             const canvas = document.createElement('canvas');
-            canvas.width = img.width;
-            canvas.height = img.height;
+            let { width, height } = source;
+            const scale = Math.min(1, maxDim / Math.max(width, height));
+            if (scale < 1) { width = Math.floor(width * scale); height = Math.floor(height * scale); }
+            canvas.width = width;
+            canvas.height = height;
             const ctx = canvas.getContext('2d');
-            ctx.drawImage(img, 0, 0);
-            const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-            const dataArr = imageData.data;
-            for (let i = 0; i < dataArr.length; i += 4) {
-                const r = dataArr[i], g = dataArr[i + 1], b = dataArr[i + 2];
-                const gray = 0.299 * r + 0.587 * g + 0.114 * b;
-                const val = gray > 170 ? 255 : 0;
-                dataArr[i] = dataArr[i + 1] = dataArr[i + 2] = val;
+            ctx.drawImage(source, 0, 0, width, height);
+            if (highContrast) {
+                const imageData = ctx.getImageData(0, 0, width, height);
+                const dataArr = imageData.data;
+                for (let i = 0; i < dataArr.length; i += 4) {
+                    const r = dataArr[i], g = dataArr[i + 1], b = dataArr[i + 2];
+                    const gray = 0.299 * r + 0.587 * g + 0.114 * b;
+                    const val = gray > threshold ? 255 : 0;
+                    const finalVal = invert ? 255 - val : val;
+                    dataArr[i] = dataArr[i + 1] = dataArr[i + 2] = finalVal;
+                }
+                ctx.putImageData(imageData, 0, 0);
             }
-            ctx.putImageData(imageData, 0, 0);
-            const blob = await new Promise((resolve) => canvas.toBlob(resolve, 'image/png'));
-            const { data } = await Tesseract.recognize(blob, 'eng', { logger: () => {} });
+            return canvas;
+        };
+
+        const recognizeCanvas = async (canvas) => {
+            const { data } = await Tesseract.recognize(canvas, 'eng', {
+                logger: () => {},
+                tessedit_pageseg_mode: 6,
+                preserve_interword_spaces: 1
+            });
             return (data?.text || '').trim();
         };
 
-        const fetchOsintForLinks = async (urls) => {
-            const results = [];
-            for (const url of urls.slice(0, 5)) {
+        const runOcr = async (file, preferHigh = false) => {
+            const source = await loadImageFlexible(file);
+            const passes = [
+                { maxDim: 1200, highContrast: false, threshold: 175, minLen: 12 },
+                { maxDim: 1100, highContrast: true, threshold: 155, invert: false, minLen: 10 },
+                { maxDim: 900, highContrast: true, threshold: 150, invert: true, minLen: 6 },
+                { maxDim: 700, highContrast: true, threshold: 140, invert: true, minLen: 4 }
+            ];
+            if (preferHigh) {
+                passes.unshift(passes.splice(1, 1)[0]);
+            }
+            for (const pass of passes) {
                 try {
-                    const resp = await fetch('/api/osint/link', {
+                    const canvas = toCanvas(source, pass);
+                    const txt = await recognizeCanvas(canvas);
+                    if (txt.length >= (pass.minLen || 6)) return txt;
+                } catch {}
+            }
+            return '';
+        };
+
+        const fetchWithTimeout = async (url, options = {}, ms = 5000) => {
+            const ctrl = new AbortController();
+            const id = setTimeout(() => ctrl.abort(), ms);
+            try {
+                return await fetch(url, { ...options, signal: ctrl.signal });
+            } finally {
+                clearTimeout(id);
+            }
+        };
+
+        const hostCache = new Map(); // hostname -> { phish, urlhaus }
+
+        const setOsintProgress = (visible, pct = 0, text = '') => {
+            if (!osintProgress) return;
+            osintProgress.style.display = visible ? 'block' : 'none';
+            if (osintProgressBar) osintProgressBar.style.width = `${Math.round(pct * 100)}%`;
+            if (osintProgressText && text) osintProgressText.textContent = text;
+        };
+
+        const fetchOsintForLinks = async (urls) => {
+            const limited = urls.slice(0, 3); // cap lookups to reduce wait
+            let done = 0;
+            const tasks = limited.map(async (url) => {
+                try {
+                    const host = new URL(url).hostname.toLowerCase();
+                    if (hostCache.has(host)) return { url, ...hostCache.get(host) };
+                    const resp = await fetchWithTimeout('/api/osint/link', {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify({ url })
-                    });
-                    if (!resp.ok) throw new Error('HTTP ' + resp.status);
+                    }, 5000);
+                    if (!resp?.ok) throw new Error('HTTP ' + (resp?.status || ''));
                     const data = await resp.json();
                     const phish = data?.sources?.phishFeed;
                     const urlhaus = data?.sources?.urlhaus;
-                    results.push({
-                        url,
+                    const record = {
                         phish: phish?.flagged ?? phish?.error,
                         urlhaus: urlhaus?.listed ?? urlhaus?.error
-                    });
+                    };
+                    hostCache.set(host, record);
+                    done += 1;
+                    setOsintProgress(true, done / limited.length, `OSINT ${done}/${limited.length}...`);
+                    return { url, ...record };
                 } catch (e) {
-                    results.push({ url, phish: 'lookup failed', urlhaus: 'lookup failed' });
+                    done += 1;
+                    setOsintProgress(true, done / limited.length, `OSINT ${done}/${limited.length}...`);
+                    return { url, phish: 'timeout/failed', urlhaus: 'timeout/failed' };
                 }
-            }
-            return results;
+            });
+            const res = await Promise.all(tasks);
+            setOsintProgress(false, 1, '');
+            return res;
         };
 
         const combineRisk = (msgRisk, linkFindings, osintFindings, hasTextHits, msgHits) => {
+        const computeConfidence = (risk, reasonsCount, osintCount = 0) => {
+            let base = risk === 'Dangerous' ? 0.9 : risk === 'Caution' ? 0.78 : 0.7;
+            if (reasonsCount > 3) base += 0.05;
+            if (osintCount > 0) base += 0.05;
+            if (reasonsCount === 0) base -= 0.2;
+            return Math.min(0.99, Math.max(0.3, base));
+        };
+
             const osintHit = osintFindings?.some((o) => o.phish === true || o.urlhaus === true);
             const linkHigh = linkFindings?.some((l) => l.risk === 'Dangerous');
             const forceDanger = msgHits?.some((h) => forceDangerLabels.has(h));
@@ -350,7 +450,7 @@
             return 'Safe';
         };
 
-        const analyzeTextFlow = async (text, setStatus, origin = 'text') => {
+        const analyzeTextFlow = async (text, setStatus, origin = 'text', runOsint = true) => {
             setStatus('Scanning...');
             const urls = extractUrls(text);
             const linkFindings = urls.map((url) => {
@@ -359,19 +459,25 @@
             });
             const msgFinding = analyzeMessageHeuristics(text);
             let osintFindings = [];
-            if (urls.length) {
-                setStatus('Running OSINT lookups...');
+            if (runOsint && urls.length) {
+                setStatus('Running OSINT lookups (timeout ~5s)...');
                 osintFindings = await fetchOsintForLinks(urls);
             }
             const reasons = [];
-            if (msgFinding.hits.length) reasons.push(...msgFinding.hits);
-            linkFindings.forEach((l) => { reasons.push(`${l.url} → ${l.risk}${l.flags?.length ? ' (' + l.flags.join(', ') + ')' : ''}`); });
+            if (msgFinding.hits.length) {
+                const friendly = msgFinding.hits.map((h) => `Text signal: ${describeHit(h)}`);
+                reasons.push(...friendly);
+            }
+            linkFindings.forEach((l) => {
+                const flagText = l.flags?.length ? ` | Flags: ${l.flags.join(', ')}` : '';
+                reasons.push(`Link ${l.risk}: ${l.url}${flagText}`);
+            });
             if (osintFindings.length) {
                 osintFindings.forEach((o) => {
-                    if (o.phish === true || o.urlhaus === true) reasons.push(`${o.url} flagged by OSINT`);
+                    if (o.phish === true || o.urlhaus === true) reasons.push(`OSINT: ${o.url} flagged in public feeds.`);
                 });
             }
-            let finalRisk = combineRisk(msgFinding.risk, linkFindings, osintFindings, msgFinding.hits.length > 0);
+            let finalRisk = combineRisk(msgFinding.risk, linkFindings, osintFindings, msgFinding.hits.length > 0, msgFinding.hits);
             if (origin === 'screenshot') {
                 const hasSignals = urls.length || msgFinding.hits.length || text.trim().length > 0;
                 if (finalRisk === 'Safe' && hasSignals) {
@@ -382,16 +488,23 @@
                     reasons.push('Screenshot scan: no text detected; treat with caution.');
                 }
             }
-            setVerdict(finalRisk, reasons);
+            const guidance = finalRisk === 'Dangerous' ? 'Do not click. Verify with the official site or app.' : finalRisk === 'Caution' ? 'Be cautious. Verify sender and avoid signing in via this link.' : 'Looks okay, but stay cautious. Avoid entering credentials if unsure.';
+            const confidence = computeConfidence(finalRisk, reasons.length, osintFindings.length);
+            setVerdict(finalRisk, reasons, confidence, guidance);
             renderLinks(linkFindings);
             renderOsint(osintFindings);
+            if (ocrPreview) {
+                const safeText = text ? text.replace(/</g, '&lt;').replace(/>/g, '&gt;') : 'No OCR text.';
+                ocrPreview.innerHTML = `<div class="node-summary" style="white-space:pre-wrap;">${safeText}</div>`;
+            }
             setStatus('Done');
         };
 
-        scanText?.addEventListener('click', async () => {
+                scanText?.addEventListener('click', async () => {
             const text = (textInput?.value || '').trim();
             if (!text) { textStatus.textContent = 'Paste something to scan.'; return; }
-            await analyzeTextFlow(text, (msg) => textStatus.textContent = msg);
+            const runOsint = (document.getElementById('osintToggle')?.checked !== false);
+            await analyzeTextFlow(text, (msg) => textStatus.textContent = msg, 'text', runOsint);
         });
 
         scanShot?.addEventListener('click', async () => {
@@ -399,13 +512,16 @@
             if (!file) { shotStatus.textContent = 'Choose a screenshot first.'; return; }
             shotStatus.textContent = 'Running OCR locally...';
             try {
-                const { data } = await Tesseract.recognize(file, 'eng', { logger: () => {} });
-                const ocrText = (data?.text || '').trim();
-                if (!ocrText) { shotStatus.textContent = 'Could not read text from image.'; return; }
-                await analyzeTextFlow(ocrText, (msg) => shotStatus.textContent = msg, 'screenshot');
+                let ocrText = await runOcr(file, true);
+                if (!ocrText) {
+                    shotStatus.textContent = 'OCR failed on this image. Try a closer crop or brighter screenshot.';
+                    return;
+                }
+                const runOsintShot = (document.getElementById('osintToggleShot')?.checked !== false);
+                await analyzeTextFlow(ocrText, (msg) => shotStatus.textContent = msg, 'screenshot', runOsintShot);
                 shotStatus.textContent = 'Done';
             } catch (e) {
-                shotStatus.textContent = 'OCR failed. Try a clearer screenshot.';
+                shotStatus.textContent = 'OCR failed. Try a closer crop or brighter screenshot.';
             }
         });
 

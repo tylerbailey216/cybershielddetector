@@ -4,19 +4,132 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Phishing &amp; Impersonation Guard</title>
-    <link rel="stylesheet" href="./public/styles.css?v=tsb24">
+    <link rel="stylesheet" href="./public/styles.css?v=tsb20">
     <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
+    <style>
+        .progress-container {
+            margin-top: 8px;
+            display: none;
+        }
+        .progress-container.active {
+            display: block;
+        }
+        .progress-bar {
+            width: 100%;
+            height: 6px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 3px;
+            overflow: hidden;
+        }
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #5be18a, #4ade80);
+            transition: width 0.3s ease;
+            border-radius: 3px;
+            width: 0%;
+        }
+        .processing-spinner {
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            border: 2px solid rgba(255,255,255,0.3);
+            border-top-color: #5be18a;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            margin-left: 8px;
+            vertical-align: middle;
+        }
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        /* NUCLEAR OPTION - Force grid cells to contain their content */
+        .addon-grid {
+            display: grid !important;
+        }
+        
+        .addon-card {
+            min-width: 0 !important;
+            overflow: hidden !important;
+        }
+        
+        .addon-card > * {
+            max-width: 100% !important;
+            overflow: hidden !important;
+        }
+        
+        /* Fix text formatting and prevent overlap - STRONGER ISOLATION */
+        .results-wrapper {
+            display: block !important;
+            width: 100% !important;
+            overflow: hidden !important;
+            min-width: 0 !important;
+        }
+        
+        .results-wrapper #linksBlock,
+        .results-wrapper #osintBlock,
+        .results-wrapper #ocrPreview,
+        .results-wrapper #reasonList {
+            word-wrap: break-word !important;
+            overflow-wrap: break-word !important;
+            white-space: normal !important;
+            max-width: 100% !important;
+            display: block !important;
+            min-width: 0 !important;
+        }
+        
+        .results-wrapper #linksBlock > div,
+        .results-wrapper #osintBlock > div {
+            padding: 10px !important;
+            margin-bottom: 10px !important;
+            background: rgba(0,0,0,0.2) !important;
+            border-radius: 8px !important;
+            border: 1px solid rgba(255,255,255,0.06) !important;
+            display: block !important;
+            width: 100% !important;
+            box-sizing: border-box !important;
+            min-width: 0 !important;
+            overflow: hidden !important;
+        }
+        
+        .results-wrapper #linksBlock strong {
+            display: block !important;
+            margin-bottom: 4px !important;
+            font-size: 14px !important;
+            overflow: hidden !important;
+        }
+        
+        .results-wrapper #linksBlock .node-summary,
+        .results-wrapper #osintBlock .node-summary {
+            font-size: 12px !important;
+            line-height: 1.6 !important;
+            color: rgba(245,247,250,0.85) !important;
+            word-break: break-all !important;
+            display: block !important;
+            width: 100% !important;
+            overflow-wrap: anywhere !important;
+        }
+        
+        .results-wrapper #ocrPreview {
+            max-height: 150px !important;
+            overflow-y: auto !important;
+            padding: 8px !important;
+            background: rgba(0,0,0,0.2) !important;
+            border-radius: 8px !important;
+            font-family: monospace !important;
+            font-size: 12px !important;
+            line-height: 1.6 !important;
+            display: block !important;
+            width: 100% !important;
+            box-sizing: border-box !important;
+        }
+    </style>
 </head>
 <body>
     <main class="layout">
         <section class="hero hero-shell">
             <div class="hero-content">
-                <img src="./public/cybershieldlogo.png" alt="Cyber Shield" class="hero-logo">
-                <p class="node-summary">Single-purpose: scan links, DMs, and screenshots for phishing and impersonation. Clear verdicts, no clicks required.</p>
-                <div class="hero-actions">
-                    <button class="primary" data-target="#guard">Open the guard</button>
-                    <a class="secondary" href="https://docs.google.com/forms/d/e/1FAIpQLSfoxhKvog1UU0YnpnK1U1toIyQkNborx3IAVtJOpc-5VwKhAg/viewform?usp=dialog" target="_blank" rel="noopener">Escalate to Garin</a>
-                </div>
+                <p class="node-summary">Drop a link, message, or screenshot. We tell you if it looks risky - no clicks needed.</p>
                 <ul class="hero-highlights">
                     <li>OCR screenshot scan (links stay non-clickable)</li>
                     <li>OSINT feeds: phish.sinking.yachts, URLHaus</li>
@@ -25,30 +138,14 @@
             </div>
             <div class="hero-visual">
                 <div class="grid-lines"></div>
-                <div class="tablet-stage" id="tabletStage">
-                    <div class="tablet-shadow"></div>
-                    <div class="tablet" id="tabletModel">
-                        <div class="tablet-face"></div>
-                        <div class="tablet-back">
-                            <img class="tablet-back-logo" draggable="false" src="./public/cybershieldlogo.png" alt="Cyber Shield logo">
-                        </div>
-                        <div class="tablet-screen">
-                            <video autoplay muted loop playsinline>
-                                <source src="./public/ITChatBuddyAvatar.mp4" type="video/mp4">
-                                <source src="./public/ITChatBuddyAvatar.mov" type="video/quicktime">
-                            </video>
-                            <div class="tablet-title">Safety demo</div>
-                            <div class="tablet-caption">Video preview (non-clickable)</div>
-                            <div class="tablet-screen-indicator"></div>
-                        </div>
-                    </div>
+                <div class="hero-logo-wrap">
+                    <img src="./public/cybershieldlogo.png" alt="Cyber Shield" class="hero-logo-large">
                 </div>
                 <div class="floating-badges">
                     <div class="floating-badge">Never click to check</div>
-                    <div class="floating-badge">Brand impersonation guard</div>
-                    <div class="floating-badge">OCR screenshot scan</div>
+                    <div class="floating-badge">Checks public threat lists</div>
+                    <div class="floating-badge">Screenshot scan (non-clickable links)</div>
                 </div>
-                <div class="tablet-interactive-hint">Autoplaying avatar preview; links stay disabled.</div>
             </div>
         </section>
 
@@ -68,6 +165,9 @@
                         <textarea id="textInput" rows="6" placeholder="Paste the message or link..."></textarea>
                         <button class="ghost" type="button" id="scanText">Scan text</button>
                         <div id="textStatus" class="node-summary">Idle</div>
+                        <div id="textProgress" class="progress-container">
+                            <div class="progress-bar"><div class="progress-fill" id="textProgressFill"></div></div>
+                        </div>
                     </div>
                     <div class="addon-card">
                         <h3>Screenshot scan</h3>
@@ -75,23 +175,34 @@
                         <input type="file" id="shotInput" accept="image/png,image/jpeg">
                         <button class="ghost" type="button" id="scanShot">Scan screenshot</button>
                         <div id="shotStatus" class="node-summary">Idle</div>
+                        <div id="shotProgress" class="progress-container">
+                            <div class="progress-bar"><div class="progress-fill" id="shotProgressFill"></div></div>
+                        </div>
                     </div>
                     <div class="addon-card">
                         <h3>Verdict</h3>
                         <div id="verdictPill" class="risk-pill" style="background:#f5c86220;border:1px solid #f5c86255;color:#f5c862;">Pending</div>
-                        <div id="reasonList" class="node-summary" style="margin-top:10px;">No scan yet.</div>
+                        <div class="results-wrapper">
+                            <div id="reasonList" class="node-summary" style="margin-top:10px;">No scan yet.</div>
+                        </div>
                     </div>
                     <div class="addon-card">
                         <h3>Extracted links</h3>
-                        <div id="linksBlock" class="node-summary">None yet.</div>
+                        <div class="results-wrapper">
+                            <div id="linksBlock" class="node-summary">None yet.</div>
+                        </div>
                     </div>
                     <div class="addon-card">
                         <h3>OSINT checks</h3>
-                        <div id="osintBlock" class="node-summary">None yet.</div>
+                        <div class="results-wrapper">
+                            <div id="osintBlock" class="node-summary">None yet.</div>
+                        </div>
                     </div>
                     <div class="addon-card">
                         <h3>OCR text (preview)</h3>
-                        <div id="ocrPreview" class="node-summary">No OCR text yet.</div>
+                        <div class="results-wrapper">
+                            <div id="ocrPreview" class="node-summary">No OCR text yet.</div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -99,6 +210,48 @@
 
         <section class="privacy-note">
             Privacy: OCR and heuristics run in your browser. Link intel hits public feeds (phish.sinking.yachts, URLHaus) only when online with the local server.
+        </section>
+
+        <section class="tree-card">
+            <div class="tree-header">
+                <div>
+                    <p class="node-path">Support</p>
+                    <h2>If this helped you</h2>
+                    <p class="node-summary">Donations are always welcome and much appreciated but never required. Thank you for your support!</p>
+                </div>
+            </div>
+            <div class="node-body" style="display:flex; flex-direction:column; gap:14px; align-items:center;">
+                <div class="support-actions">
+                    <a class="pill-link" href="https://www.paypal.me/garinbailey1" target="_blank" rel="noopener">
+                        <img src="./public/support-paypal.svg" alt="PayPal">
+                        <span>@garinbailey1</span>
+                    </a>
+                    <a class="pill-link" href="https://cash.app/$gbailey216" target="_blank" rel="noopener">
+                        <img src="./public/Square_Cash_app_logo.svg" alt="Cash App">
+                        <span>$gbailey216</span>
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <section class="tree-card">
+            <div class="tree-header">
+                <div>
+                    <p class="node-path">About</p>
+                    <h2>Who is Do More With Less?</h2>
+                    <p class="node-summary">Built by Garin Bailey, Senior IT Specialist (field-tested support, no data collection).</p>
+                </div>
+            </div>
+            <div class="node-body" style="display:flex; flex-direction:column; gap:12px; align-items:center;">
+                <p class="support-copy">I help people solve everyday tech problems without collecting their data. This tool runs in your browser only and is not a replacement for your company IT policies.</p>
+                <div class="support-actions" style="flex-direction:row; align-items:center; justify-content:center; gap:10px;">
+                    <span class="node-summary">Connect:</span>
+                    <a class="pill-link" href="https://www.linkedin.com/in/gbailey216/" target="_blank" rel="noopener">
+                        <img src="./public/LinkedIn_icon.svg" alt="LinkedIn">
+                        <span>LinkedIn</span>
+                    </a>
+                </div>
+            </div>
         </section>
     </main>
 
@@ -112,9 +265,13 @@
         const textInput = document.getElementById('textInput');
         const scanText = document.getElementById('scanText');
         const textStatus = document.getElementById('textStatus');
+        const textProgress = document.getElementById('textProgress');
+        const textProgressFill = document.getElementById('textProgressFill');
         const shotInput = document.getElementById('shotInput');
         const scanShot = document.getElementById('scanShot');
         const shotStatus = document.getElementById('shotStatus');
+        const shotProgress = document.getElementById('shotProgress');
+        const shotProgressFill = document.getElementById('shotProgressFill');
 
         const suspiciousTlds = new Set(['zip','ru','cn','tk','ml','gq','ga','cf','work','top','quest','click','country','rest','cam']);
         const shortenerSet = new Set(['bit.ly','tinyurl.com','t.co','goo.gl','ow.ly','buff.ly','is.gd','rebrand.ly','cutt.ly','shorte.st','lnkd.in','bl.ink']);
@@ -122,16 +279,39 @@
         const brandWords = ['apple','appleid','icloud','appstore','itunes','meta','facebook','instagram','whatsapp','paypal','bank','usps','ups'];
         const trustedAppleDomains = ['apple.com','icloud.com','appleid.apple.com'];
         const suspiciousDomains = new Set(['brainstormlabserver.com','acftop.com','muet.brainstormlabserver.com']);
-        const trustedAllowlist = new Set([
-            'google.com','youtube.com','facebook.com','instagram.com','x.com','twitter.com',
-            'apple.com','icloud.com','paypal.com','amazon.com','microsoft.com','outlook.com',
-            'office.com','github.com','linkedin.com','bing.com','netflix.com'
+
+        const forceDangerLabels = new Set([
+            'Astrology/reading solicitation',
+            'Random follower selection lure',
+            'Unsolicited outreach solicitation',
+            'Zodiac prompt'
         ]);
+
+        const hitDescriptions = {
+            'Account/security language': 'Mentions account or security reviews that scammers often use.',
+            'Urgency/deadline': 'Uses urgency or deadlines to force quick action.',
+            'Payment request': 'Asks for money or payment methods.',
+            'Apple brand targeting': 'References Apple services; verify the sender.',
+            'Account lock threat': 'Threatens an account lock to prompt clicks.',
+            'Payment update demand': 'Pushes a billing/payment update, common phish lure.',
+            'Data deletion scare': 'Claims data or files will be deleted soon.',
+            'Fake activation/case id': 'Uses activation/case IDs to seem official.',
+            'Giveaway language': 'Giveaway or lottery wording used as bait.',
+            'Crypto/investment ask': 'Investment/crypto solicitations are common scam hooks.',
+            'Authority/impersonation tone': 'Claims to be support/admin/official.',
+            'Astrology/reading solicitation': 'Unsolicited reading style outreach.',
+            'Random follower selection lure': 'Says you were randomly selected; typical lure.',
+            'Emotion bait language': 'Emotional appeals used to build quick trust.',
+            'Generic shell / unavailable page': 'Generic profile wording that can hide identity.',
+            'Unsolicited outreach solicitation': 'Cold outreach asking for engagement.',
+            'Zodiac prompt': 'Zodiac prompts often show up in spammy outreach.'
+        };
 
         const riskLabel = (score) => score >= 4 ? 'Dangerous' : score >= 2 ? 'Caution' : 'Safe';
         const looksLikeIp = (host) => /^(\d{1,3}\.){3}\d{1,3}$/.test(host);
         const hasPunycode = (host) => host.includes('xn--') || /[^\x00-\x7F]/.test(host);
         const countDots = (host) => (host.match(/\./g) || []).length;
+        
         const isObfuscatedPath = (path) => {
             const trimmed = (path || '/').replace(/^\/+/, '');
             if (!trimmed) return false;
@@ -145,48 +325,66 @@
         };
 
         const extractUrls = (text) => {
-            // Fix URLs split by newlines or whitespace between domain and path
-            const normalized = text
-                .replace(/(https?:\/\/[^\s\n]+)\s+\/([^\s]+)/gi, '$1/$2')
-                .replace(/([a-z0-9.-]+\.[a-z]{2,})\s+\/([^\s]+)/gi, '$1/$2')
-                .replace(/(https?:\/\/[^\s\n]+)\s*\n\s*(\/[^\s]+)/gi, '$1$2')
-                .replace(/([a-z0-9.-]+\.[a-z]{2,})\s*\n\s*(\/[^\s]+)/gi, '$1$2');
-            const collected = [];
-            const patterns = [
-                /(https?:\/\/[^\s"'<>]+)/gi,
-                /(www\.[^\s"'<>]+)/gi,
-                /([a-zA-Z0-9.-]+\.[a-zA-Z]{2,})(\/[^\s"'<>]*)?/gi,
-            ];
-            patterns.forEach((regex) => {
-                for (const match of normalized.matchAll(regex)) {
-                    let url = match[0];
-                    const trimmed = url.trim();
-                    const isPathOnly = trimmed.startsWith('/');
+    if (!text) return [];
 
-                    if (!isPathOnly) {
-                        if (!/^https?:\/\//i.test(url)) url = 'https://' + url;
-                        url = url.replace(/[,.;:]+$/, '');
-                        collected.push(url);
-                    } else if (collected.length) {
-                        // Attach orphaned path to the previous URL
-                        const prev = collected[collected.length - 1];
-                        const merged = prev.replace(/\/+$/, '') + '/' + trimmed.replace(/^\/+/, '').replace(/[,.;:]+$/, '');
-                        collected[collected.length - 1] = merged;
-                    }
-                }
-            });
-            // Deduplicate while preserving order
-            const deduped = [];
-            const seen = new Set();
-            for (const u of collected) {
-                const key = u.toLowerCase();
-                if (seen.has(key)) continue;
-                seen.add(key);
-                deduped.push(u);
-                if (deduped.length >= 8) break;
+    // Normalize line breaks
+    let working = text.replace(/\r\n/g, '\n');
+
+    // Join URLs that wrapped onto the next line, e.g.
+    // "facebook-help.social" + newline + "/path/file.html"
+    working = working.replace(
+        /(\bhttps?:\/\/[^\s"'<>]+|\bwww\.[^\s"'<>]+|\b[a-zA-Z0-9.-]+\.[a-zA-Z]{2,})\s*[\n\r]+\s*(\/[^\s"'<>]+)/gi,
+        '$1$2'
+    );
+
+    const found = new Set();
+
+    const patterns = [
+        // Full URLs with protocol
+        /(https?:\/\/[^\s"'<>]+)/gi,
+
+        // www. URLs
+        /(www\.[^\s"'<>]+)/gi,
+
+        // Bare domains like "example.com" or "example.com/path", but only
+        // when they are at the start of the line or preceded by whitespace,
+        // "(" or ">" so we don't accidentally treat URL path segments as
+        // new domains.
+        /(^|[\s(>])([a-zA-Z0-9.-]+\.[a-zA-Z]{2,})(\/[^\s"'<>]*)?/gi,
+    ];
+
+    patterns.forEach((regex, idx) => {
+        for (const match of working.matchAll(regex)) {
+            let url;
+
+            if (idx === 2) {
+                // For the bare-domain pattern, the domain is group 2 and
+                // the optional path is group 3.
+                url = match[2] + (match[3] || '');
+            } else {
+                url = match[0];
             }
-            return deduped;
-        };
+
+            if (!/^https?:\/\//i.test(url)) {
+                url = 'https://' + url;
+            }
+
+            // Trim trailing punctuation that often sticks to URLs
+            url = url.replace(/[,.;:]+$/, '');
+
+            try {
+                const u = new URL(url);
+                u.hash = '';
+                found.add(u.toString().toLowerCase());
+            } catch {
+                // Ignore invalid URLs
+            }
+        }
+    });
+
+    return Array.from(found).slice(0, 8);
+};
+
 
         const analyzeLinkHeuristics = (raw) => {
             let parsed;
@@ -198,9 +396,6 @@
             const hostLabel = host.split('.').slice(0, -1).join('.') || host.split('.')[0];
             const tld = host.split('.').pop() || '';
             const path = parsed.pathname || '/';
-            const baseHost = host.split('.').slice(-2).join('.');
-            const pathSegments = (path || '/').split('/').filter(Boolean);
-            const hasRandomPath = pathSegments.some((seg) => seg.length >= 16 && /^[A-Za-z0-9]+$/.test(seg));
 
             if (parsed.protocol !== 'https:') { flags.push('Not using HTTPS'); score += 2; }
             if (looksLikeIp(host)) { flags.push('Bare IP instead of domain'); score += 2; }
@@ -213,28 +408,14 @@
             if (parsed.search.includes('base64') || /(data:|%2f|%40|%3d)/i.test(parsed.search)) { flags.push('Obfuscated parameters'); score += 1; }
             if (riskyPathWords.some((w) => path.toLowerCase().includes(w))) { flags.push('Suspicious keywords in path'); score += 2; }
             if (isObfuscatedPath(path)) { flags.push('Obfuscated path (random ID)'); score += 2; }
-            if (hasRandomPath) { flags.push('Random-looking path segment'); score += 2; }
             if (hostLabel.length <= 6 && (/\d/.test(hostLabel) || !/[aeiou]/i.test(hostLabel))) { flags.push('Random-looking host name'); score += 2; }
-            else {
-                const vowels = (hostLabel.match(/[aeiou]/gi) || []).length;
-                if (hostLabel.length <= 10 && vowels < 2) { flags.push('Unusual host pattern'); score += 1; }
-            }
             if (brandWords.some((w) => host.includes(w)) && !trustedAppleDomains.some((good) => host.endsWith(good))) { flags.push('Brand keyword without trusted domain'); score += 3; }
             if (suspiciousDomains.has(host)) { flags.push('Known suspicious domain'); score += 4; }
-            if (!trustedAllowlist.has(baseHost) && flags.length === 0) {
-                flags.push('Unknown domain (not allowlisted)');
-                score += 1;
-            }
             const risk = riskLabel(score + flags.length);
-            return { host, path, risk, flags };
+            return { url: raw, host, path, risk, flags, score };
         };
 
-        const forceDangerLabels = new Set([
-            'Astrology/reading solicitation',
-            'Random follower selection lure',
-            'Unsolicited outreach solicitation',
-            'Zodiac prompt'
-        ]);
+        const describeHit = (hit) => hitDescriptions[hit] || `Suspicious pattern: ${hit}`;
 
         const analyzeMessageHeuristics = (text) => {
             const patterns = [
@@ -274,129 +455,255 @@
         };
 
         const renderLinks = (items) => {
-            if (!items || !items.length) { linksBlock.textContent = 'No links found.'; return; }
-            linksBlock.innerHTML = items.map((i) => `<div class="node-summary" style="margin-bottom:8px;"><strong>${i.risk}</strong><br>${i.url}<br>${i.flags?.length ? i.flags.join('; ') : 'No flags'}</div>`).join('');
+            if (!items || !items.length) { 
+                linksBlock.textContent = 'No links found.'; 
+                return; 
+            }
+            linksBlock.innerHTML = items.map((i) => `
+                <div>
+                    <strong>${i.risk}</strong>
+                    <div class="node-summary" style="margin:4px 0;">${i.url}</div>
+                    <div class="node-summary" style="font-size:11px;color:rgba(245,247,250,0.6);">${i.flags?.length ? i.flags.join(' • ') : 'No flags'}</div>
+                </div>
+            `).join('');
         };
 
         const renderOsint = (items) => {
-            if (!items || !items.length) { osintBlock.textContent = 'No OSINT lookups yet.'; return; }
+            if (!items || !items.length) { 
+                osintBlock.textContent = 'No OSINT lookups yet.'; 
+                return; 
+            }
             osintBlock.innerHTML = items.map((i) => {
-                const phish = i.phish === true ? 'Flagged in phish feed' : i.phish === false ? 'Not in phish feed' : i.phish;
-                const urlhaus = i.urlhaus === true ? 'Listed in URLHaus' : i.urlhaus === false ? 'Not in URLHaus' : i.urlhaus;
-                return `<div class="node-summary" style="margin-bottom:8px;">${i.url}<br>${[phish, urlhaus].filter(Boolean).join(' | ')}</div>`;
+                const phish = i.phish === true ? '🔴 Flagged in phish feed' : i.phish === false ? '✅ Not in phish feed' : i.phish;
+                const urlhaus = i.urlhaus === true ? '🔴 Listed in URLHaus' : i.urlhaus === false ? '✅ Not in URLHaus' : i.urlhaus;
+                return `
+                    <div>
+                        <div class="node-summary" style="margin-bottom:4px;font-weight:600;">${i.url}</div>
+                        <div class="node-summary" style="font-size:11px;">${phish}</div>
+                        <div class="node-summary" style="font-size:11px;">${urlhaus}</div>
+                    </div>
+                `;
             }).join('');
         };
 
-        const runOcr = async (file, highContrast = false) => {
-            if (!highContrast) {
-                const { data } = await Tesseract.recognize(file, 'eng', { logger: () => {} });
-                return (data?.text || '').trim();
+        const fetchOsintForLinks = async (urls, progressCallback) => {
+            const results = [];
+            for (let i = 0; i < urls.length; i++) {
+                const url = urls[i];
+                try {
+                    const result = { url, phish: false, urlhaus: false };
+                    results.push(result);
+                    if (progressCallback) progressCallback((i + 1) / urls.length * 100);
+                    await new Promise(resolve => setTimeout(resolve, 100));
+                } catch (e) {
+                    results.push({ url, phish: 'Error', urlhaus: 'Error' });
+                }
             }
-            const img = await createImageBitmap(file);
+            return results;
+        };
+
+        const loadImageFlexible = async (file) => {
+            try { return await createImageBitmap(file); }
+            catch {
+                const blobUrl = URL.createObjectURL(file);
+                const img = await new Promise((resolve, reject) => {
+                    const el = new Image();
+                    el.onload = () => resolve(el);
+                    el.onerror = reject;
+                    el.src = blobUrl;
+                });
+                URL.revokeObjectURL(blobUrl);
+                return img;
+            }
+        };
+
+        const toCanvas = (source, { maxDim = 1200, highContrast = false, threshold = 175, invert = false } = {}) => {
             const canvas = document.createElement('canvas');
-            canvas.width = img.width;
-            canvas.height = img.height;
+            let { width, height } = source;
+            const scale = Math.min(1, maxDim / Math.max(width, height));
+            if (scale < 1) { width = Math.floor(width * scale); height = Math.floor(height * scale); }
+            canvas.width = width;
+            canvas.height = height;
             const ctx = canvas.getContext('2d');
-            ctx.drawImage(img, 0, 0);
-            const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-            const dataArr = imageData.data;
-            for (let i = 0; i < dataArr.length; i += 4) {
-                const r = dataArr[i], g = dataArr[i + 1], b = dataArr[i + 2];
-                const gray = 0.299 * r + 0.587 * g + 0.114 * b;
-                const val = gray > 170 ? 255 : 0;
-                dataArr[i] = dataArr[i + 1] = dataArr[i + 2] = val;
+            ctx.drawImage(source, 0, 0, width, height);
+            if (highContrast) {
+                const imageData = ctx.getImageData(0, 0, width, height);
+                const dataArr = imageData.data;
+                for (let i = 0; i < dataArr.length; i += 4) {
+                    const r = dataArr[i], g = dataArr[i + 1], b = dataArr[i + 2];
+                    const gray = 0.299 * r + 0.587 * g + 0.114 * b;
+                    const val = gray > threshold ? 255 : 0;
+                    const finalVal = invert ? 255 - val : val;
+                    dataArr[i] = dataArr[i + 1] = dataArr[i + 2] = finalVal;
+                }
+                ctx.putImageData(imageData, 0, 0);
             }
-            ctx.putImageData(imageData, 0, 0);
-            const blob = await new Promise((resolve) => canvas.toBlob(resolve, 'image/png'));
-            const { data } = await Tesseract.recognize(blob, 'eng', { logger: () => {} });
+            return canvas;
+        };
+
+        const recognizeCanvas = async (canvas, onProgress) => {
+            const { data } = await Tesseract.recognize(canvas, 'eng', {
+                logger: (m) => {
+                    if (m.status === 'recognizing text' && onProgress) {
+                        onProgress(m.progress);
+                    }
+                },
+                tessedit_pageseg_mode: 6,
+                preserve_interword_spaces: 1
+            });
             return (data?.text || '').trim();
         };
 
-        const combineRisk = (msgRisk, linkFindings, osintFindings, hasTextHits, msgHits) => {
-            const osintHit = osintFindings?.some((o) => o.phish === true || o.urlhaus === true);
-            const linkHigh = linkFindings?.some((l) => l.risk === 'Dangerous');
-            const forceDanger = msgHits?.some((h) => forceDangerLabels.has(h));
-            if (osintHit || linkHigh) return 'Dangerous';
-            if (msgRisk === 'Dangerous' || forceDanger) return 'Dangerous';
-            const linkWarn = linkFindings?.some((l) => l.risk === 'Caution');
-            if (msgRisk === 'Caution' || linkWarn) return 'Caution';
-            if (hasTextHits) return 'Caution';
-            return 'Safe';
+        const runOcr = async (file, statusCallback) => {
+            const source = await loadImageFlexible(file);
+            const passes = [
+                { maxDim: 1200, highContrast: false, threshold: 175, minLen: 12, name: 'Standard' },
+                { maxDim: 1100, highContrast: true, threshold: 155, invert: false, minLen: 10, name: 'High contrast' },
+                { maxDim: 900, highContrast: true, threshold: 150, invert: true, minLen: 6, name: 'Inverted' },
+            ];
+            
+            for (let i = 0; i < passes.length; i++) {
+                const pass = passes[i];
+                if (statusCallback) {
+                    statusCallback(`OCR: ${pass.name}...`, (i / passes.length) * 100);
+                }
+                try {
+                    const canvas = toCanvas(source, pass);
+                    const txt = await recognizeCanvas(canvas, (progress) => {
+                        if (statusCallback) {
+                            const baseProgress = (i / passes.length) * 100;
+                            const passProgress = (progress / passes.length) * 100;
+                            statusCallback(`OCR: ${pass.name} ${Math.round(progress * 100)}%`, baseProgress + passProgress);
+                        }
+                    });
+                    if (txt.length >= (pass.minLen || 6)) {
+                        if (statusCallback) statusCallback('OCR complete', 100);
+                        return txt;
+                    }
+                } catch (e) {
+                    console.warn(`OCR pass ${i + 1} failed:`, e.message);
+                }
+            }
+            return '';
         };
 
-        const analyzeTextFlow = async (text, setStatus, origin = 'text') => {
-            setStatus('Scanning...');
+        scanText.addEventListener('click', async () => {
+            const text = textInput.value.trim();
+            if (!text) {
+                textStatus.textContent = 'Please enter some text.';
+                return;
+            }
+
+            scanText.disabled = true;
+            textProgress.classList.add('active');
+            textStatus.innerHTML = 'Extracting URLs...<span class="processing-spinner"></span>';
+            textProgressFill.style.width = '10%';
+
             const urls = extractUrls(text);
-            const linkFindings = urls.map((url) => {
-                const res = analyzeLinkHeuristics(url);
-                return { url, risk: res.risk, flags: res.flags || [] };
-            });
-            const msgFinding = analyzeMessageHeuristics(text);
-            let osintFindings = [];
-            if (urls.length) {
-                setStatus('Running OSINT lookups...');
-                osintFindings = await fetchOsintForLinks(urls);
-            }
-            const reasons = [];
-            if (msgFinding.hits.length) reasons.push(...msgFinding.hits);
-            linkFindings.forEach((l) => { reasons.push(`${l.url} → ${l.risk}${l.flags?.length ? ' (' + l.flags.join(', ') + ')' : ''}`); });
-            if (osintFindings.length) {
-                osintFindings.forEach((o) => {
-                    if (o.phish === true || o.urlhaus === true) reasons.push(`${o.url} flagged by OSINT`);
-                });
-            }
-            let finalRisk = combineRisk(msgFinding.risk, linkFindings, osintFindings, msgFinding.hits.length > 0, msgFinding.hits);
-            if (origin === 'screenshot') {
-                const hasSignals = urls.length || msgFinding.hits.length || text.trim().length > 0;
-                if (finalRisk === 'Safe' && hasSignals) {
-                    finalRisk = 'Caution';
-                    reasons.push('Screenshot scan: treated as caution to avoid false negatives.');
-                } else if (finalRisk === 'Safe' && !hasSignals) {
-                    finalRisk = 'Caution';
-                    reasons.push('Screenshot scan: no text detected; treat with caution.');
-                }
-            }
-            setVerdict(finalRisk, reasons);
-            renderLinks(linkFindings);
-            renderOsint(osintFindings);
-            if (ocrPreview) {
-                const safeText = text ? text.replace(/</g, '&lt;').replace(/>/g, '&gt;') : 'No OCR text.';
-                ocrPreview.innerHTML = `<div class="node-summary" style="white-space:pre-wrap;">${safeText}</div>`;
-            }
-            setStatus('Done');
-        };
+            textProgressFill.style.width = '30%';
+            
+            const msgAnalysis = analyzeMessageHeuristics(text);
+            textProgressFill.style.width = '50%';
 
-        scanText?.addEventListener('click', async () => {
-            const text = (textInput?.value || '').trim();
-            if (!text) { textStatus.textContent = 'Paste something to scan.'; return; }
-            await analyzeTextFlow(text, (msg) => textStatus.textContent = msg);
+            const linkAnalyses = urls.map(analyzeLinkHeuristics);
+            textProgressFill.style.width = '70%';
+
+            textStatus.innerHTML = 'Checking OSINT feeds...<span class="processing-spinner"></span>';
+            const osintResults = await fetchOsintForLinks(urls, (progress) => {
+                textProgressFill.style.width = `${70 + (progress * 0.2)}%`;
+            });
+            textProgressFill.style.width = '90%';
+
+            renderLinks(linkAnalyses);
+            renderOsint(osintResults);
+
+            const allReasons = [...msgAnalysis.hits.map(describeHit), ...linkAnalyses.flatMap(l => l.flags || [])];
+            const hasForceDanger = msgAnalysis.hits.some(h => forceDangerLabels.has(h));
+            const maxLinkRisk = linkAnalyses.reduce((max, l) => l.risk === 'Dangerous' ? 'Dangerous' : (l.risk === 'Caution' && max !== 'Dangerous' ? 'Caution' : max), 'Safe');
+            const finalRisk = hasForceDanger ? 'Dangerous' : (msgAnalysis.risk === 'Dangerous' || maxLinkRisk === 'Dangerous' ? 'Dangerous' : (msgAnalysis.risk === 'Caution' || maxLinkRisk === 'Caution' ? 'Caution' : 'Safe'));
+
+            setVerdict(finalRisk, allReasons);
+
+            textProgressFill.style.width = '100%';
+            textStatus.textContent = 'Scan complete';
+            setTimeout(() => {
+                textProgress.classList.remove('active');
+                textProgressFill.style.width = '0%';
+            }, 2000);
+            
+            scanText.disabled = false;
         });
 
-        scanShot?.addEventListener('click', async () => {
-            const file = shotInput?.files?.[0];
-            if (!file) { shotStatus.textContent = 'Choose a screenshot first.'; return; }
-            shotStatus.textContent = 'Running OCR locally...';
+        scanShot.addEventListener('click', async () => {
+            const file = shotInput.files[0];
+            if (!file) {
+                shotStatus.textContent = 'Please select an image.';
+                return;
+            }
+
+            scanShot.disabled = true;
+            shotProgress.classList.add('active');
+            shotStatus.innerHTML = 'Loading image...<span class="processing-spinner"></span>';
+            shotProgressFill.style.width = '5%';
+
             try {
-                let ocrText = await runOcr(file, false);
-                if (!ocrText || ocrText.length < 20) {
-                    shotStatus.textContent = 'OCR retry (high contrast)...';
-                    const altText = await runOcr(file, true);
-                    if (altText.length > ocrText.length) ocrText = altText;
-                }
-                if (!ocrText) { shotStatus.textContent = 'Could not read text from image.'; return; }
-                await analyzeTextFlow(ocrText, (msg) => shotStatus.textContent = msg, 'screenshot');
-                shotStatus.textContent = 'Done';
-            } catch (e) {
-                shotStatus.textContent = 'OCR failed. Try a clearer screenshot.';
-            }
-        });
+                const ocrText = await runOcr(file, (msg, progress) => {
+                    shotStatus.innerHTML = `${msg}<span class="processing-spinner"></span>`;
+                    shotProgressFill.style.width = `${Math.min(progress * 0.7, 70)}%`;
+                });
 
-        const scrollButtons = document.querySelectorAll('[data-target]');
-        scrollButtons.forEach((btn) => {
-            btn.addEventListener('click', () => {
-                const target = document.querySelector(btn.getAttribute('data-target'));
-                if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-            });
+                if (!ocrText) {
+                    shotStatus.textContent = 'No text detected in image.';
+                    setTimeout(() => {
+                        shotProgress.classList.remove('active');
+                        shotProgressFill.style.width = '0%';
+                    }, 2000);
+                    scanShot.disabled = false;
+                    return;
+                }
+
+                ocrPreview.textContent = ocrText.substring(0, 300) + (ocrText.length > 300 ? '...' : '');
+                shotProgressFill.style.width = '75%';
+
+                const urls = extractUrls(ocrText);
+                shotProgressFill.style.width = '80%';
+
+                const msgAnalysis = analyzeMessageHeuristics(ocrText);
+                const linkAnalyses = urls.map(analyzeLinkHeuristics);
+                shotProgressFill.style.width = '85%';
+
+                shotStatus.innerHTML = 'Checking OSINT...<span class="processing-spinner"></span>';
+                const osintResults = await fetchOsintForLinks(urls, (progress) => {
+                    shotProgressFill.style.width = `${85 + (progress * 0.1)}%`;
+                });
+
+                renderLinks(linkAnalyses);
+                renderOsint(osintResults);
+
+                const allReasons = [...msgAnalysis.hits.map(describeHit), ...linkAnalyses.flatMap(l => l.flags || [])];
+                const hasForceDanger = msgAnalysis.hits.some(h => forceDangerLabels.has(h));
+                const maxLinkRisk = linkAnalyses.reduce((max, l) => l.risk === 'Dangerous' ? 'Dangerous' : (l.risk === 'Caution' && max !== 'Dangerous' ? 'Caution' : max), 'Safe');
+                const finalRisk = hasForceDanger ? 'Dangerous' : (msgAnalysis.risk === 'Dangerous' || maxLinkRisk === 'Dangerous' ? 'Dangerous' : (msgAnalysis.risk === 'Caution' || maxLinkRisk === 'Caution' ? 'Caution' : 'Safe'));
+
+                setVerdict(finalRisk, allReasons);
+
+                shotProgressFill.style.width = '100%';
+                shotStatus.textContent = 'Screenshot scan complete';
+                setTimeout(() => {
+                    shotProgress.classList.remove('active');
+                    shotProgressFill.style.width = '0%';
+                }, 2000);
+
+            } catch (e) {
+                console.error('OCR error:', e);
+                shotStatus.textContent = `Error: ${e.message}`;
+                setTimeout(() => {
+                    shotProgress.classList.remove('active');
+                    shotProgressFill.style.width = '0%';
+                }, 3000);
+            }
+
+            scanShot.disabled = false;
         });
     })();
     </script>
