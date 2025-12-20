@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Phishing &amp; Impersonation Guard</title>
-    <link rel="stylesheet" href="./public/styles.css?v=tsb27">
+    <link rel="stylesheet" href="./public/styles.css?v=tsb28">
     <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
     <style>
         .progress-container {
@@ -173,9 +173,9 @@
                         <h3>Screenshot scan</h3>
                         <p class="node-summary">Upload PNG/JPG. OCR runs locally; extracted links are shown as text.</p>
                         <input type="file" id="shotInput" accept="image/png,image/jpeg">
-                        <label class="node-summary" style="display:flex;align-items:center;gap:8px;margin:6px 0 2px;color:#f5f7fa;font-size:13px;">
-                            <input type="checkbox" id="shotPhotoMode">
-                            <span style="color:#f5f7fa;font-size:13px;display:block;">Photo mode (better for camera pictures of a screen)</span>
+                        <label class="node-summary" style="display:flex;align-items:center;gap:10px;margin:6px 0 6px;color:#f5f7fa;font-size:14px;line-height:1.4;">
+                            <input type="checkbox" id="shotPhotoMode" style="flex:0 0 auto;">
+                            <span style="color:#f5f7fa;font-size:14px;display:block;flex:1 1 auto;">Photo mode (better for camera pictures of a screen)</span>
                         </label>
                         <p class="node-summary" style="margin:2px 0 10px;">Tip: for best results, hold steady, avoid glare, and fill the frame; screenshots are still most accurate.</p>
                         <button class="ghost" type="button" id="scanShot">Scan screenshot</button>
