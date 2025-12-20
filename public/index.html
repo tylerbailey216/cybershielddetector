@@ -4,8 +4,34 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Phishing &amp; Impersonation Guard</title>
-    <link rel="stylesheet" href="/styles.css?v=tsb29">
+    <link rel="stylesheet" href="/styles.css?v=tsb30">
     <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
+    <style>
+        .photo-mode-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin: 6px 0 2px;
+            color: #f5f7fa;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow: visible;
+            flex-wrap: wrap;
+            width: 100%;
+        }
+        .photo-mode-row span {
+            color: inherit;
+            flex: 1 1 auto;
+            min-width: 0;
+            white-space: normal;
+        }
+        .photo-mode-note {
+            color: #d8f5ff;
+            font-size: 13px;
+            margin: 0 0 8px 0;
+            line-height: 1.5;
+        }
+    </style>
 </head>
 <body>
     <main class="layout">
@@ -58,11 +84,11 @@
                         <label class="node-summary" style="display:flex;align-items:center;gap:8px;margin:6px 0 2px;">
                             <input type="checkbox" id="osintToggleShot" checked> <span>Run OSINT (slower)</span>
                         </label>
-                        <label class="node-summary" style="display:flex;align-items:center;gap:10px;margin:6px 0 2px;color:#f5f7fa;font-size:14px;line-height:1.4;">
+                        <label class="photo-mode-row">
                             <input type="checkbox" id="shotPhotoMode" style="flex:0 0 auto;">
-                            <span style="color:#f5f7fa;font-size:14px;display:block;flex:1 1 auto;">Photo mode (better for camera pics of screens)</span>
+                            <span>Photo mode (better for camera pictures of a screen)</span>
                         </label>
-                        <div class="node-summary" style="color:#f5f7fa;font-size:13px;margin:0 0 8px 0;">Photo mode boosts OCR for phone photos of screens.</div>
+                        <div class="photo-mode-note">Photo mode boosts OCR for phone photos of screens.</div>
                         <p class="node-summary" style="margin:2px 0 10px;">Tip: hold steady, avoid glare, fill the frame; screenshots are still most accurate.</p>
                         <button class="ghost" type="button" id="scanShot">Scan screenshot</button>
                         <div id="shotStatus" class="node-summary">Idle</div>
