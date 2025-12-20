@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Phishing &amp; Impersonation Guard</title>
-    <link rel="stylesheet" href="/styles.css?v=tsb18">
+    <link rel="stylesheet" href="/styles.css?v=tsb25">
     <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
 </head>
 <body>
@@ -58,6 +58,10 @@
                         <label class="node-summary" style="display:flex;align-items:center;gap:8px;margin:6px 0 2px;">
                             <input type="checkbox" id="osintToggleShot" checked> <span>Run OSINT (slower)</span>
                         </label>
+                        <label class="node-summary" style="display:flex;align-items:center;gap:8px;margin:4px 0 2px;">
+                            <input type="checkbox" id="shotPhotoMode"> <span>Photo mode (better for camera pics of screens)</span>
+                        </label>
+                        <p class="node-summary" style="margin:2px 0 10px;">Tip: hold steady, avoid glare, fill the frame; screenshots are still most accurate.</p>
                         <button class="ghost" type="button" id="scanShot">Scan screenshot</button>
                         <div id="shotStatus" class="node-summary">Idle</div>
                     </div>
@@ -359,17 +363,19 @@
             return (data?.text || '').trim();
         };
 
-        const runOcr = async (file, preferHigh = false) => {
+        const runOcr = async (file, preferPhoto = false) => {
             const source = await loadImageFlexible(file);
-            const passes = [
+            const basePasses = [
                 { maxDim: 1200, highContrast: false, threshold: 175, minLen: 12 },
                 { maxDim: 1100, highContrast: true, threshold: 155, invert: false, minLen: 10 },
                 { maxDim: 900, highContrast: true, threshold: 150, invert: true, minLen: 6 },
                 { maxDim: 700, highContrast: true, threshold: 140, invert: true, minLen: 4 }
             ];
-            if (preferHigh) {
-                passes.unshift(passes.splice(1, 1)[0]);
-            }
+            const photoPasses = preferPhoto ? [
+                { maxDim: 1600, highContrast: true, threshold: 140, invert: false, minLen: 8 },
+                { maxDim: 1600, highContrast: true, threshold: 130, invert: true, minLen: 8 },
+            ] : [];
+            const passes = [...photoPasses, ...basePasses];
             for (const pass of passes) {
                 try {
                     const canvas = toCanvas(source, pass);
@@ -516,7 +522,8 @@
             if (!file) { shotStatus.textContent = 'Choose a screenshot first.'; return; }
             shotStatus.textContent = 'Running OCR locally...';
             try {
-                let ocrText = await runOcr(file, true);
+                const preferPhoto = (document.getElementById('shotPhotoMode')?.checked === true);
+                let ocrText = await runOcr(file, preferPhoto);
                 if (!ocrText) {
                     shotStatus.textContent = 'OCR failed on this image. Try a closer crop or brighter screenshot.';
                     return;

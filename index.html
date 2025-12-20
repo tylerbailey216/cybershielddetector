@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Phishing &amp; Impersonation Guard</title>
-    <link rel="stylesheet" href="./public/styles.css?v=tsb20">
+    <link rel="stylesheet" href="./public/styles.css?v=tsb25">
     <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
     <style>
         .progress-container {
@@ -173,6 +173,10 @@
                         <h3>Screenshot scan</h3>
                         <p class="node-summary">Upload PNG/JPG. OCR runs locally; extracted links are shown as text.</p>
                         <input type="file" id="shotInput" accept="image/png,image/jpeg">
+                        <label class="node-summary" style="display:flex;align-items:center;gap:8px;margin:6px 0 2px;">
+                            <input type="checkbox" id="shotPhotoMode"> <span>Photo mode (better for camera pictures of a screen)</span>
+                        </label>
+                        <p class="node-summary" style="margin:2px 0 10px;">Tip: for best results, hold steady, avoid glare, and fill the frame; screenshots are still most accurate.</p>
                         <button class="ghost" type="button" id="scanShot">Scan screenshot</button>
                         <div id="shotStatus" class="node-summary">Idle</div>
                         <div id="shotProgress" class="progress-container">
@@ -558,13 +562,18 @@
             return (data?.text || '').trim();
         };
 
-        const runOcr = async (file, statusCallback) => {
+        const runOcr = async (file, { statusCallback, photoMode = false } = {}) => {
             const source = await loadImageFlexible(file);
-            const passes = [
+            const basePasses = [
                 { maxDim: 1200, highContrast: false, threshold: 175, minLen: 12, name: 'Standard' },
                 { maxDim: 1100, highContrast: true, threshold: 155, invert: false, minLen: 10, name: 'High contrast' },
                 { maxDim: 900, highContrast: true, threshold: 150, invert: true, minLen: 6, name: 'Inverted' },
             ];
+            const photoPasses = photoMode ? [
+                { maxDim: 1600, highContrast: true, threshold: 140, invert: false, minLen: 8, name: 'Photo boost' },
+                { maxDim: 1600, highContrast: true, threshold: 130, invert: true, minLen: 8, name: 'Photo boost (invert)' },
+            ] : [];
+            const passes = [...photoPasses, ...basePasses];
             
             for (let i = 0; i < passes.length; i++) {
                 const pass = passes[i];
@@ -651,9 +660,13 @@
             shotProgressFill.style.width = '5%';
 
             try {
-                const ocrText = await runOcr(file, (msg, progress) => {
-                    shotStatus.innerHTML = `${msg}<span class="processing-spinner"></span>`;
-                    shotProgressFill.style.width = `${Math.min(progress * 0.7, 70)}%`;
+                const photoModeChecked = document.getElementById('shotPhotoMode')?.checked;
+                const ocrText = await runOcr(file, {
+                    photoMode: !!photoModeChecked,
+                    statusCallback: (msg, progress) => {
+                        shotStatus.innerHTML = `${msg}<span class="processing-spinner"></span>`;
+                        shotProgressFill.style.width = `${Math.min(progress * 0.7, 70)}%`;
+                    }
                 });
 
                 if (!ocrText) {
