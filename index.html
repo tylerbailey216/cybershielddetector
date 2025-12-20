@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Phishing &amp; Impersonation Guard</title>
-    <link rel="stylesheet" href="./public/styles.css?v=tsb22">
+    <link rel="stylesheet" href="./public/styles.css?v=tsb23">
     <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
 </head>
 <body>
@@ -145,25 +145,47 @@
         };
 
         const extractUrls = (text) => {
-            const found = new Set();
+            // Fix URLs split by newlines or whitespace between domain and path
+            const normalized = text
+                .replace(/(https?:\/\/[^\s\n]+)\s+\/([^\s]+)/gi, '$1/$2')
+                .replace(/([a-z0-9.-]+\.[a-z]{2,})\s+\/([^\s]+)/gi, '$1/$2')
+                .replace(/(https?:\/\/[^\s\n]+)\s*\n\s*(\/[^\s]+)/gi, '$1$2')
+                .replace(/([a-z0-9.-]+\.[a-z]{2,})\s*\n\s*(\/[^\s]+)/gi, '$1$2');
+            const collected = [];
             const patterns = [
                 /(https?:\/\/[^\s"'<>]+)/gi,
                 /(www\.[^\s"'<>]+)/gi,
                 /([a-zA-Z0-9.-]+\.[a-zA-Z]{2,})(\/[^\s"'<>]*)?/gi,
             ];
             patterns.forEach((regex) => {
-                for (const match of text.matchAll(regex)) {
+                for (const match of normalized.matchAll(regex)) {
                     let url = match[0];
-                    if (!/^https?:\/\//i.test(url)) url = 'https://' + url;
-                    url = url.replace(/[,.;:]+$/, '');
-                    try {
-                        const u = new URL(url);
-                        u.hash = '';
-                        found.add(u.toString().toLowerCase());
-                    } catch {}
+                    const trimmed = url.trim();
+                    const isPathOnly = trimmed.startsWith('/');
+
+                    if (!isPathOnly) {
+                        if (!/^https?:\/\//i.test(url)) url = 'https://' + url;
+                        url = url.replace(/[,.;:]+$/, '');
+                        collected.push(url);
+                    } else if (collected.length) {
+                        // Attach orphaned path to the previous URL
+                        const prev = collected[collected.length - 1];
+                        const merged = prev.replace(/\/+$/, '') + '/' + trimmed.replace(/^\/+/, '').replace(/[,.;:]+$/, '');
+                        collected[collected.length - 1] = merged;
+                    }
                 }
             });
-            return Array.from(found).slice(0, 8);
+            // Deduplicate while preserving order
+            const deduped = [];
+            const seen = new Set();
+            for (const u of collected) {
+                const key = u.toLowerCase();
+                if (seen.has(key)) continue;
+                seen.add(key);
+                deduped.push(u);
+                if (deduped.length >= 8) break;
+            }
+            return deduped;
         };
 
         const analyzeLinkHeuristics = (raw) => {
