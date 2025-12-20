@@ -249,7 +249,9 @@
             'Emotion bait language': 'Emotional appeals used to build quick trust.',
             'Generic shell / unavailable page': 'Generic profile wording that can hide identity.',
             'Unsolicited outreach solicitation': 'Cold outreach asking for engagement.',
-            'Zodiac prompt': 'Zodiac prompts often show up in spammy outreach.'
+            'Zodiac prompt': 'Zodiac prompts often show up in spammy outreach.',
+            'Deactivated account lure': 'Claims the account is deactivated to prompt action.',
+            'Giveaway language': 'Giveaway/contest wording often used as bait.'
         };
         const describeHit = (hit) => hitDescriptions[hit] || `Suspicious pattern: ${hit}`;
 
@@ -264,9 +266,10 @@
                 { regex: /(update my payment details|update payment|billing update|payment declined)/i, label: 'Payment update demand', weight: 3 },
                 { regex: /(files (?:deleted|erased)|data (?:deleted|erased)|cloud storage.*at risk|irreversible termination|media files.*lost)/i, label: 'Data deletion scare', weight: 3 },
                 { regex: /(activation[- ]?id|activation id|case id)/i, label: 'Fake activation/case id', weight: 2 },
-                { regex: /(giveaway|winner|prize|lottery|claim)/i, label: 'Giveaway language', weight: 1 },
+                { regex: /(giveaway|winner|prize|lottery|contest|survey reward|claim your prize)/i, label: 'Giveaway language', weight: 4 },
                 { regex: /(crypto|usdt|bitcoin|investment|roi|forex)/i, label: 'Crypto/investment ask', weight: 2 },
                 { regex: /(support agent|admin|representative|official)/i, label: 'Authority/impersonation tone', weight: 1 },
+                { regex: /(deactivated account|deactivated profile|deactivated user)/i, label: 'Deactivated account lure', weight: 2 },
                 { regex: /(reading|tarot|zodiac|signs|astrology)/i, label: 'Astrology/reading solicitation', weight: 4 },
                 { regex: /(random from my followers|pick(?:ing)? random|consider you in a reading)/i, label: 'Random follower selection lure', weight: 4 },
                 { regex: /(blessings|love and light)/i, label: 'Emotion bait language', weight: 3 },
