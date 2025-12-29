@@ -4,9 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Phishing &amp; Impersonation Guard</title>
-    <link rel="stylesheet" href="/styles.css?v=tsb34">
+    <link rel="stylesheet" href="/styles.css?v=tsb35">
     <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.js"></script>
+    <script src="https://unpkg.com/@zxing/library@0.19.1/umd/index.min.js"></script>
     <style>
         .photo-mode-row {
             display: flex;
@@ -489,6 +490,29 @@
                         if (decoded) return decoded;
                     }
                 }
+            }
+            // Fallback: ZXing if available
+            try {
+                if (window.ZXing && ZXing.BrowserQRCodeReader) {
+                    const reader = new ZXing.BrowserQRCodeReader();
+                    const baseCanvas = document.createElement('canvas');
+                    const bw = source.width || source.videoWidth || source.naturalWidth;
+                    const bh = source.height || source.videoHeight || source.naturalHeight;
+                    baseCanvas.width = bw;
+                    baseCanvas.height = bh;
+                    const bctx = baseCanvas.getContext('2d');
+                    bctx.drawImage(source, 0, 0, bw, bh);
+                    const imgEl = new Image();
+                    imgEl.src = baseCanvas.toDataURL('image/png');
+                    await new Promise((resolve, reject) => {
+                        imgEl.onload = resolve;
+                        imgEl.onerror = reject;
+                    });
+                    const res = await reader.decodeFromImageElement(imgEl);
+                    if (res?.text) return res.text;
+                }
+            } catch (e) {
+                console.warn('ZXing fallback failed', e);
             }
             return '';
         };
