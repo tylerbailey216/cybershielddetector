@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Phishing &amp; Impersonation Guard</title>
-    <link rel="stylesheet" href="/styles.css?v=tsb30">
+    <link rel="stylesheet" href="/styles.css?v=tsb31">
     <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
     <style>
         .photo-mode-row {
@@ -274,6 +274,7 @@
             'Data deletion scare': 'Claims data or files will be deleted soon.',
             'Fake activation/case id': 'Uses activation/case IDs to seem official.',
             'Giveaway language': 'Giveaway or lottery wording used as bait.',
+            'Contest with off-platform contact': 'Contest/winner lure that asks you to contact off-platform.',
             'Crypto/investment ask': 'Investment/crypto solicitations are common scam hooks.',
             'Authority/impersonation tone': 'Claims to be support/admin/official.',
             'Astrology/reading solicitation': 'Unsolicited ?reading? style outreach.',
@@ -283,7 +284,9 @@
             'Unsolicited outreach solicitation': 'Cold outreach asking for engagement.',
             'Zodiac prompt': 'Zodiac prompts often show up in spammy outreach.',
             'Deactivated account lure': 'Claims the account is deactivated to prompt action.',
-            'Giveaway language': 'Giveaway/contest wording often used as bait.'
+            'External contact handle': 'Pushes you to contact a handle (Telegram/WhatsApp/etc.).',
+            'Third-party reach-out': 'Claims a friend/third party wants you to message them.',
+            'Romance lure language': 'Romance/dating style language used as bait.'
         };
         const describeHit = (hit) => hitDescriptions[hit] || `Suspicious pattern: ${hit}`;
 
@@ -298,7 +301,8 @@
                 { regex: /(update my payment details|update payment|billing update|payment declined)/i, label: 'Payment update demand', weight: 3 },
                 { regex: /(files (?:deleted|erased)|data (?:deleted|erased)|cloud storage.*at risk|irreversible termination|media files.*lost)/i, label: 'Data deletion scare', weight: 3 },
                 { regex: /(activation[- ]?id|activation id|case id)/i, label: 'Fake activation/case id', weight: 2 },
-                { regex: /(giveaway|winner|prize|lottery|contest|survey reward|claim your prize)/i, label: 'Giveaway language', weight: 4 },
+                { regex: /(giveaway|winner|prize|lottery|contest|survey reward|claim your prize)/i, label: 'Giveaway language', weight: 2 },
+                { regex: /(giveaway|winner|prize|contest|lottery).*(telegram|whatsapp|signal|contact|dm)/i, label: 'Contest with off-platform contact', weight: 3 },
                 { regex: /(crypto|usdt|bitcoin|investment|roi|forex)/i, label: 'Crypto/investment ask', weight: 2 },
                 { regex: /(support agent|admin|representative|official)/i, label: 'Authority/impersonation tone', weight: 1 },
                 { regex: /(deactivated account|deactivated profile|deactivated user)/i, label: 'Deactivated account lure', weight: 2 },
@@ -307,7 +311,11 @@
                 { regex: /(blessings|love and light)/i, label: 'Emotion bait language', weight: 3 },
                 { regex: /(business chat|business chats|facebook user|page is unavailable on messenger|your privacy)/i, label: 'Generic shell / unavailable page', weight: 3 },
                 { regex: /(thanks for supporting my page|would you like me to consider you)/i, label: 'Unsolicited outreach solicitation', weight: 3 },
-                { regex: /(what.?s your zodiac|zodiac signs)/i, label: 'Zodiac prompt', weight: 3 }
+                { regex: /(what.?s your zodiac|zodiac signs)/i, label: 'Zodiac prompt', weight: 3 },
+                { regex: /(my friend (?:saw|found) your profile|too shy to message|could you dm (?:him|her)|message my friend|message her on)/i, label: 'Third-party reach-out', weight: 3 },
+                { regex: /(you.?re (?:exactly|just) my type|you look like my type|romance|date you|soulmate|my type lol)/i, label: 'Romance lure language', weight: 3 },
+                { regex: /(telegram|t\\.me|whatsapp|signal|snapchat|discord|line)[^\\w]?(?:@|id[:\\s]*)?[A-Za-z0-9_.-]{4,}/i, label: 'External contact handle', weight: 3 },
+                { regex: /@(?:[A-Za-z0-9_.-]{4,})/i, label: 'External contact handle', weight: 2 }
             ];
             let score = 0;
             const hits = [];
