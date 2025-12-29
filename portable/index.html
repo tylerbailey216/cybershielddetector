@@ -4,8 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Phishing &amp; Impersonation Guard</title>
-    <link rel="stylesheet" href="/styles.css?v=tsb31">
+    <link rel="stylesheet" href="/styles.css?v=tsb32">
     <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.js"></script>
     <style>
         .photo-mode-row {
             display: flex;
@@ -92,6 +93,13 @@
                         <p class="node-summary" style="margin:2px 0 10px;">Tip: hold steady, avoid glare, fill the frame; screenshots are still most accurate.</p>
                         <button class="ghost" type="button" id="scanShot">Scan screenshot</button>
                         <div id="shotStatus" class="node-summary">Idle</div>
+                    </div>
+                    <div class="addon-card">
+                        <h3>QR / payload scan</h3>
+                        <p class="node-summary">Upload a QR image. We decode it locally and scan the payload without opening it.</p>
+                        <input type="file" id="qrInput" accept="image/png,image/jpeg">
+                        <button class="ghost" type="button" id="scanQr">Scan QR</button>
+                        <div id="qrStatus" class="node-summary">Idle</div>
                     </div>
                     <div class="addon-card">
                         <h3>Verdict</h3>
@@ -182,6 +190,9 @@
         const shotInput = document.getElementById('shotInput');
         const scanShot = document.getElementById('scanShot');
         const shotStatus = document.getElementById('shotStatus');
+        const qrInput = document.getElementById('qrInput');
+        const scanQr = document.getElementById('scanQr');
+        const qrStatus = document.getElementById('qrStatus');
 
         const suspiciousTlds = new Set(['zip','ru','cn','tk','ml','gq','ga','cf','work','top','quest','click','country','rest','cam']);
         const shortenerSet = new Set(['bit.ly','tinyurl.com','t.co','goo.gl','ow.ly','buff.ly','is.gd','rebrand.ly','cutt.ly','shorte.st','lnkd.in','bl.ink']);
@@ -422,6 +433,20 @@
             return '';
         };
 
+        const decodeQrImage = async (file) => {
+            const source = await loadImageFlexible(file);
+            const w = source.width || source.videoWidth || source.naturalWidth;
+            const h = source.height || source.videoHeight || source.naturalHeight;
+            const canvas = document.createElement('canvas');
+            canvas.width = w;
+            canvas.height = h;
+            const ctx = canvas.getContext('2d');
+            ctx.drawImage(source, 0, 0, w, h);
+            const imageData = ctx.getImageData(0, 0, w, h);
+            const result = jsQR(imageData.data, w, h, { inversionAttempts: 'attemptBoth' });
+            return result?.data || '';
+        };
+
         const fetchWithTimeout = async (url, options = {}, ms = 5000) => {
             const ctrl = new AbortController();
             const id = setTimeout(() => ctrl.abort(), ms);
@@ -569,6 +594,25 @@
                 shotStatus.textContent = 'Done';
             } catch (e) {
                 shotStatus.textContent = 'OCR failed. Try a closer crop or brighter screenshot.';
+            }
+        });
+
+        scanQr?.addEventListener('click', async () => {
+            const file = qrInput?.files?.[0];
+            if (!file) { qrStatus.textContent = 'Choose a QR image first.'; return; }
+            qrStatus.textContent = 'Decoding QR...';
+            try {
+                const payload = await decodeQrImage(file);
+                if (!payload) { qrStatus.textContent = 'No QR detected or unreadable.'; return; }
+                qrStatus.textContent = 'QR decoded. Scanning payload...';
+                await analyzeTextFlow(payload, (msg) => qrStatus.textContent = msg, 'qr', true);
+                qrStatus.textContent = 'QR scan complete';
+                if (ocrPreview) {
+                    const safeText = payload.replace(/</g, '&lt;').replace(/>/g, '&gt;');
+                    ocrPreview.innerHTML = `<div class="node-summary" style="white-space:pre-wrap;">${safeText}</div>`;
+                }
+            } catch (e) {
+                qrStatus.textContent = 'QR decode failed.';
             }
         });
 

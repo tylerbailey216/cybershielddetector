@@ -4,8 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Phishing &amp; Impersonation Guard</title>
-    <link rel="stylesheet" href="./public/styles.css?v=tsb31">
+    <link rel="stylesheet" href="./public/styles.css?v=tsb32">
     <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.js"></script>
     <style>
         .progress-container {
             margin-top: 8px;
@@ -195,25 +196,32 @@
                         </div>
                     </div>
                     <div class="addon-card">
-                        <h3>Screenshot scan</h3>
-                        <p class="node-summary">Upload PNG/JPG. OCR runs locally; extracted links are shown as text.</p>
-                        <input type="file" id="shotInput" accept="image/png,image/jpeg">
-                        <label class="photo-mode-row">
-                            <input type="checkbox" id="shotPhotoMode" style="flex:0 0 auto;">
-                            <span>Photo mode (better for camera pictures of a screen)</span>
-                        </label>
-                        <div class="photo-mode-note">Photo mode boosts OCR for phone photos of screens.</div>
-                        <p class="node-summary" style="margin:2px 0 10px;">Tip: for best results, hold steady, avoid glare, and fill the frame; screenshots are still most accurate.</p>
-                        <button class="ghost" type="button" id="scanShot">Scan screenshot</button>
-                        <div id="shotStatus" class="node-summary">Idle</div>
-                        <div id="shotProgress" class="progress-container">
-                            <div class="progress-bar"><div class="progress-fill" id="shotProgressFill"></div></div>
-                        </div>
+                    <h3>Screenshot scan</h3>
+                    <p class="node-summary">Upload PNG/JPG. OCR runs locally; extracted links are shown as text.</p>
+                    <input type="file" id="shotInput" accept="image/png,image/jpeg">
+                    <label class="photo-mode-row">
+                        <input type="checkbox" id="shotPhotoMode" style="flex:0 0 auto;">
+                        <span>Photo mode (better for camera pictures of a screen)</span>
+                    </label>
+                    <div class="photo-mode-note">Photo mode boosts OCR for phone photos of screens.</div>
+                    <p class="node-summary" style="margin:2px 0 10px;">Tip: for best results, hold steady, avoid glare, and fill the frame; screenshots are still most accurate.</p>
+                    <button class="ghost" type="button" id="scanShot">Scan screenshot</button>
+                    <div id="shotStatus" class="node-summary">Idle</div>
+                    <div id="shotProgress" class="progress-container">
+                        <div class="progress-bar"><div class="progress-fill" id="shotProgressFill"></div></div>
                     </div>
-                    <div class="addon-card">
-                        <h3>Verdict</h3>
-                        <div id="verdictPill" class="risk-pill" style="background:#f5c86220;border:1px solid #f5c86255;color:#f5c862;">Pending</div>
-                        <div class="results-wrapper">
+                </div>
+                <div class="addon-card">
+                    <h3>QR / payload scan</h3>
+                    <p class="node-summary">Upload a QR image. We decode it locally and scan the payload without opening it.</p>
+                    <input type="file" id="qrInput" accept="image/png,image/jpeg">
+                    <button class="ghost" type="button" id="scanQr">Scan QR</button>
+                    <div id="qrStatus" class="node-summary">Idle</div>
+                </div>
+                <div class="addon-card">
+                    <h3>Verdict</h3>
+                    <div id="verdictPill" class="risk-pill" style="background:#f5c86220;border:1px solid #f5c86255;color:#f5c862;">Pending</div>
+                    <div class="results-wrapper">
                             <div id="reasonList" class="node-summary" style="margin-top:10px;">No scan yet.</div>
                         </div>
                     </div>
@@ -304,6 +312,9 @@
         const shotStatus = document.getElementById('shotStatus');
         const shotProgress = document.getElementById('shotProgress');
         const shotProgressFill = document.getElementById('shotProgressFill');
+        const qrInput = document.getElementById('qrInput');
+        const scanQr = document.getElementById('scanQr');
+        const qrStatus = document.getElementById('qrStatus');
 
         const suspiciousTlds = new Set(['zip','ru','cn','tk','ml','gq','ga','cf','work','top','quest','click','country','rest','cam']);
         const shortenerSet = new Set(['bit.ly','tinyurl.com','t.co','goo.gl','ow.ly','buff.ly','is.gd','rebrand.ly','cutt.ly','shorte.st','lnkd.in','bl.ink']);
@@ -545,6 +556,33 @@
             return results;
         };
 
+        const runRiskPipeline = async (text, origin = 'qr') => {
+            const urls = extractUrls(text || '');
+            const msgAnalysis = analyzeMessageHeuristics(text || '');
+            const linkAnalyses = urls.map(analyzeLinkHeuristics);
+            const osintResults = await fetchOsintForLinks(urls);
+
+            renderLinks(linkAnalyses);
+            renderOsint(osintResults);
+
+            const allReasons = [...msgAnalysis.hits.map(describeHit), ...linkAnalyses.flatMap(l => l.flags || [])];
+            const hasForceDanger = msgAnalysis.hits.some(h => forceDangerLabels.has(h));
+            const maxLinkRisk = linkAnalyses.reduce((max, l) => l.risk === 'Dangerous' ? 'Dangerous' : (l.risk === 'Caution' && max !== 'Dangerous' ? 'Caution' : max), 'Safe');
+            let finalRisk = hasForceDanger ? 'Dangerous' : (msgAnalysis.risk === 'Dangerous' || maxLinkRisk === 'Dangerous' ? 'Dangerous' : (msgAnalysis.risk === 'Caution' || maxLinkRisk === 'Caution' ? 'Caution' : 'Safe'));
+
+            if (origin === 'qr' && finalRisk === 'Safe' && (urls.length || msgAnalysis.hits.length)) {
+                finalRisk = 'Caution';
+                allReasons.push('QR scan: payload contained signals; treated as caution.');
+            }
+
+            setVerdict(finalRisk, allReasons);
+
+            if (ocrPreview && origin === 'qr') {
+                const safeText = text ? text.replace(/</g, '&lt;').replace(/>/g, '&gt;') : 'No text.';
+                ocrPreview.innerHTML = `<div class="node-summary" style="white-space:pre-wrap;">${safeText}</div>`;
+            }
+        };
+
         const loadImageFlexible = async (file) => {
             try { return await createImageBitmap(file); }
             catch {
@@ -582,6 +620,20 @@
                 ctx.putImageData(imageData, 0, 0);
             }
             return canvas;
+        };
+
+        const decodeQrImage = async (file) => {
+            const source = await loadImageFlexible(file);
+            const canvas = document.createElement('canvas');
+            const w = source.width || source.videoWidth || source.naturalWidth;
+            const h = source.height || source.videoHeight || source.naturalHeight;
+            canvas.width = w;
+            canvas.height = h;
+            const ctx = canvas.getContext('2d');
+            ctx.drawImage(source, 0, 0, w, h);
+            const imageData = ctx.getImageData(0, 0, w, h);
+            const result = jsQR(imageData.data, w, h, { inversionAttempts: 'attemptBoth' });
+            return result?.data || '';
         };
 
         const recognizeCanvas = async (canvas, onProgress) => {
@@ -757,6 +809,32 @@
 
             scanShot.disabled = false;
         });
+
+        if (scanQr) {
+            scanQr.addEventListener('click', async () => {
+                const file = qrInput?.files?.[0];
+                if (!file) {
+                    qrStatus.textContent = 'Please select a QR image.';
+                    return;
+                }
+                scanQr.disabled = true;
+                qrStatus.textContent = 'Decoding QR...';
+                try {
+                    const payload = await decodeQrImage(file);
+                    if (!payload) {
+                        qrStatus.textContent = 'No QR detected or unreadable.';
+                        scanQr.disabled = false;
+                        return;
+                    }
+                    qrStatus.textContent = 'QR decoded. Checking risk...';
+                    await runRiskPipeline(payload, 'qr');
+                    qrStatus.textContent = 'QR scan complete';
+                } catch (e) {
+                    qrStatus.textContent = `Error: ${e.message}`;
+                }
+                scanQr.disabled = false;
+            });
+        }
     })();
     </script>
 </body>
