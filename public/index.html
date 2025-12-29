@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Phishing &amp; Impersonation Guard</title>
-    <link rel="stylesheet" href="/styles.css?v=tsb32">
+    <link rel="stylesheet" href="/styles.css?v=tsb33">
     <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.js"></script>
     <style>
@@ -435,6 +435,30 @@
 
         const decodeQrImage = async (file) => {
             const source = await loadImageFlexible(file);
+            const attemptDecode = (img, scale = 1) => {
+                const w = Math.max(1, Math.floor((img.width || img.videoWidth || img.naturalWidth) * scale));
+                const h = Math.max(1, Math.floor((img.height || img.videoHeight || img.naturalHeight) * scale));
+                const canvas = document.createElement('canvas');
+                canvas.width = w;
+                canvas.height = h;
+                const ctx = canvas.getContext('2d');
+                ctx.drawImage(img, 0, 0, w, h);
+                const imageData = ctx.getImageData(0, 0, w, h);
+                const result = jsQR(imageData.data, w, h, { inversionAttempts: 'attemptBoth' });
+                return result?.data || '';
+            };
+            let decoded = attemptDecode(source, 1);
+            if (decoded) return decoded;
+            const maxDim = Math.max(source.width || 0, source.height || 0, source.videoWidth || 0, source.videoHeight || 0, source.naturalWidth || 0, source.naturalHeight || 0);
+            if (maxDim && maxDim < 1200) {
+                const scale = 1200 / maxDim;
+                decoded = attemptDecode(source, scale);
+            }
+            return decoded || '';
+        };
+
+        const decodeQrImage = async (file) => {
+            const source = await loadImageFlexible(file);
             const w = source.width || source.videoWidth || source.naturalWidth;
             const h = source.height || source.videoHeight || source.naturalHeight;
             const canvas = document.createElement('canvas');
@@ -603,7 +627,7 @@
             qrStatus.textContent = 'Decoding QR...';
             try {
                 const payload = await decodeQrImage(file);
-                if (!payload) { qrStatus.textContent = 'No QR detected or unreadable.'; return; }
+                if (!payload) { qrStatus.textContent = 'No QR detected or unreadable. Try a clearer QR image or a straight-on photo.'; return; }
                 qrStatus.textContent = 'QR decoded. Scanning payload...';
                 await analyzeTextFlow(payload, (msg) => qrStatus.textContent = msg, 'qr', true);
                 qrStatus.textContent = 'QR scan complete';

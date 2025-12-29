@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Phishing &amp; Impersonation Guard</title>
-    <link rel="stylesheet" href="/styles.css?v=tsb32">
+    <link rel="stylesheet" href="/styles.css?v=tsb33">
     <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.js"></script>
     <style>
@@ -603,7 +603,7 @@
             qrStatus.textContent = 'Decoding QR...';
             try {
                 const payload = await decodeQrImage(file);
-                if (!payload) { qrStatus.textContent = 'No QR detected or unreadable.'; return; }
+                if (!payload) { qrStatus.textContent = 'No QR detected or unreadable. Try a clearer QR image or a straight-on photo.'; return; }
                 qrStatus.textContent = 'QR decoded. Scanning payload...';
                 await analyzeTextFlow(payload, (msg) => qrStatus.textContent = msg, 'qr', true);
                 qrStatus.textContent = 'QR scan complete';
