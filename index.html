@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -506,13 +506,21 @@
             verdictPill.style.background = `${color}20`;
             verdictPill.style.border = `1px solid ${color}55`;
             verdictPill.style.color = color;
-            reasonList.innerHTML = (reasons && reasons.length) ? `<ul class="flag-list">${reasons.map((r) => `<li>${r}</li>`).join('')}</ul>` : 'No clear issues detected. Still be cautious.';
+            const cautionQrTips = `
+                <div class="node-summary" style="margin:6px 0 0 0;">
+                    If this came from a QR, check: misaligned/peeling stickers, a QR label slapped over another code, mismatched branding/text,
+                    or being asked to pay/login from a poster in the wild. Favor codes on official receipts/packaging; ask the vendor to confirm.
+                </div>`;
+            const extra = risk === 'Caution' ? cautionQrTips : '';
+            reasonList.innerHTML = (reasons && reasons.length)
+                ? `<ul class="flag-list">${reasons.map((r) => `<li>${r}</li>`).join('')}</ul>${extra}`
+                : `No clear issues detected. Still be cautious.${extra}`;
         };
 
         const renderLinks = (items) => {
-            if (!items || !items.length) { 
-                linksBlock.textContent = 'No links found.'; 
-                return; 
+            if (!items || !items.length) {
+                linksBlock.textContent = 'No links found.';
+                return;
             }
             linksBlock.innerHTML = items.map((i) => `
                 <div>
@@ -524,21 +532,17 @@
         };
 
         const renderOsint = (items) => {
-            if (!items || !items.length) { 
-                osintBlock.textContent = 'No OSINT lookups yet.'; 
-                return; 
+            if (!items || !items.length) {
+                osintBlock.textContent = 'No OSINT lookups yet.';
+                return;
             }
-            osintBlock.innerHTML = items.map((i) => {
-                const phish = i.phish === true ? '🔴 Flagged in phish feed' : i.phish === false ? '✅ Not in phish feed' : i.phish;
-                const urlhaus = i.urlhaus === true ? '🔴 Listed in URLHaus' : i.urlhaus === false ? '✅ Not in URLHaus' : i.urlhaus;
-                return `
-                    <div>
-                        <div class="node-summary" style="margin-bottom:4px;font-weight:600;">${i.url}</div>
-                        <div class="node-summary" style="font-size:11px;">${phish}</div>
-                        <div class="node-summary" style="font-size:11px;">${urlhaus}</div>
-                    </div>
-                `;
-            }).join('');
+            osintBlock.innerHTML = items.map((i) => `
+                <div>
+                    <div class="node-summary" style="margin-bottom:4px;font-weight:600;">${i.url}</div>
+                    <div class="node-summary" style="font-size:11px;">${i.phish === true ? 'Flagged in phish feed' : i.phish === false ? 'Not in phish feed' : i.phish}</div>
+                    <div class="node-summary" style="font-size:11px;">${i.urlhaus === true ? 'Listed in URLHaus' : i.urlhaus === false ? 'Not in URLHaus' : i.urlhaus}</div>
+                </div>
+            `).join('');
         };
 
         const fetchOsintForLinks = async (urls, progressCallback) => {
@@ -914,3 +918,4 @@
     </script>
 </body>
 </html>
+

@@ -345,8 +345,15 @@
             verdictPill.style.color = color;
             const confHtml = confidence ? `<div class="node-summary">Confidence: ${Math.round(confidence * 100)}%</div>` : '';
             const guideHtml = guidance ? `<div class="node-summary">${guidance}</div>` : '';
+            const cautionQrTips = risk === 'Caution'
+                ? `<div class="node-summary" style="margin:6px 0 0 0;">
+                        If this came from a QR, check for: misaligned/peeling stickers, a QR label over another code,
+                        mismatched branding/text, or being asked to pay/login from a random poster. Prefer codes on official
+                        receipts/packaging; ask the vendor to confirm.
+                   </div>`
+                : '';
             const listHtml = (reasons && reasons.length) ? `<ul class="flag-list">${reasons.map((r) => `<li>${r}</li>`).join('')}</ul>` : 'No clear issues detected. Still be cautious.';
-            reasonList.innerHTML = confHtml + guideHtml + listHtml;
+            reasonList.innerHTML = confHtml + guideHtml + listHtml + cautionQrTips;
         };
 
         const renderLinks = (items) => {
