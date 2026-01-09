@@ -273,7 +273,10 @@
             'Astrology/reading solicitation',
             'Random follower selection lure',
             'Unsolicited outreach solicitation',
-            'Zodiac prompt'
+            'Zodiac prompt',
+            'Suspicious attachment type',
+            'Double-extension attachment',
+            'Macro enable prompt'
         ]);
 
         const hitDescriptions = {
@@ -299,10 +302,19 @@
             'External contact handle': 'Pushes you to contact a handle (Telegram/WhatsApp/etc.).',
             'Third-party reach-out': 'Claims a friend/third party wants you to message them.',
             'Romance lure language': 'Romance/dating style language used as bait.',
+            'Attachment download instruction': 'Asks you to open/download an attachment; verify the sender.',
             'Suspicious attachment type': 'Executable or HTML attachment types are commonly used in phishing.',
-            'Attachment download instruction': 'Asks you to open/download an attachment, a common malware delivery trick.',
+            'Double-extension attachment': 'Filename uses double extensions to hide executable files.',
+            'Macro enable prompt': 'Asks you to enable macros/content, a common malware trick.',
+            'Password-protected attachment': 'Password-protected attachments are used to evade scanners.',
             'Update/installer lure': 'Update/installer language used to push a download or restart.',
-            'IT impersonation': 'Claims to be internal IT/helpdesk to gain trust.'
+            'IT impersonation': 'Claims to be internal IT/helpdesk to gain trust.',
+            'Credential prompt': 'Asks you to sign in or verify your identity.',
+            'Mailbox quota pressure': 'Claims your mailbox is full to push a login.',
+            'Secure message lure': 'Secure/encrypted message prompts can hide phishing.',
+            'Document share lure': 'Shared document language used to lure clicks.',
+            'Invoice/payment lure': 'Invoice or payment language used in business email compromise.',
+            'Security alert lure': 'Suspicious login/new device alerts used to prompt action.'
         };
         const describeHit = (hit) => hitDescriptions[hit] || `Suspicious pattern: ${hit}`;
 
@@ -315,10 +327,19 @@
                 { regex: /(apple id|icloud|appleid|itunes|app store)/i, label: 'Apple brand targeting', weight: 3 },
                 { regex: /(locked account|account will be locked|account lock)/i, label: 'Account lock threat', weight: 3 },
                 { regex: /(update my payment details|update payment|billing update|payment declined)/i, label: 'Payment update demand', weight: 3 },
-                { regex: /(attached file|attachment|open the attachment|download the attached|click the attached|attached document)/i, label: 'Attachment download instruction', weight: 3 },
-                { regex: /\b[\w-]+\.(html?|msi|exe|zip|iso|img|js|vbs|ps1|bat|cmd|lnk|scr|jar|cab|reg)\b/i, label: 'Suspicious attachment type', weight: 4 },
-                { regex: /(windows update|update issue|installer|install the|known issue rollback|kir|restart to complete|microsoft windows installer)/i, label: 'Update/installer lure', weight: 2 },
+                { regex: /(attached file|attachment|open the attachment|download the attachment|click the attached|attached document|see attached|attached invoice)/i, label: 'Attachment download instruction', weight: 3 },
+                { regex: /\b[\w-]+\.(pdf|docx?|xlsx?|pptx?|jpg|png)\.(exe|js|vbs|scr|bat|cmd|ps1|lnk)\b/i, label: 'Double-extension attachment', weight: 4 },
+                { regex: /\b[\w-]+\.(html?|msi|exe|zip|iso|img|js|vbs|ps1|bat|cmd|lnk|scr|jar|cab|reg|docm|xlsm|pptm|rtf|one)\b/i, label: 'Suspicious attachment type', weight: 4 },
+                { regex: /(enable content|enable editing|macros? disabled|protected view|security warning|click enable)/i, label: 'Macro enable prompt', weight: 4 },
+                { regex: /(password (?:is|for)|zip password|encrypted attachment|password-protected)/i, label: 'Password-protected attachment', weight: 3 },
+                { regex: /(sign in to view|login to view|verify your identity|reauthenticate|confirm your password)/i, label: 'Credential prompt', weight: 3 },
+                { regex: /(mailbox.*full|storage (?:full|quota)|exceed(?:ed)? quota|email account will be deleted)/i, label: 'Mailbox quota pressure', weight: 3 },
+                { regex: /(secure message|encrypted message|view secure|securely shared|confidential message)/i, label: 'Secure message lure', weight: 2 },
+                { regex: /(sharepoint|one ?drive|google drive|dropbox|icloud drive|document shared|shared document|shared file)/i, label: 'Document share lure', weight: 2 },
+                { regex: /(windows update|update issue|installer|install the|known issue rollback|kir|restart to complete|microsoft windows installer|security update)/i, label: 'Update/installer lure', weight: 2 },
                 { regex: /(internal it|it alert|it department|helpdesk|service desk|it support|sysadmin)/i, label: 'IT impersonation', weight: 2 },
+                { regex: /(unusual activity|suspicious sign-in|new sign-in|new device|login attempt)/i, label: 'Security alert lure', weight: 2 },
+                { regex: /(invoice|remittance|payment due|past due|overdue|statement|purchase order|po number|wire transfer|ach|bank details|routing number)/i, label: 'Invoice/payment lure', weight: 2 },
                 { regex: /(files (?:deleted|erased)|data (?:deleted|erased)|cloud storage.*at risk|irreversible termination|media files.*lost)/i, label: 'Data deletion scare', weight: 3 },
                 { regex: /(activation[- ]?id|activation id|case id)/i, label: 'Fake activation/case id', weight: 2 },
                 { regex: /(giveaway|winner|prize|lottery|contest|survey reward|claim your prize)/i, label: 'Giveaway language', weight: 2 },
