@@ -1685,6 +1685,21 @@ a:focus-visible {
     justify-content: center;
 }
 
+.counter-card .tree-header {
+    text-align: center;
+    align-items: center;
+}
+
+.counter-card .tree-header > div {
+    width: 100%;
+}
+
+.counter-card .tree-header .node-path,
+.counter-card .tree-header h2,
+.counter-card .tree-header .node-summary {
+    text-align: center;
+}
+
 .counter-shell {
     width: min(520px, 100%);
     text-align: center;
