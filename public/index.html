@@ -225,11 +225,11 @@
         const fetchVisitCounter = async () => {
             if (!visitCounter) return;
             try {
-                const response = await fetch('https://api.countapi.xyz/hit/tylerbailey216-cybershielddetector/visits', { cache: 'no-store' });
+                const response = await fetch('https://api.counterapi.dev/v1/tylerbailey216-cybershielddetector/visits/up', { cache: 'no-store' });
                 if (!response.ok) throw new Error('Counter unavailable');
                 const data = await response.json();
-                if (typeof data?.value === 'number') {
-                    updateVisitCounter(data.value);
+                if (typeof data?.count === 'number') {
+                    updateVisitCounter(data.count);
                     if (visitCounterNote) visitCounterNote.textContent = 'Updated just now.';
                 } else if (visitCounterNote) {
                     visitCounterNote.textContent = 'Counter unavailable.';
