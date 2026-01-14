@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Phishing &amp; Impersonation Guard</title>
-    <link rel="stylesheet" href="/styles.css?v=tsb36">
+    <link rel="stylesheet" href="/styles.css?v=tsb37">
     <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.js"></script>
     <script src="https://unpkg.com/@zxing/library@0.19.1/umd/index.min.js"></script>
@@ -173,6 +173,25 @@
                 </div>
             </div>
         </section>
+
+        <section class="tree-card counter-card" id="visit-counter">
+            <div class="tree-header">
+                <div>
+                    <p class="node-path">Site stats</p>
+                    <h2>Global visit counter</h2>
+                    <p class="node-summary">Public count of visits across all users.</p>
+                </div>
+            </div>
+            <div class="node-body">
+                <div class="counter-shell" role="status" aria-live="polite">
+                    <div class="counter-label">Global visits</div>
+                    <div class="counter-display">
+                        <span id="visitCounter" class="counter-digits">0000000000</span>
+                    </div>
+                    <div id="visitCounterNote" class="counter-sub">Updating...</div>
+                </div>
+            </div>
+        </section>
     </main>
 
     <script>
@@ -194,6 +213,33 @@
         const qrInput = document.getElementById('qrInput');
         const scanQr = document.getElementById('scanQr');
         const qrStatus = document.getElementById('qrStatus');
+        const visitCounter = document.getElementById('visitCounter');
+        const visitCounterNote = document.getElementById('visitCounterNote');
+
+        const updateVisitCounter = (value) => {
+            if (!visitCounter) return;
+            const digits = String(value ?? 0).padStart(10, '0');
+            visitCounter.textContent = digits;
+        };
+
+        const fetchVisitCounter = async () => {
+            if (!visitCounter) return;
+            try {
+                const response = await fetch('https://api.countapi.xyz/hit/tylerbailey216-cybershielddetector/visits', { cache: 'no-store' });
+                if (!response.ok) throw new Error('Counter unavailable');
+                const data = await response.json();
+                if (typeof data?.value === 'number') {
+                    updateVisitCounter(data.value);
+                    if (visitCounterNote) visitCounterNote.textContent = 'Updated just now.';
+                } else if (visitCounterNote) {
+                    visitCounterNote.textContent = 'Counter unavailable.';
+                }
+            } catch (e) {
+                if (visitCounterNote) visitCounterNote.textContent = 'Counter unavailable (offline).';
+            }
+        };
+
+        fetchVisitCounter();
 
         const suspiciousTlds = new Set(['zip','ru','cn','tk','ml','gq','ga','cf','work','top','quest','click','country','rest','cam']);
         const shortenerSet = new Set(['bit.ly','tinyurl.com','t.co','goo.gl','ow.ly','buff.ly','is.gd','rebrand.ly','cutt.ly','shorte.st','lnkd.in','bl.ink']);
