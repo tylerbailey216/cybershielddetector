@@ -1683,6 +1683,8 @@ a:focus-visible {
 .counter-card .node-body {
     display: flex;
     justify-content: center;
+    align-items: center;
+    flex-direction: column;
 }
 
 .counter-card .tree-header {
@@ -1702,6 +1704,7 @@ a:focus-visible {
 
 .counter-shell {
     width: min(520px, 100%);
+    margin: 0 auto;
     text-align: center;
     padding: 18px 24px;
     border-radius: 18px;
