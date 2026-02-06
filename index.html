@@ -234,6 +234,7 @@
                         <div id="dfPill" class="risk-pill" style="background:#f5c86220;border:1px solid #f5c86255;color:#f5c862;">No scan yet</div>
                         <div id="dfReasons" class="node-summary">No analysis yet.</div>
                         <div id="dfMeta" class="node-summary df-meta"></div>
+                        <div id="dfLegacy" class="node-summary df-legacy">Legacy checks not run yet.</div>
                     </div>
                     <p class="node-summary df-note">Best-effort only. Compression, low light, and edits can reduce accuracy.</p>
                     <p class="node-summary df-note">First run downloads a large model in your browser; later scans are faster.</p>
@@ -364,6 +365,7 @@
         const dfPill = document.getElementById('dfPill');
         const dfReasons = document.getElementById('dfReasons');
         const dfMeta = document.getElementById('dfMeta');
+        const dfLegacy = document.getElementById('dfLegacy');
         const visitCounter = document.getElementById('visitCounter');
         const visitCounterNote = document.getElementById('visitCounterNote');
 
@@ -446,6 +448,199 @@
             if (err.message) return err.message;
             if (err.toString) return err.toString();
             try { return JSON.stringify(err); } catch { return 'Unknown error'; }
+        };
+
+
+        const readFileSignature = async (file, length = 16) => {
+            const buffer = await file.slice(0, length).arrayBuffer();
+            return new Uint8Array(buffer);
+        };
+
+        const detectFileSignature = (sig) => {
+            if (!sig || sig.length < 4) return null;
+            const ascii = String.fromCharCode(...sig.slice(0, 12));
+            const isJpeg = sig[0] === 0xff && sig[1] === 0xd8 && sig[2] === 0xff;
+            if (isJpeg) return { type: 'jpeg', mime: 'image/jpeg', exts: ['jpg', 'jpeg'] };
+            const isPng = sig[0] === 0x89 && sig[1] === 0x50 && sig[2] === 0x4e && sig[3] === 0x47;
+            if (isPng) return { type: 'png', mime: 'image/png', exts: ['png'] };
+            const isGif = sig[0] === 0x47 && sig[1] === 0x49 && sig[2] === 0x46 && sig[3] === 0x38;
+            if (isGif) return { type: 'gif', mime: 'image/gif', exts: ['gif'] };
+            if (ascii.startsWith('RIFF') && ascii.slice(8, 12) === 'WEBP') {
+                return { type: 'webp', mime: 'image/webp', exts: ['webp'] };
+            }
+            if (ascii.slice(4, 8) === 'ftyp') {
+                const brand = ascii.slice(8, 12);
+                if (brand === 'qt  ') return { type: 'mov', mime: 'video/quicktime', exts: ['mov'] };
+                return { type: 'mp4', mime: 'video/mp4', exts: ['mp4', 'm4v'] };
+            }
+            return null;
+        };
+
+        const getFileExtension = (name) => {
+            const parts = (name || '').toLowerCase().split('.');
+            return parts.length > 1 ? parts.pop() : '';
+        };
+
+        const extractBinaryText = async (file, maxBytes = 200000) => {
+            try {
+                const buffer = await file.slice(0, maxBytes).arrayBuffer();
+                return new TextDecoder('latin1').decode(buffer).toLowerCase();
+            } catch {
+                return '';
+            }
+        };
+
+        const findEditMarkers = async (file) => {
+            const text = await extractBinaryText(file);
+            if (!text) return [];
+            const markers = [
+                { label: 'Photoshop', tokens: ['photoshop', 'adobe photoshop'] },
+                { label: 'GIMP', tokens: ['gimp'] },
+                { label: 'Lightroom', tokens: ['lightroom'] },
+                { label: 'Snapseed', tokens: ['snapseed'] },
+                { label: 'Facetune', tokens: ['facetune'] },
+                { label: 'FaceApp', tokens: ['faceapp'] },
+                { label: 'Runway', tokens: ['runway'] },
+                { label: 'Midjourney', tokens: ['midjourney'] },
+                { label: 'Stable Diffusion', tokens: ['stable diffusion', 'stablediffusion'] },
+                { label: 'DallE', tokens: ['dall-e', 'dalle', 'openai'] },
+                { label: 'Pika', tokens: ['pika'] },
+                { label: 'Sora', tokens: ['sora'] }
+            ];
+            const found = [];
+            markers.forEach((marker) => {
+                if (marker.tokens.some((token) => text.includes(token))) found.push(marker.label);
+            });
+            return Array.from(new Set(found));
+        };
+
+        const computeEdgeScore = (source, size = 256) => {
+            try {
+                const canvas = document.createElement('canvas');
+                canvas.width = size;
+                canvas.height = size;
+                const ctx = canvas.getContext('2d', { willReadFrequently: true });
+                ctx.drawImage(source, 0, 0, size, size);
+                const { data } = ctx.getImageData(0, 0, size, size);
+                const gray = new Float32Array(size * size);
+                for (let i = 0, p = 0; i < data.length; i += 4, p += 1) {
+                    gray[p] = 0.299 * data[i] + 0.587 * data[i + 1] + 0.114 * data[i + 2];
+                }
+                let sum = 0;
+                let sumSq = 0;
+                let count = 0;
+                for (let y = 1; y < size - 1; y++) {
+                    for (let x = 1; x < size - 1; x++) {
+                        const idx = y * size + x;
+                        const lap = -4 * gray[idx] + gray[idx - 1] + gray[idx + 1] + gray[idx - size] + gray[idx + size];
+                        sum += lap;
+                        sumSq += lap * lap;
+                        count += 1;
+                    }
+                }
+                if (!count) return null;
+                const mean = sum / count;
+                const variance = sumSq / count - mean * mean;
+                return Math.sqrt(Math.max(variance, 0));
+            } catch {
+                return null;
+            }
+        };
+
+        const analyzeLegacyImage = async (file, img) => {
+            const flags = [];
+            const sig = await readFileSignature(file);
+            const sigInfo = detectFileSignature(sig);
+            const ext = getFileExtension(file.name);
+            if (sigInfo && file.type && file.type !== sigInfo.mime) {
+                flags.push('File signature does not match the reported MIME type.');
+            }
+            if (sigInfo && ext && !sigInfo.exts.includes(ext)) {
+                flags.push('File extension does not match the detected format.');
+            }
+            const width = img.width || img.naturalWidth || DF_INPUT_SIZE;
+            const height = img.height || img.naturalHeight || DF_INPUT_SIZE;
+            const pixels = Math.max(width * height, 1);
+            const bpp = file.size / pixels;
+            if (Math.min(width, height) < 360) {
+                flags.push('Low resolution; details may be lost.');
+            }
+            if (bpp < 0.22) {
+                flags.push('Heavy compression detected (low bytes-per-pixel).');
+            }
+            const edgeScore = computeEdgeScore(img);
+            if (edgeScore !== null && edgeScore < 12) {
+                flags.push('Image appears very smooth/blurred; artifacts may be hidden.');
+            }
+            const markers = await findEditMarkers(file);
+            if (markers.length) {
+                flags.push('Edit/AI tool markers found: ' + markers.join(', '));
+            }
+            return { flags, meta: width + 'x' + height };
+        };
+
+        const getVideoMeta = async (file) => {
+            const url = URL.createObjectURL(file);
+            const video = document.createElement('video');
+            video.preload = 'metadata';
+            video.muted = true;
+            video.playsInline = true;
+            video.src = url;
+            await new Promise((resolve, reject) => {
+                video.onloadedmetadata = () => resolve();
+                video.onerror = () => reject(new Error('Unable to load video metadata.'));
+            });
+            const meta = { duration: video.duration, width: video.videoWidth, height: video.videoHeight };
+            URL.revokeObjectURL(url);
+            return meta;
+        };
+
+        const analyzeLegacyVideo = async (file) => {
+            const flags = [];
+            const sig = await readFileSignature(file);
+            const sigInfo = detectFileSignature(sig);
+            const ext = getFileExtension(file.name);
+            if (sigInfo && file.type && file.type !== sigInfo.mime) {
+                flags.push('File signature does not match the reported MIME type.');
+            }
+            if (sigInfo && ext && !sigInfo.exts.includes(ext)) {
+                flags.push('File extension does not match the detected format.');
+            }
+            let metaText = '';
+            try {
+                const meta = await getVideoMeta(file);
+                metaText = meta.width + 'x' + meta.height + ' - ' + meta.duration.toFixed(1) + 's';
+                if (Math.min(meta.width, meta.height) < 480) {
+                    flags.push('Low resolution; details may be lost.');
+                }
+                if (meta.duration > 60) {
+                    flags.push('Video longer than 60 seconds; trim for better results.');
+                }
+                const bitrateKbps = (file.size * 8) / 1024 / Math.max(meta.duration, 0.1);
+                if (bitrateKbps < 300) {
+                    flags.push('High compression (low bitrate).');
+                }
+            } catch (e) {
+                flags.push('Video metadata unavailable; file may be corrupted or unsupported.');
+            }
+            return { flags, meta: metaText };
+        };
+
+        const renderLegacyFindings = (legacy) => {
+            if (!dfLegacy) return;
+            if (!legacy) {
+                dfLegacy.textContent = 'Legacy checks not run yet.';
+                return;
+            }
+            const flags = legacy.flags || [];
+            const title = legacy.meta ? 'Legacy checks (' + legacy.meta + ')' : 'Legacy checks';
+            if (!flags.length) {
+                dfLegacy.textContent = title + ': no obvious tampering indicators found.';
+                return;
+            }
+            dfLegacy.innerHTML = '<strong>' + title + '</strong><ul class="flag-list">' +
+                flags.map((flag) => '<li>' + flag + '</li>').join('') +
+                '</ul>';
         };
 
         const imageToTensor = (source) => {
@@ -581,7 +776,7 @@
             dfPill.style.border = `1px solid ${color}55`;
             dfPill.style.color = color;
             renderDfReasons(reasons);
-            if (dfMeta) dfMeta.textContent = meta ? `${meta} · Confidence: ${confidence}` : `Confidence: ${confidence}`;
+            if (dfMeta) dfMeta.textContent = meta ? `${meta} - Confidence: ${confidence}` : `Confidence: ${confidence}`;
         };
 
         if (dfScan) {
@@ -595,6 +790,8 @@
                 if (dfProgress) dfProgress.classList.add('active');
                 if (dfProgressFill) dfProgressFill.style.width = '5%';
                 if (dfStatus) dfStatus.textContent = 'Preparing analysis...';
+                if (dfLegacy) dfLegacy.textContent = 'Running legacy checks...';
+                let legacy = null;
                 try {
                     const isVideo = file.type.startsWith('video/');
                     let score = 0;
@@ -603,6 +800,8 @@
                     let meta = '';
 
                     if (isVideo) {
+                        legacy = await analyzeLegacyVideo(file);
+                        renderLegacyFindings(legacy);
                         if (dfStatus) dfStatus.textContent = 'Analyzing video frames...';
                         const result = await analyzeDeepfakeVideo(file, (done, total) => {
                             if (dfProgressFill) dfProgressFill.style.width = `${Math.min(10 + (done / total) * 80, 90)}%`;
@@ -621,18 +820,37 @@
                         }
                         const bitrateKbps = (file.size * 8) / 1024 / Math.max(result.duration, 1);
                         if (bitrateKbps < 300) qualityFlags.push('High compression; accuracy reduced.');
-                        meta = `${result.width}×${result.height} · ${result.duration.toFixed(1)}s`;
+                        meta = `${result.width}x${result.height} - ${result.duration.toFixed(1)}s`;
                     } else {
                         if (dfStatus) dfStatus.textContent = 'Analyzing image...';
-                        const result = await analyzeDeepfakeImage(file);
-                        score = result.score;
+
+                        const img = await loadImageFromFile(file);
+
+                        legacy = await analyzeLegacyImage(file, img);
+
+                        renderLegacyFindings(legacy);
+
+                        score = await runDfOnSource(img);
+
                         reasons.push(`Model score: ${Math.round(score * 100)}%`);
-                        if (Math.min(result.width, result.height) < 360) {
+
+                        const width = img.width || img.naturalWidth || DF_INPUT_SIZE;
+
+                        const height = img.height || img.naturalHeight || DF_INPUT_SIZE;
+
+                        if (Math.min(width, height) < 360) {
+
                             qualityFlags.push('Low resolution; accuracy reduced.');
+
                         }
-                        meta = `${result.width}×${result.height}`;
+
+                        meta = `${width}x${height}`;
                     }
 
+                    if (legacy && !legacy.meta && meta) {
+                        legacy.meta = meta;
+                        renderLegacyFindings(legacy);
+                    }
                     if (qualityFlags.length) reasons.push(...qualityFlags);
                     const confidence = deriveConfidence(score, qualityFlags);
                     setDfVerdict(score, reasons, meta, confidence);
@@ -645,6 +863,17 @@
                 } catch (e) {
                     const msg = formatDfError(e);
                     if (dfStatus) dfStatus.textContent = `Error: ${msg}`;
+                    if (legacy) {
+                        renderLegacyFindings(legacy);
+                        renderDfReasons(['Model unavailable. Legacy checks shown below.']);
+                        if (dfPill) {
+                            dfPill.textContent = 'Heuristic-only';
+                            dfPill.style.background = '#f5c86220';
+                            dfPill.style.border = '1px solid #f5c86255';
+                            dfPill.style.color = '#f5c862';
+                        }
+                        if (dfMeta && legacy.meta) dfMeta.textContent = `Model unavailable - ${legacy.meta}`;
+                    }
                     console.error('Deepfake analysis error:', e);
                     if (dfProgress) dfProgress.classList.remove('active');
                     if (dfProgressFill) dfProgressFill.style.width = '0%';

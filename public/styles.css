@@ -1790,6 +1790,17 @@ a:focus-visible {
     color: var(--text-muted);
 }
 
+.deepfake-card .df-legacy {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    margin-top: 6px;
+}
+
+.deepfake-card .df-legacy strong {
+    color: #d8f5ff;
+    font-weight: 600;
+}
+
 .deepfake-card .df-note {
     font-size: 0.85rem;
     color: var(--text-muted);
