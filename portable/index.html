@@ -4,10 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Phishing &amp; Impersonation Guard</title>
-    <link rel="stylesheet" href="/styles.css?v=tsb39">
+    <link rel="stylesheet" href="/styles.css?v=tsb40">
     <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.js"></script>
     <script src="https://unpkg.com/@zxing/library@0.19.1/umd/index.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/onnxruntime-web@1.23.2/dist/ort.min.js"></script>
     <style>
         .photo-mode-row {
             display: flex;
@@ -101,6 +102,22 @@
                         <input type="file" id="qrInput" accept="image/png,image/jpeg">
                         <button class="ghost" type="button" id="scanQr">Scan QR</button>
                         <div id="qrStatus" class="node-summary">Idle</div>
+                    </div>
+                    <div class="addon-card deepfake-card">
+                        <h3>Deepfake check (image/video)</h3>
+                        <p class="node-summary">Upload an image or a video (max 60s). We analyze it locally and estimate AI-generation likelihood.</p>
+                        <input type="file" id="dfInput" accept="image/*,video/*">
+                        <button class="ghost" type="button" id="dfScan">Analyze media</button>
+                        <div id="dfStatus" class="node-summary">Idle</div>
+                        <div id="dfProgress" class="progress-container">
+                            <div class="progress-bar"><div class="progress-fill" id="dfProgressFill"></div></div>
+                        </div>
+                        <div class="df-output">
+                            <div id="dfPill" class="risk-pill" style="background:#f5c86220;border:1px solid #f5c86255;color:#f5c862;">No scan yet</div>
+                            <div id="dfReasons" class="node-summary">No analysis yet.</div>
+                            <div id="dfMeta" class="node-summary df-meta"></div>
+                        </div>
+                        <p class="node-summary df-note">Best-effort only. Compression, low light, and edits can reduce accuracy.</p>
                     </div>
                     <div class="addon-card">
                         <h3>Verdict</h3>
@@ -213,6 +230,14 @@
         const qrInput = document.getElementById('qrInput');
         const scanQr = document.getElementById('scanQr');
         const qrStatus = document.getElementById('qrStatus');
+        const dfInput = document.getElementById('dfInput');
+        const dfScan = document.getElementById('dfScan');
+        const dfStatus = document.getElementById('dfStatus');
+        const dfProgress = document.getElementById('dfProgress');
+        const dfProgressFill = document.getElementById('dfProgressFill');
+        const dfPill = document.getElementById('dfPill');
+        const dfReasons = document.getElementById('dfReasons');
+        const dfMeta = document.getElementById('dfMeta');
         const visitCounter = document.getElementById('visitCounter');
         const visitCounterNote = document.getElementById('visitCounterNote');
 
@@ -240,6 +265,236 @@
         };
 
         fetchVisitCounter();
+
+        if (window.ort?.env?.wasm) {
+            ort.env.wasm.numThreads = Math.min(4, navigator.hardwareConcurrency || 2);
+        }
+
+        const DF_MODEL_URL = 'https://huggingface.co/prithivMLmods/Deepfake-Detection-Exp-02-21-ONNX/resolve/main/onnx/model_int8.onnx';
+        const DF_INPUT_SIZE = 224;
+        const DF_MEAN = [0.5, 0.5, 0.5];
+        const DF_STD = [0.5, 0.5, 0.5];
+        let dfSessionPromise = null;
+
+        const loadDfSession = async () => {
+            if (!dfScan) return null;
+            if (!window.ort) throw new Error('Deepfake model runtime failed to load.');
+            if (!dfSessionPromise) {
+                if (dfStatus) dfStatus.textContent = 'Loading detection model (first run may take a minute)...';
+                dfSessionPromise = ort.InferenceSession.create(DF_MODEL_URL, { executionProviders: ['wasm'] });
+            }
+            return dfSessionPromise;
+        };
+
+        const softmax = (logits) => {
+            const values = Array.from(logits);
+            const max = Math.max(...values);
+            const exps = values.map((v) => Math.exp(v - max));
+            const sum = exps.reduce((a, b) => a + b, 0) || 1;
+            return exps.map((v) => v / sum);
+        };
+
+        const imageToTensor = (source) => {
+            const size = DF_INPUT_SIZE;
+            const canvas = document.createElement('canvas');
+            canvas.width = size;
+            canvas.height = size;
+            const ctx = canvas.getContext('2d', { willReadFrequently: true });
+            ctx.drawImage(source, 0, 0, size, size);
+            const { data } = ctx.getImageData(0, 0, size, size);
+            const planeSize = size * size;
+            const float = new Float32Array(planeSize * 3);
+            let p = 0;
+            for (let i = 0; i < data.length; i += 4) {
+                const r = data[i] / 255;
+                const g = data[i + 1] / 255;
+                const b = data[i + 2] / 255;
+                float[p] = (r - DF_MEAN[0]) / DF_STD[0];
+                float[p + planeSize] = (g - DF_MEAN[1]) / DF_STD[1];
+                float[p + planeSize * 2] = (b - DF_MEAN[2]) / DF_STD[2];
+                p += 1;
+            }
+            return new ort.Tensor('float32', float, [1, 3, size, size]);
+        };
+
+        const runDfOnSource = async (source) => {
+            const session = await loadDfSession();
+            if (!session) throw new Error('Deepfake model not ready.');
+            const inputName = session.inputNames[0];
+            const outputName = session.outputNames[0];
+            const tensor = imageToTensor(source);
+            const results = await session.run({ [inputName]: tensor });
+            const logits = results[outputName]?.data;
+            if (!logits) throw new Error('Deepfake model output unavailable.');
+            const probs = softmax(logits);
+            return probs[0];
+        };
+
+        const loadImageFromFile = async (file) => {
+            try { return await createImageBitmap(file); }
+            catch {
+                const url = URL.createObjectURL(file);
+                return await new Promise((resolve, reject) => {
+                    const img = new Image();
+                    img.onload = () => {
+                        URL.revokeObjectURL(url);
+                        resolve(img);
+                    };
+                    img.onerror = (e) => {
+                        URL.revokeObjectURL(url);
+                        reject(e);
+                    };
+                    img.src = url;
+                });
+            }
+        };
+
+        const seekVideo = (video, time) => new Promise((resolve) => {
+            const handler = () => {
+                video.removeEventListener('seeked', handler);
+                resolve();
+            };
+            video.addEventListener('seeked', handler);
+            video.currentTime = time;
+        });
+
+        const analyzeDeepfakeImage = async (file) => {
+            const img = await loadImageFromFile(file);
+            const score = await runDfOnSource(img);
+            const width = img.width || img.naturalWidth || DF_INPUT_SIZE;
+            const height = img.height || img.naturalHeight || DF_INPUT_SIZE;
+            return { score, width, height };
+        };
+
+        const analyzeDeepfakeVideo = async (file, onProgress) => {
+            const url = URL.createObjectURL(file);
+            const video = document.createElement('video');
+            video.preload = 'auto';
+            video.muted = true;
+            video.playsInline = true;
+            video.src = url;
+            await new Promise((resolve, reject) => {
+                video.onloadedmetadata = () => resolve();
+                video.onerror = () => reject(new Error('Unable to load video.'));
+            });
+            const duration = video.duration;
+            if (!Number.isFinite(duration) || duration <= 0) {
+                URL.revokeObjectURL(url);
+                throw new Error('Video duration not available.');
+            }
+            if (duration > 60) {
+                URL.revokeObjectURL(url);
+                throw new Error('Video is longer than 60 seconds. Please trim and try again.');
+            }
+            const sampleCount = Math.min(24, Math.max(6, Math.ceil(duration)));
+            const scores = [];
+            for (let i = 0; i < sampleCount; i++) {
+                const time = Math.min(duration - 0.05, (i + 0.5) * (duration / sampleCount));
+                await seekVideo(video, time);
+                const score = await runDfOnSource(video);
+                scores.push(score);
+                if (onProgress) onProgress(i + 1, sampleCount);
+            }
+            URL.revokeObjectURL(url);
+            return { scores, duration, width: video.videoWidth, height: video.videoHeight };
+        };
+
+        const renderDfReasons = (items) => {
+            if (!dfReasons) return;
+            if (!items || !items.length) {
+                dfReasons.textContent = 'No analysis yet.';
+                return;
+            }
+            dfReasons.innerHTML = `<ul class="flag-list">${items.map((item) => `<li>${item}</li>`).join('')}</ul>`;
+        };
+
+        const deriveConfidence = (score, qualityFlags) => {
+            const distance = Math.abs(score - 0.5);
+            let confidence = distance > 0.3 ? 'High' : distance > 0.18 ? 'Medium' : 'Low';
+            if (qualityFlags?.length) confidence = 'Low';
+            return confidence;
+        };
+
+        const setDfVerdict = (score, reasons, meta, confidence) => {
+            if (!dfPill) return;
+            let label = 'Unclear';
+            let color = '#f5c862';
+            if (score >= 0.7) { label = 'Likely deepfake'; color = '#ff6b6b'; }
+            else if (score <= 0.35) { label = 'Likely real'; color = '#5be18a'; }
+            dfPill.textContent = `${label} • ${Math.round(score * 100)}%`;
+            dfPill.style.background = `${color}20`;
+            dfPill.style.border = `1px solid ${color}55`;
+            dfPill.style.color = color;
+            renderDfReasons(reasons);
+            if (dfMeta) dfMeta.textContent = meta ? `${meta} · Confidence: ${confidence}` : `Confidence: ${confidence}`;
+        };
+
+        if (dfScan) {
+            dfScan.addEventListener('click', async () => {
+                const file = dfInput?.files?.[0];
+                if (!file) {
+                    if (dfStatus) dfStatus.textContent = 'Please select an image or video.';
+                    return;
+                }
+                dfScan.disabled = true;
+                if (dfProgress) dfProgress.classList.add('active');
+                if (dfProgressFill) dfProgressFill.style.width = '5%';
+                if (dfStatus) dfStatus.textContent = 'Preparing analysis...';
+                try {
+                    const isVideo = file.type.startsWith('video/');
+                    let score = 0;
+                    const reasons = [];
+                    const qualityFlags = [];
+                    let meta = '';
+
+                    if (isVideo) {
+                        if (dfStatus) dfStatus.textContent = 'Analyzing video frames...';
+                        const result = await analyzeDeepfakeVideo(file, (done, total) => {
+                            if (dfProgressFill) dfProgressFill.style.width = `${Math.min(10 + (done / total) * 80, 90)}%`;
+                            if (dfStatus) dfStatus.textContent = `Analyzing video frames (${done}/${total})...`;
+                        });
+                        const avg = result.scores.reduce((a, b) => a + b, 0) / result.scores.length;
+                        const max = Math.max(...result.scores);
+                        score = avg;
+                        const highFrames = result.scores.filter((s) => s >= 0.7).length;
+                        reasons.push(`Frames analyzed: ${result.scores.length}`);
+                        reasons.push(`Average score: ${Math.round(avg * 100)}%`);
+                        reasons.push(`Peak score: ${Math.round(max * 100)}%`);
+                        if (highFrames > 0) reasons.push(`Frames above 70%: ${highFrames}`);
+                        if (Math.min(result.width, result.height) && Math.min(result.width, result.height) < 360) {
+                            qualityFlags.push('Low resolution; accuracy reduced.');
+                        }
+                        const bitrateKbps = (file.size * 8) / 1024 / Math.max(result.duration, 1);
+                        if (bitrateKbps < 300) qualityFlags.push('High compression; accuracy reduced.');
+                        meta = `${result.width}×${result.height} · ${result.duration.toFixed(1)}s`;
+                    } else {
+                        if (dfStatus) dfStatus.textContent = 'Analyzing image...';
+                        const result = await analyzeDeepfakeImage(file);
+                        score = result.score;
+                        reasons.push(`Model score: ${Math.round(score * 100)}%`);
+                        if (Math.min(result.width, result.height) < 360) {
+                            qualityFlags.push('Low resolution; accuracy reduced.');
+                        }
+                        meta = `${result.width}×${result.height}`;
+                    }
+
+                    if (qualityFlags.length) reasons.push(...qualityFlags);
+                    const confidence = deriveConfidence(score, qualityFlags);
+                    setDfVerdict(score, reasons, meta, confidence);
+                    if (dfProgressFill) dfProgressFill.style.width = '100%';
+                    if (dfStatus) dfStatus.textContent = 'Analysis complete';
+                    setTimeout(() => {
+                        if (dfProgress) dfProgress.classList.remove('active');
+                        if (dfProgressFill) dfProgressFill.style.width = '0%';
+                    }, 2000);
+                } catch (e) {
+                    if (dfStatus) dfStatus.textContent = `Error: ${e.message}`;
+                    if (dfProgress) dfProgress.classList.remove('active');
+                    if (dfProgressFill) dfProgressFill.style.width = '0%';
+                }
+                dfScan.disabled = false;
+            });
+        }
 
         const suspiciousTlds = new Set(['zip','ru','cn','tk','ml','gq','ga','cf','work','top','quest','click','country','rest','cam']);
         const shortenerSet = new Set(['bit.ly','tinyurl.com','t.co','goo.gl','ow.ly','buff.ly','is.gd','rebrand.ly','cutt.ly','shorte.st','lnkd.in','bl.ink']);
