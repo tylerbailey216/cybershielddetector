@@ -397,16 +397,26 @@
 
         const DF_MODEL_URL = 'https://huggingface.co/prithivMLmods/Deepfake-Detection-Exp-02-21-ONNX/resolve/main/onnx/model_fp16.onnx';
         const DF_INPUT_SIZE = 224;
+        const isLowMemoryDevice = (navigator.deviceMemory && navigator.deviceMemory <= 4) || /iPad|iPhone|iPod/i.test(navigator.userAgent);
         const DF_MEAN = [0.5, 0.5, 0.5];
         const DF_STD = [0.5, 0.5, 0.5];
         let dfSessionPromise = null;
+
+        const createDfSession = async () => {
+            try {
+                return await ort.InferenceSession.create(DF_MODEL_URL, { executionProviders: ['webgl', 'wasm'] });
+            } catch (e) {
+                console.warn('Deepfake WebGL provider failed, falling back to WASM.', e);
+                return await ort.InferenceSession.create(DF_MODEL_URL, { executionProviders: ['wasm'] });
+            }
+        };
 
         const loadDfSession = async () => {
             if (!dfScan) return null;
             if (!window.ort) throw new Error('Deepfake model runtime failed to load.');
             if (!dfSessionPromise) {
                 if (dfStatus) dfStatus.textContent = 'Loading detection model (first run may take a minute)...';
-                dfSessionPromise = ort.InferenceSession.create(DF_MODEL_URL, { executionProviders: ['wasm'] });
+                dfSessionPromise = createDfSession();
             }
             return dfSessionPromise;
         };
@@ -421,6 +431,7 @@
 
         const formatDfError = (err) => {
             if (!err) return 'Unknown error';
+            if (typeof err === 'number') return 'Deepfake model error code ' + err + '. Try a smaller file or a different browser/device.';
             if (typeof err === 'string') return err;
             if (err.message) return err.message;
             if (err.toString) return err.toString();
@@ -519,7 +530,8 @@
                 URL.revokeObjectURL(url);
                 throw new Error('Video is longer than 60 seconds. Please trim and try again.');
             }
-            const sampleCount = Math.min(24, Math.max(6, Math.ceil(duration)));
+            const maxSamples = isLowMemoryDevice ? 8 : 24;
+            const sampleCount = Math.min(maxSamples, Math.max(6, Math.ceil(duration)));
             const scores = [];
             for (let i = 0; i < sampleCount; i++) {
                 const time = Math.min(duration - 0.05, (i + 0.5) * (duration / sampleCount));
@@ -1264,6 +1276,8 @@
     </script>
 </body>
 </html>
+
+
 
 
 
