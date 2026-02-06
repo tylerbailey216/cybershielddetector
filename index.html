@@ -403,10 +403,14 @@
             ort.env.wasm.simd = !isLowMemoryDevice;
         }
 
-        const DF_MODEL_URL = isLowMemoryDevice ?
+        const DF_MODEL_URL_PRIMARY = isLowMemoryDevice ?
             'https://huggingface.co/prithivMLmods/Deepfake-Detection-Exp-02-22-ONNX/resolve/main/onnx/model_fp16.onnx' :
             'https://huggingface.co/prithivMLmods/Deepfake-Detection-Exp-02-21-ONNX/resolve/main/onnx/model_fp16.onnx';
+        const DF_MODEL_URL_FALLBACK = 'https://huggingface.co/prithivMLmods/Deepfake-Detection-Exp-02-22-ONNX/resolve/main/onnx/model_fp16.onnx';
         const DF_INPUT_SIZE = 224;
+        const DF_MAX_IMAGE_MB = 12;
+        const DF_MAX_VIDEO_MB = 80;
+        const DF_MODEL_MAX_DIM = 1280;
         const DF_MEAN = [0.5, 0.5, 0.5];
         const DF_STD = [0.5, 0.5, 0.5];
 
@@ -415,11 +419,23 @@
 
         const createDfSession = async () => {
             try {
-                return await ort.InferenceSession.create(DF_MODEL_URL, { executionProviders: ['webgl', 'wasm'] });
+                return await ort.InferenceSession.create(DF_MODEL_URL_PRIMARY, { executionProviders: ['webgl', 'wasm'] });
             } catch (e) {
                 console.warn('Deepfake WebGL provider failed, falling back to WASM.', e);
-                return await ort.InferenceSession.create(DF_MODEL_URL, { executionProviders: ['wasm'] });
             }
+            try {
+                return await ort.InferenceSession.create(DF_MODEL_URL_PRIMARY, { executionProviders: ['wasm'] });
+            } catch (e) {
+                console.warn('Deepfake WASM provider failed for primary model.', e);
+            }
+            if (DF_MODEL_URL_FALLBACK && DF_MODEL_URL_FALLBACK != DF_MODEL_URL_PRIMARY) {
+                try {
+                    return await ort.InferenceSession.create(DF_MODEL_URL_FALLBACK, { executionProviders: ['wasm'] });
+                } catch (e) {
+                    console.warn('Deepfake fallback model failed.', e);
+                }
+            }
+            throw new Error('Deepfake model failed to initialize.');
         };
 
         const loadDfSession = async () => {
@@ -643,6 +659,21 @@
                 '</ul>';
         };
 
+        const prepareModelSource = (source, maxDim = DF_MODEL_MAX_DIM) => {
+            const width = source.width || source.naturalWidth || DF_INPUT_SIZE;
+            const height = source.height || source.naturalHeight || DF_INPUT_SIZE;
+            if (Math.max(width, height) <= maxDim) {
+                return { source, scaled: false };
+            }
+            const scale = maxDim / Math.max(width, height);
+            const canvas = document.createElement('canvas');
+            canvas.width = Math.max(DF_INPUT_SIZE, Math.round(width * scale));
+            canvas.height = Math.max(DF_INPUT_SIZE, Math.round(height * scale));
+            const ctx = canvas.getContext('2d', { willReadFrequently: true });
+            ctx.drawImage(source, 0, 0, canvas.width, canvas.height);
+            return { source: canvas, scaled: true };
+        };
+
         const imageToTensor = (source) => {
             const size = DF_INPUT_SIZE;
             const canvas = document.createElement('canvas');
@@ -735,7 +766,9 @@
                 URL.revokeObjectURL(url);
                 throw new Error('Video is longer than 60 seconds. Please trim and try again.');
             }
-            const maxSamples = isLowMemoryDevice ? 8 : 24;
+            const maxDim = Math.max(video.videoWidth, video.videoHeight);
+            const sizeMb = file.size / (1024 * 1024);
+            const maxSamples = isLowMemoryDevice ? 6 : (maxDim > 1280 || sizeMb > 40 ? 10 : 24);
             const sampleCount = Math.min(maxSamples, Math.max(6, Math.ceil(duration)));
             const scores = [];
             for (let i = 0; i < sampleCount; i++) {
@@ -779,6 +812,17 @@
             if (dfMeta) dfMeta.textContent = meta ? `${meta} - Confidence: ${confidence}` : `Confidence: ${confidence}`;
         };
 
+        const setHeuristicOnly = (reason, metaText) => {
+            if (dfPill) {
+                dfPill.textContent = 'Heuristic-only';
+                dfPill.style.background = '#f5c86220';
+                dfPill.style.border = '1px solid #f5c86255';
+                dfPill.style.color = '#f5c862';
+            }
+            renderDfReasons([reason]);
+            if (dfMeta) dfMeta.textContent = metaText ? `Legacy-only - ${metaText}` : 'Legacy-only';
+        };
+
         if (dfScan) {
             dfScan.addEventListener('click', async () => {
                 const file = dfInput?.files?.[0];
@@ -794,6 +838,25 @@
                 let legacy = null;
                 try {
                     const isVideo = file.type.startsWith('video/');
+                    const maxBytes = (isVideo ? DF_MAX_VIDEO_MB : DF_MAX_IMAGE_MB) * 1024 * 1024;
+                    if (file.size > maxBytes) {
+                        if (isVideo) {
+                            legacy = await analyzeLegacyVideo(file);
+                        } else {
+                            const img = await loadImageFromFile(file);
+                            legacy = await analyzeLegacyImage(file, img);
+                        }
+                        renderLegacyFindings(legacy);
+                        setHeuristicOnly('File too large for local model; legacy checks shown below.', legacy ? legacy.meta : '');
+                        if (dfStatus) dfStatus.textContent = 'Legacy-only analysis complete';
+                        if (dfProgressFill) dfProgressFill.style.width = '100%';
+                        setTimeout(() => {
+                            if (dfProgress) dfProgress.classList.remove('active');
+                            if (dfProgressFill) dfProgressFill.style.width = '0%';
+                        }, 2000);
+                        dfScan.disabled = false;
+                        return;
+                    }
                     let score = 0;
                     const reasons = [];
                     const qualityFlags = [];
@@ -830,7 +893,11 @@
 
                         renderLegacyFindings(legacy);
 
-                        score = await runDfOnSource(img);
+                        const modelPrep = prepareModelSource(img);
+
+                        if (modelPrep.scaled) qualityFlags.push('Downscaled for analysis to improve stability.');
+
+                        score = await runDfOnSource(modelPrep.source);
 
                         reasons.push(`Model score: ${Math.round(score * 100)}%`);
 
@@ -865,14 +932,7 @@
                     if (dfStatus) dfStatus.textContent = `Error: ${msg}`;
                     if (legacy) {
                         renderLegacyFindings(legacy);
-                        renderDfReasons(['Model unavailable. Legacy checks shown below.']);
-                        if (dfPill) {
-                            dfPill.textContent = 'Heuristic-only';
-                            dfPill.style.background = '#f5c86220';
-                            dfPill.style.border = '1px solid #f5c86255';
-                            dfPill.style.color = '#f5c862';
-                        }
-                        if (dfMeta && legacy.meta) dfMeta.textContent = `Model unavailable - ${legacy.meta}`;
+                        setHeuristicOnly('Model unavailable. Legacy checks shown below.', legacy ? legacy.meta : '');
                     }
                     console.error('Deepfake analysis error:', e);
                     if (dfProgress) dfProgress.classList.remove('active');
