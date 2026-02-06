@@ -267,7 +267,9 @@
         fetchVisitCounter();
 
         if (window.ort?.env?.wasm) {
-            ort.env.wasm.numThreads = Math.min(4, navigator.hardwareConcurrency || 2);
+            const supportsThreads = (typeof crossOriginIsolated !== 'undefined') && crossOriginIsolated && (navigator.hardwareConcurrency || 0) > 1;
+            ort.env.wasm.numThreads = supportsThreads ? Math.min(4, navigator.hardwareConcurrency || 2) : 1;
+            ort.env.wasm.wasmPaths = 'https://cdn.jsdelivr.net/npm/onnxruntime-web@1.23.2/dist/';
         }
 
         const DF_MODEL_URL = 'https://huggingface.co/prithivMLmods/Deepfake-Detection-Exp-02-21-ONNX/resolve/main/onnx/model_fp16.onnx';
@@ -292,6 +294,14 @@
             const exps = values.map((v) => Math.exp(v - max));
             const sum = exps.reduce((a, b) => a + b, 0) || 1;
             return exps.map((v) => v / sum);
+        };
+
+        const formatDfError = (err) => {
+            if (!err) return 'Unknown error';
+            if (typeof err === 'string') return err;
+            if (err.message) return err.message;
+            if (err.toString) return err.toString();
+            try { return JSON.stringify(err); } catch { return 'Unknown error'; }
         };
 
         const imageToTensor = (source) => {
@@ -488,7 +498,9 @@
                         if (dfProgressFill) dfProgressFill.style.width = '0%';
                     }, 2000);
                 } catch (e) {
-                    if (dfStatus) dfStatus.textContent = `Error: ${e.message}`;
+                    const msg = formatDfError(e);
+                    if (dfStatus) dfStatus.textContent = `Error: ${msg}`;
+                    console.error('Deepfake analysis error:', e);
                     if (dfProgress) dfProgress.classList.remove('active');
                     if (dfProgressFill) dfProgressFill.style.width = '0%';
                 }
@@ -1039,3 +1051,7 @@
     </script>
 </body>
 </html>
+
+
+
+
