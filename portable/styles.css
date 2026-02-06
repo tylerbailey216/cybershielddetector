@@ -1954,3 +1954,10 @@ a:focus-visible {
 .df-mode input { accent-color: #5be18a; }
 .df-cloud-note { margin: 0 0 10px; }
 
+
+.df-desktop-note { display: none; }
+@media (max-width: 1024px) {
+  .df-desktop-only { display: none; }
+  .df-desktop-note { display: block; }
+}
+

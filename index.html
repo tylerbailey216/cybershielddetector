@@ -223,6 +223,7 @@
                 <div class="addon-card deepfake-card">
                     <h3>Deepfake check (image/video)</h3>
                     <p class="node-summary">Upload an image or a video (max 60s). We analyze it locally and estimate AI-generation likelihood.</p>
+                    <div class="df-desktop-only">
                     <input type="file" id="dfInput" accept="image/*,video/*">
                     <div class="df-mode-row">
                         <label class="df-mode">
@@ -247,6 +248,8 @@
                     </div>
                     <p class="node-summary df-note">Best-effort only. Compression, low light, and edits can reduce accuracy.</p>
                     <p class="node-summary df-note">First run downloads a large model in your browser; later scans are faster.</p>
+                    </div>
+                    <p class="node-summary df-desktop-note">Desktop-only for reliability. Open this tool on a desktop browser to run deepfake scans.</p>
                 </div>
                 <div class="addon-card">
                     <h3>Verdict</h3>
