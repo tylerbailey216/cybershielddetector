@@ -107,6 +107,17 @@
                         <h3>Deepfake check (image/video)</h3>
                         <p class="node-summary">Upload an image or a video (max 60s). We analyze it locally and estimate AI-generation likelihood.</p>
                         <input type="file" id="dfInput" accept="image/*,video/*">
+                    <div class="df-mode-row">
+                        <label class="df-mode">
+                            <input type="radio" name="dfMode" id="dfModeCloud" value="cloud">
+                            <span>Cloud scan (recommended)</span>
+                        </label>
+                        <label class="df-mode">
+                            <input type="radio" name="dfMode" id="dfModeLocal" value="local" checked>
+                            <span>Local scan (private)</span>
+                        </label>
+                    </div>
+                    <div class="node-summary df-note df-cloud-note">Cloud scan runs on your server for consistent results; local scan stays in your browser.</div>
                         <button class="ghost" type="button" id="dfScan">Analyze media</button>
                         <div id="dfStatus" class="node-summary">Idle</div>
                         <div id="dfProgress" class="progress-container">
@@ -239,6 +250,8 @@
         const dfPill = document.getElementById('dfPill');
         const dfReasons = document.getElementById('dfReasons');
         const dfMeta = document.getElementById('dfMeta');
+        const dfModeCloud = document.getElementById('dfModeCloud');
+        const dfModeLocal = document.getElementById('dfModeLocal');
         const visitCounter = document.getElementById('visitCounter');
         const visitCounterNote = document.getElementById('visitCounterNote');
 
@@ -282,6 +295,40 @@
         const DF_INPUT_SIZE = 224;
         const DF_MEAN = [0.5, 0.5, 0.5];
         const DF_STD = [0.5, 0.5, 0.5];
+        const DF_CLOUD_ENDPOINT_DEFAULT = '';
+        const DF_CLOUD_API_KEY = '';
+        const DF_CLOUD_TIMEOUT_MS = 90000;
+
+        const getDfCloudEndpoint = () => {
+            try {
+                const urlParam = new URLSearchParams(location.search).get('dfEndpoint');
+                if (urlParam) {
+                    try { localStorage.setItem('dfCloudEndpoint', urlParam); } catch {}
+                    return urlParam;
+                }
+                try {
+                    return localStorage.getItem('dfCloudEndpoint') || DF_CLOUD_ENDPOINT_DEFAULT;
+                } catch {
+                    return DF_CLOUD_ENDPOINT_DEFAULT;
+                }
+            } catch {
+                return DF_CLOUD_ENDPOINT_DEFAULT;
+            }
+        };
+
+        const initDfMode = () => {
+            const endpoint = getDfCloudEndpoint();
+            if (!dfModeCloud || !dfModeLocal) return;
+            if (endpoint && isLowMemoryDevice) {
+                dfModeCloud.checked = true;
+                dfModeLocal.checked = false;
+                return;
+            }
+            if (endpoint && !dfModeCloud.checked && !dfModeLocal.checked) {
+                dfModeCloud.checked = true;
+                dfModeLocal.checked = false;
+            }
+        };
         let dfSessionPromise = null;
 
         const createDfSession = async () => {
@@ -302,6 +349,8 @@
             }
             return dfSessionPromise;
         };
+
+        initDfMode();
 
         const softmax = (logits) => {
             const values = Array.from(logits);
@@ -425,6 +474,30 @@
             URL.revokeObjectURL(url);
             return { scores, duration, width: video.videoWidth, height: video.videoHeight };
         };
+        const analyzeDeepfakeCloud = async (file, onProgress) => {
+            const endpoint = getDfCloudEndpoint();
+            if (!endpoint) throw new Error('Cloud scan not configured.');
+            const form = new FormData();
+            form.append('media', file);
+            const headers = {};
+            if (DF_CLOUD_API_KEY) headers['Authorization'] = `Bearer ${DF_CLOUD_API_KEY}`;
+            const ctrl = new AbortController();
+            const timeoutId = setTimeout(() => ctrl.abort(), DF_CLOUD_TIMEOUT_MS);
+            if (onProgress) onProgress(0, 1);
+            let response;
+            try {
+                response = await fetch(endpoint, { method: 'POST', body: form, headers, signal: ctrl.signal });
+            } finally {
+                clearTimeout(timeoutId);
+            }
+            if (!response.ok) throw new Error(`Cloud scan failed (${response.status})`);
+            const data = await response.json();
+            if (typeof data?.score !== 'number') throw new Error('Cloud scan response missing score.');
+            const reasons = Array.isArray(data.reasons) ? data.reasons : [];
+            const meta = data.meta || data.model || '';
+            const confidence = typeof data.confidence === 'string' ? data.confidence : deriveConfidence(data.score, []);
+            return { score: data.score, reasons, meta, confidence };
+        };
 
         const renderDfReasons = (items) => {
             if (!dfReasons) return;
@@ -468,6 +541,25 @@
                 if (dfProgressFill) dfProgressFill.style.width = '5%';
                 if (dfStatus) dfStatus.textContent = 'Preparing analysis...';
                 try {
+                const wantsCloud = !!dfModeCloud?.checked;
+                if (wantsCloud) {
+                    const endpoint = getDfCloudEndpoint();
+                    if (!endpoint) { throw new Error('Cloud scan not configured. Add ?dfEndpoint= to the URL or set DF_CLOUD_ENDPOINT_DEFAULT.'); }
+                    if (dfStatus) dfStatus.textContent = 'Uploading to cloud...';
+                    if (dfProgressFill) dfProgressFill.style.width = '15%';
+                    const cloudResult = await analyzeDeepfakeCloud(file, () => {});
+                    const cloudReasons = (cloudResult.reasons && cloudResult.reasons.length) ? cloudResult.reasons : ['Cloud scan completed.'];
+                    const cloudConfidence = cloudResult.confidence || deriveConfidence(cloudResult.score, []);
+                    setDfVerdict(cloudResult.score, cloudReasons, cloudResult.meta || 'Cloud scan', cloudConfidence);
+                    if (dfProgressFill) dfProgressFill.style.width = '100%';
+                    if (dfStatus) dfStatus.textContent = 'Cloud scan complete';
+                    setTimeout(() => {
+                        if (dfProgress) dfProgress.classList.remove('active');
+                        if (dfProgressFill) dfProgressFill.style.width = '0%';
+                    }, 2000);
+                    dfScan.disabled = false;
+                    return;
+                }
                     const isVideo = file.type.startsWith('video/');
                     let score = 0;
                     const reasons = [];
@@ -1086,6 +1178,10 @@
     </script>
 </body>
 </html>
+
+
+
+
 
 
 
