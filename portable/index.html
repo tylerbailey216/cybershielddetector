@@ -270,7 +270,7 @@
             ort.env.wasm.numThreads = Math.min(4, navigator.hardwareConcurrency || 2);
         }
 
-        const DF_MODEL_URL = 'https://huggingface.co/prithivMLmods/Deepfake-Detection-Exp-02-21-ONNX/resolve/main/onnx/model_int8.onnx';
+        const DF_MODEL_URL = 'https://huggingface.co/prithivMLmods/Deepfake-Detection-Exp-02-21-ONNX/resolve/main/onnx/model_fp16.onnx';
         const DF_INPUT_SIZE = 224;
         const DF_MEAN = [0.5, 0.5, 0.5];
         const DF_STD = [0.5, 0.5, 0.5];

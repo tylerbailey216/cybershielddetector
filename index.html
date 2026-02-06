@@ -1,4 +1,4 @@
-ï»¿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -392,7 +392,7 @@
             ort.env.wasm.numThreads = Math.min(4, navigator.hardwareConcurrency || 2);
         }
 
-        const DF_MODEL_URL = 'https://huggingface.co/prithivMLmods/Deepfake-Detection-Exp-02-21-ONNX/resolve/main/onnx/model_int8.onnx';
+        const DF_MODEL_URL = 'https://huggingface.co/prithivMLmods/Deepfake-Detection-Exp-02-21-ONNX/resolve/main/onnx/model_fp16.onnx';
         const DF_INPUT_SIZE = 224;
         const DF_MEAN = [0.5, 0.5, 0.5];
         const DF_STD = [0.5, 0.5, 0.5];
@@ -543,12 +543,12 @@
             let color = '#f5c862';
             if (score >= 0.7) { label = 'Likely deepfake'; color = '#ff6b6b'; }
             else if (score <= 0.35) { label = 'Likely real'; color = '#5be18a'; }
-            dfPill.textContent = `${label} â€¢ ${Math.round(score * 100)}%`;
+            dfPill.textContent = `${label} • ${Math.round(score * 100)}%`;
             dfPill.style.background = `${color}20`;
             dfPill.style.border = `1px solid ${color}55`;
             dfPill.style.color = color;
             renderDfReasons(reasons);
-            if (dfMeta) dfMeta.textContent = meta ? `${meta} Â· Confidence: ${confidence}` : `Confidence: ${confidence}`;
+            if (dfMeta) dfMeta.textContent = meta ? `${meta} · Confidence: ${confidence}` : `Confidence: ${confidence}`;
         };
 
         if (dfScan) {
@@ -588,7 +588,7 @@
                         }
                         const bitrateKbps = (file.size * 8) / 1024 / Math.max(result.duration, 1);
                         if (bitrateKbps < 300) qualityFlags.push('High compression; accuracy reduced.');
-                        meta = `${result.width}Ã—${result.height} Â· ${result.duration.toFixed(1)}s`;
+                        meta = `${result.width}×${result.height} · ${result.duration.toFixed(1)}s`;
                     } else {
                         if (dfStatus) dfStatus.textContent = 'Analyzing image...';
                         const result = await analyzeDeepfakeImage(file);
@@ -597,7 +597,7 @@
                         if (Math.min(result.width, result.height) < 360) {
                             qualityFlags.push('Low resolution; accuracy reduced.');
                         }
-                        meta = `${result.width}Ã—${result.height}`;
+                        meta = `${result.width}×${result.height}`;
                     }
 
                     if (qualityFlags.length) reasons.push(...qualityFlags);
@@ -859,7 +859,7 @@
                 <div>
                     <strong>${i.risk}</strong>
                     <div class="node-summary" style="margin:4px 0;">${i.url}</div>
-                    <div class="node-summary" style="font-size:11px;color:rgba(245,247,250,0.6);">${i.flags?.length ? i.flags.join(' â€¢ ') : 'No flags'}</div>
+                    <div class="node-summary" style="font-size:11px;color:rgba(245,247,250,0.6);">${i.flags?.length ? i.flags.join(' • ') : 'No flags'}</div>
                 </div>
             `).join('');
         };
