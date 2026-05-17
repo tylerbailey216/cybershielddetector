@@ -465,6 +465,39 @@ body::before {
     border-radius: 999px;
     border: 1px solid rgba(109, 252, 140, 0.2);
     background: rgba(109, 252, 140, 0.06);
+    text-decoration: none;
+}
+
+.series-shelf-list {
+    display: grid;
+    gap: 18px;
+}
+
+.series-shelf {
+    padding: 22px;
+    border-radius: 26px;
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    background: rgba(255, 255, 255, 0.03);
+}
+
+.series-shelf-header {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 16px;
+    flex-wrap: wrap;
+    margin-bottom: 18px;
+}
+
+.series-shelf-header h3 {
+    margin: 0 0 8px;
+}
+
+.series-shelf-header p:last-child {
+    margin: 0;
+    color: var(--text-muted);
+    line-height: 1.6;
+    max-width: 62ch;
 }
 
 .poster-grid-expanded {
