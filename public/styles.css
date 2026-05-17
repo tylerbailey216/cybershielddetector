@@ -238,6 +238,14 @@ body::before {
     text-decoration: none;
 }
 
+.hero-platform-label {
+    margin: 0;
+    color: rgba(245, 248, 240, 0.78);
+    font-size: 0.95rem;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+}
+
 .hero-lede {
     font-size: 1.15rem;
     max-width: 42rem;
@@ -249,6 +257,12 @@ body::before {
     border-left: 2px solid rgba(109, 252, 140, 0.45);
     color: rgba(245, 248, 240, 0.88);
     font-size: 1rem;
+}
+
+.hero-support-copy {
+    max-width: 44rem;
+    color: rgba(245, 248, 240, 0.72);
+    line-height: 1.6;
 }
 
 .hero-visual-hub {
@@ -331,9 +345,138 @@ body::before {
 
 .poster-grid,
 .path-grid,
-.resource-grid {
+.resource-grid,
+.entry-grid,
+.series-grid {
     display: grid;
     gap: 18px;
+}
+
+.publication-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1.15fr) minmax(280px, 0.85fr);
+    gap: 18px;
+}
+
+.lead-feature-card,
+.spotlight-card,
+.publication-strip {
+    border-radius: 26px;
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    background: rgba(255, 255, 255, 0.03);
+}
+
+.lead-feature-card {
+    display: grid;
+    grid-template-columns: minmax(0, 0.9fr) minmax(260px, 1.1fr);
+    gap: 18px;
+    padding: 24px;
+    text-decoration: none;
+    color: var(--text);
+    background: linear-gradient(160deg, rgba(15, 28, 34, 0.92), rgba(7, 9, 12, 0.98));
+    border-color: rgba(109, 252, 140, 0.18);
+}
+
+.lead-feature-copy {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 12px;
+}
+
+.lead-feature-copy h3,
+.publication-strip-copy h3,
+.spotlight-card h3 {
+    margin: 0;
+}
+
+.lead-feature-copy p:last-of-type,
+.spotlight-card p:last-of-type {
+    margin: 0;
+    color: var(--text-muted);
+    line-height: 1.6;
+}
+
+.lead-feature-image {
+    width: 100%;
+    height: 100%;
+    min-height: 320px;
+    border-radius: 20px;
+    object-fit: cover;
+    object-position: top center;
+}
+
+.publication-side-rail {
+    display: grid;
+    gap: 18px;
+}
+
+.spotlight-card {
+    display: grid;
+    grid-template-columns: 120px minmax(0, 1fr);
+    gap: 14px;
+    padding: 14px;
+    text-decoration: none;
+    color: var(--text);
+}
+
+.spotlight-thumb {
+    width: 100%;
+    height: 100%;
+    min-height: 130px;
+    border-radius: 16px;
+    object-fit: cover;
+    object-position: top center;
+}
+
+.publication-tag,
+.publication-pill {
+    display: inline-flex;
+    align-items: center;
+    margin-bottom: 8px;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.72rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--accent);
+}
+
+.publication-strip {
+    display: grid;
+    grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+    gap: 18px;
+    padding: 22px;
+}
+
+.publication-strip-copy {
+    min-width: 0;
+}
+
+.publication-pill-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    align-items: center;
+}
+
+.publication-pill {
+    margin: 0;
+    padding: 9px 12px;
+    border-radius: 999px;
+    border: 1px solid rgba(109, 252, 140, 0.2);
+    background: rgba(109, 252, 140, 0.06);
+}
+
+.poster-grid-expanded {
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+}
+
+.entry-grid {
+    grid-template-columns: 1.3fr repeat(2, minmax(0, 1fr));
+}
+
+.series-grid {
+    grid-template-columns: 1.2fr repeat(2, minmax(0, 1fr));
 }
 
 .poster-grid {
@@ -354,7 +497,9 @@ body::before {
 
 .poster-card:hover,
 .resource-card:hover,
-.path-card:hover {
+.path-card:hover,
+.lead-feature-card:hover,
+.spotlight-card:hover {
     transform: translateY(-3px);
     border-color: rgba(109, 252, 140, 0.24);
     box-shadow: 0 24px 60px -40px rgba(0, 0, 0, 0.85);
@@ -410,6 +555,86 @@ body::before {
 .about-grid {
     display: grid;
     grid-template-columns: minmax(0, 1.3fr) minmax(260px, 0.7fr);
+    gap: 18px;
+}
+
+.editorial-intro-card,
+.mission-card {
+    overflow: hidden;
+}
+
+.entry-card,
+.series-card,
+.mission-statement,
+.mission-point {
+    border-radius: 24px;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.entry-card,
+.series-card {
+    padding: 22px;
+    min-height: 100%;
+}
+
+.entry-card-featured,
+.series-card-large,
+.mission-statement {
+    background: linear-gradient(160deg, rgba(15, 28, 34, 0.9), rgba(8, 10, 13, 0.95));
+    border-color: rgba(109, 252, 140, 0.18);
+}
+
+.entry-card h3,
+.series-card h3,
+.mission-statement h2 {
+    margin: 0 0 10px;
+}
+
+.entry-card p:last-of-type,
+.series-card p:last-of-type,
+.mission-copy,
+.mission-point p {
+    margin: 0;
+    color: var(--text-muted);
+    line-height: 1.6;
+}
+
+.entry-label,
+.series-label,
+.mission-point-label {
+    display: inline-block;
+    margin-bottom: 8px;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.72rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--accent);
+}
+
+.entry-link {
+    display: inline-flex;
+    align-items: center;
+    margin-top: 18px;
+    color: var(--text);
+    text-decoration: none;
+    border-bottom: 1px solid rgba(109, 252, 140, 0.32);
+    padding-bottom: 2px;
+}
+
+.mission-layout {
+    display: grid;
+    grid-template-columns: minmax(0, 1.15fr) minmax(280px, 0.85fr);
+    gap: 18px;
+}
+
+.mission-statement,
+.mission-point {
+    padding: 24px;
+}
+
+.mission-points {
+    display: grid;
     gap: 18px;
 }
 
@@ -2032,7 +2257,10 @@ a:focus-visible {
         display: none !important;
     }
     .hero-pulse-grid,
-    .about-grid {
+    .about-grid,
+    .entry-grid,
+    .series-grid,
+    .mission-layout {
         grid-template-columns: 1fr;
     }
     .hero-signal-card {
