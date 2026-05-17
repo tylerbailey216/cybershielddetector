@@ -461,6 +461,34 @@ body::before {
     border-top: 0;
 }
 
+.issue-rail-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 18px;
+}
+
+.issue-rail-card {
+    padding: 22px;
+    border-radius: 24px;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.issue-rail-card-live {
+    background: linear-gradient(160deg, rgba(15, 28, 34, 0.9), rgba(8, 10, 13, 0.95));
+    border-color: rgba(109, 252, 140, 0.18);
+}
+
+.issue-rail-card h3 {
+    margin: 0 0 10px;
+}
+
+.issue-rail-card p:last-of-type {
+    margin: 0;
+    color: var(--text-muted);
+    line-height: 1.6;
+}
+
 .lead-feature-card,
 .spotlight-card,
 .publication-strip {
@@ -2429,6 +2457,7 @@ a:focus-visible {
         display: none !important;
     }
     .hero-pulse-grid,
+    .issue-rail-grid,
     .publication-grid,
     .latest-drop-layout,
     .about-grid,
