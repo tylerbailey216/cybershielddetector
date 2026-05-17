@@ -2471,6 +2471,35 @@ a:focus-visible {
         max-width: none;
         margin-top: auto;
     }
+    .lead-feature-card,
+    .publication-strip,
+    .spotlight-card {
+        grid-template-columns: 1fr;
+    }
+    .lead-feature-card,
+    .publication-strip {
+        padding: 18px;
+    }
+    .lead-feature-image,
+    .spotlight-thumb {
+        width: 100%;
+        height: auto;
+        min-height: 0;
+        aspect-ratio: 4 / 5;
+    }
+    .spotlight-card {
+        padding: 18px;
+    }
+    .publication-pill-row {
+        width: 100%;
+    }
+    .publication-pill {
+        justify-content: center;
+    }
+    .series-shelf-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
     /* Keep the front tablet logo hidden on small screens */
     .tablet-screen-logo {
         display: none !important;
@@ -2528,6 +2557,28 @@ a:focus-visible {
     }
     .hero-actions > * {
         width: 100%;
+    }
+    .lead-feature-card,
+    .publication-strip,
+    .spotlight-card {
+        gap: 14px;
+    }
+    .lead-feature-image,
+    .spotlight-thumb,
+    .poster-card-image {
+        border-radius: 18px;
+    }
+    .publication-strip-copy h3,
+    .lead-feature-copy h3 {
+        max-width: none;
+    }
+    .publication-pill-row {
+        justify-content: flex-start;
+    }
+    .publication-pill,
+    .topic-pill {
+        width: 100%;
+        justify-content: center;
     }
     .feature-marquee-card {
         grid-template-columns: 1fr;
@@ -2593,8 +2644,20 @@ a:focus-visible {
 }
 
 @media (max-width: 540px) {
+    .lead-feature-card,
+    .publication-strip,
+    .spotlight-card,
+    .series-shelf,
+    .issue-rail-card {
+        padding: 16px;
+        border-radius: 22px;
+    }
     .poster-card-image {
         aspect-ratio: 1 / 1.22;
+    }
+    .lead-feature-image,
+    .spotlight-thumb {
+        aspect-ratio: 1 / 1.15;
     }
     body {
         padding: 20px 10px 32px;
