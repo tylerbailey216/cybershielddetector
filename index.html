@@ -798,71 +798,69 @@
                 <div class="addon-grid">
                     <div class="addon-card">
                         <h3>Text / Link check</h3>
-                        <p class="node-summary">Paste a DM, comment, or email text. Links stay non-clickable.</p>
+                        <p class="node-summary">Paste a DM, comment, or email.</p>
                         <textarea id="textInput" rows="6" placeholder="Paste the message or link..."></textarea>
                         <button class="ghost" type="button" id="scanText">Scan text</button>
-                        <div id="textStatus" class="node-summary">Idle</div>
+                        <div id="textStatus" class="node-summary">Ready</div>
                         <div id="textProgress" class="progress-container">
                             <div class="progress-bar"><div class="progress-fill" id="textProgressFill"></div></div>
                         </div>
                     </div>
                     <div class="addon-card">
                     <h3>Screenshot scan</h3>
-                    <p class="node-summary">Upload PNG/JPG. OCR runs locally; extracted links are shown as text.</p>
+                    <p class="node-summary">Upload a screenshot to scan safely.</p>
                         <label for="shotInput" class="sr-only">Upload screenshot for scanning</label>
                     <input type="file" id="shotInput" accept="image/png,image/jpeg">
                     <label class="photo-mode-row">
                             <input type="checkbox" id="shotPhotoMode" class="photo-mode-toggle">
-                        <span>Photo mode (better for camera pictures of a screen)</span>
+                        <span>Photo mode</span>
                     </label>
-                    <div class="photo-mode-note">Photo mode boosts OCR for phone photos of screens.</div>
-                        <p class="node-summary screenshot-tip">Tip: for best results, hold steady, avoid glare, and fill the frame; screenshots are still most accurate.</p>
+                    <div class="photo-mode-note">Best for phone photos of screens.</div>
                     <button class="ghost" type="button" id="scanShot">Scan screenshot</button>
-                    <div id="shotStatus" class="node-summary">Idle</div>
+                    <div id="shotStatus" class="node-summary">Ready</div>
                     <div id="shotProgress" class="progress-container">
                         <div class="progress-bar"><div class="progress-fill" id="shotProgressFill"></div></div>
                     </div>
                 </div>
                 <div class="addon-card">
                     <h3>QR / payload scan</h3>
-                    <p class="node-summary">Upload a QR image. We decode it locally and scan the payload without opening it.</p>
+                    <p class="node-summary">Upload a QR image to inspect it without opening it.</p>
                     <label for="qrInput" class="sr-only">Upload QR code image for scanning</label>
                     <input type="file" id="qrInput" accept="image/png,image/jpeg">
                     <button class="ghost" type="button" id="scanQr">Scan QR</button>
-                    <div id="qrStatus" class="node-summary">Idle</div>
+                    <div id="qrStatus" class="node-summary">Ready</div>
                 </div>
                 <div class="addon-card">
                     <h3>Verdict</h3>
                     <div id="verdictPill" class="risk-pill verdict-pending">Pending</div>
                     <div class="results-wrapper">
-                            <div id="reasonList" class="node-summary reason-list-start">No scan yet.</div>
+                            <div id="reasonList" class="node-summary reason-list-start">Awaiting scan.</div>
                         </div>
                     </div>
                     <div class="addon-card">
                         <h3>Extracted links</h3>
                         <div class="results-wrapper">
-                            <div id="linksBlock" class="node-summary">None yet.</div>
+                            <div id="linksBlock" class="node-summary">No links yet.</div>
                         </div>
                     </div>
                     <div class="addon-card">
                         <h3>OSINT checks</h3>
                         <div class="results-wrapper">
-                            <div id="osintBlock" class="node-summary">None yet.</div>
+                            <div id="osintBlock" class="node-summary">No checks yet.</div>
                         </div>
                     </div>
                     <div class="addon-card">
                         <h3>OCR text (preview)</h3>
                         <div class="results-wrapper">
-                            <div id="ocrPreview" class="node-summary">No OCR text yet.</div>
+                            <div id="ocrPreview" class="node-summary">No preview yet.</div>
                         </div>
-                        <p class="node-summary ocr-note">OCR = Optical Character Recognition. It reads text inside your screenshot so you can see links and flags without ever clicking them.</p>
                     </div>
                 </div>
             </div>
         </section>
 
         <section class="privacy-note">
-            Privacy: OCR and heuristics run in your browser. Threat lookups only hit public feeds when the connected server is available. The broader hub is focused on education, awareness, and practical habits without data collection.
+            Privacy-first by design. Scans run in your browser.
         </section>
 
         <section class="tree-card mission-card" id="autonomy">
@@ -901,12 +899,11 @@
             <div class="node-body about-grid">
                 <div class="about-copy-block">
                     <p class="entry-label">Created by GT Bailey</p>
-                    <p class="support-copy">Cyber Shield is being built as a public-facing awareness platform: part cyber awareness magazine, part learning hub, part digital self-defense publication.</p>
-                    <p class="support-copy">The goal is not to impress people with tooling. The goal is to help everyday people understand the digital world, recognize risks, and make safer, smarter choices online.</p>
+                    <p class="support-copy">Practical digital literacy, cyber awareness, and self-defense for everyday people.</p>
                 </div>
                 <div class="about-actions-block">
                     <p class="entry-label">Stay Connected</p>
-                    <p class="support-copy">Follow the creator, support the work, and help the awareness platform keep publishing.</p>
+                    <p class="support-copy">Follow the work and support future releases.</p>
                     <a class="pill-link" href="https://www.linkedin.com/in/gbailey216/" target="_blank" rel="noopener">
                         <img src="./public/LinkedIn_icon.svg" alt="LinkedIn">
                         <span>LinkedIn</span>
@@ -924,26 +921,7 @@
                 <div>
                     <p class="node-path">Site stats</p>
                     <h2>Global visit counter</h2>
-                    <p class="node-summary">Public count of visits across all users.</p>
-                </div>
-            </div>
-            <div class="node-body">
-                <div class="counter-shell" role="status" aria-live="polite">
-                    <div class="counter-label">Global visits</div>
-                    <div class="counter-display">
-                        <span id="visitCounter" class="counter-digits">0000000000</span>
-                    </div>
-                    <div id="visitCounterNote" class="counter-sub">Updating...</div>
-                </div>
-            </div>
-        </section>
-
-        <section class="tree-card counter-card" id="visit-counter">
-            <div class="tree-header">
-                <div>
-                    <p class="node-path">Site stats</p>
-                    <h2>Global visit counter</h2>
-                    <p class="node-summary">Public count of visits across all users.</p>
+                    <p class="node-summary">Live site visits.</p>
                 </div>
             </div>
             <div class="node-body">
@@ -995,7 +973,7 @@
                 const data = await response.json();
                 if (typeof data?.count === 'number') {
                     updateVisitCounter(data.count);
-                    if (visitCounterNote) visitCounterNote.textContent = 'Updated just now.';
+                    if (visitCounterNote) visitCounterNote.textContent = 'Live now.';
                 } else if (visitCounterNote) {
                     visitCounterNote.textContent = 'Counter unavailable.';
                 }
