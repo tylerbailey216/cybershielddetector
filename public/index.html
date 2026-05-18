@@ -12,27 +12,51 @@
     <script>
         (() => {
             const resetScroll = () => {
-                window.scrollTo(0, 0);
+                const scroller = document.scrollingElement || document.documentElement;
+
+                if (scroller) {
+                    scroller.scrollTop = 0;
+                    scroller.scrollLeft = 0;
+                }
+
                 document.documentElement.scrollTop = 0;
+                document.documentElement.scrollLeft = 0;
                 document.body.scrollTop = 0;
+                document.body.scrollLeft = 0;
+                window.scrollTo({ top: 0, left: 0, behavior: 'auto' });
+            };
+
+            const clearHash = () => {
+                if (!window.location.hash) {
+                    return;
+                }
+
+                history.replaceState(null, '', `${window.location.pathname}${window.location.search}`);
+            };
+
+            const forceTop = () => {
+                clearHash();
+                resetScroll();
+                requestAnimationFrame(() => {
+                    clearHash();
+                    resetScroll();
+                    requestAnimationFrame(resetScroll);
+                });
+                setTimeout(resetScroll, 0);
+                setTimeout(resetScroll, 50);
             };
 
             if ('scrollRestoration' in history) {
                 history.scrollRestoration = 'manual';
             }
 
-            const restoreTop = () => {
-                if (window.location.hash) {
-                    return;
-                }
-
-                resetScroll();
-                requestAnimationFrame(resetScroll);
-            };
-
-            window.addEventListener('load', restoreTop);
-            window.addEventListener('pageshow', restoreTop);
+            forceTop();
+            window.addEventListener('DOMContentLoaded', forceTop, { once: true });
+            window.addEventListener('load', forceTop);
+            window.addEventListener('pageshow', forceTop);
+            window.addEventListener('popstate', forceTop);
             window.addEventListener('beforeunload', resetScroll);
+            window.addEventListener('pagehide', resetScroll);
         })();
     </script>
     <style>
