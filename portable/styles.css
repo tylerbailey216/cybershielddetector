@@ -858,6 +858,140 @@ body::before {
     grid-template-columns: 1.2fr repeat(2, minmax(0, 1fr));
 }
 
+.archive-stage {
+    background: linear-gradient(180deg, rgba(10, 14, 18, 0.96), rgba(7, 9, 11, 0.98));
+    border-color: rgba(109, 252, 140, 0.12);
+}
+
+.archive-preview-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1.3fr) repeat(3, minmax(0, 1fr));
+    gap: 18px;
+}
+
+.archive-preview-card {
+    display: grid;
+    gap: 14px;
+    padding: 14px;
+    border-radius: 24px;
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    background: rgba(255, 255, 255, 0.03);
+    text-decoration: none;
+    color: var(--text);
+}
+
+.archive-preview-card-featured {
+    background: linear-gradient(160deg, rgba(15, 28, 34, 0.92), rgba(7, 9, 12, 0.98));
+    border-color: rgba(109, 252, 140, 0.18);
+}
+
+.archive-preview-image {
+    width: 100%;
+    aspect-ratio: 1 / 1.05;
+    object-fit: cover;
+    object-position: top center;
+    border-radius: 18px;
+}
+
+.archive-preview-copy {
+    display: grid;
+    gap: 8px;
+}
+
+.archive-preview-copy h3 {
+    margin: 0;
+}
+
+.archive-preview-copy p:last-child {
+    margin: 0;
+    color: var(--text-muted);
+    line-height: 1.6;
+}
+
+.content-drawer {
+    border-radius: 26px;
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    background: rgba(255, 255, 255, 0.02);
+    overflow: hidden;
+}
+
+.content-drawer[open] {
+    background: rgba(255, 255, 255, 0.03);
+}
+
+.content-drawer-summary {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 18px 20px;
+    cursor: pointer;
+    list-style: none;
+    font-size: 0.98rem;
+}
+
+.content-drawer-summary::-webkit-details-marker {
+    display: none;
+}
+
+.content-drawer-meta {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.78rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--accent);
+}
+
+.content-drawer-body {
+    display: grid;
+    gap: 18px;
+    padding: 0 20px 20px;
+}
+
+.drawer-packs {
+    display: grid;
+    gap: 16px;
+}
+
+.compact-pack-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.utility-stage {
+    background: linear-gradient(180deg, rgba(9, 11, 14, 0.94), rgba(6, 8, 10, 0.96));
+}
+
+.utility-note {
+    margin: 0;
+}
+
+.footer-stage {
+    background: linear-gradient(180deg, rgba(8, 10, 12, 0.98), rgba(7, 9, 11, 0.98));
+}
+
+.footer-stage-layout {
+    display: grid;
+    grid-template-columns: minmax(0, 1.2fr) auto;
+    gap: 18px;
+    align-items: center;
+}
+
+.footer-copy h2,
+.footer-copy p {
+    margin-top: 0;
+}
+
+.footer-copy p:last-child {
+    margin-bottom: 0;
+}
+
+.footer-actions {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+}
+
 .poster-grid {
     grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
 }
@@ -2677,9 +2811,12 @@ a:focus-visible {
     .issue-rail-grid,
     .publication-grid,
     .latest-drop-layout,
+    .archive-preview-grid,
     .about-grid,
     .entry-grid,
     .series-grid,
+    .compact-pack-grid,
+    .footer-stage-layout,
     .mission-layout {
         grid-template-columns: 1fr;
     }
@@ -2709,6 +2846,9 @@ a:focus-visible {
     }
     .publication-pill-row {
         width: 100%;
+    }
+    .footer-actions {
+        justify-content: flex-start;
     }
     .publication-pill {
         justify-content: center;
@@ -2845,6 +2985,11 @@ a:focus-visible {
     .spotlight-card {
         gap: 14px;
     }
+    .archive-preview-card,
+    .content-drawer,
+    .footer-stage {
+        border-radius: 20px;
+    }
     .lead-feature-image,
     .spotlight-thumb,
     .poster-card-image {
@@ -2861,6 +3006,14 @@ a:focus-visible {
     .topic-pill {
         width: 100%;
         justify-content: center;
+    }
+    .content-drawer-summary {
+        display: grid;
+        gap: 6px;
+        padding: 16px;
+    }
+    .content-drawer-body {
+        padding: 0 16px 16px;
     }
     .feature-marquee-card {
         grid-template-columns: 1fr;
@@ -2975,7 +3128,9 @@ a:focus-visible {
     .publication-strip,
     .spotlight-card,
     .series-shelf,
-    .issue-rail-card {
+    .issue-rail-card,
+    .archive-preview-card,
+    .content-drawer {
         padding: 16px;
         border-radius: 22px;
     }

@@ -12,761 +12,310 @@
     <script>
         (() => {
             const resetScroll = () => {
-                const scroller = document.scrollingElement || document.documentElement;
+                <section class="tree-card archive-stage" id="library">
 
                 if (scroller) {
-                    scroller.scrollTop = 0;
-                    scroller.scrollLeft = 0;
-                }
+                            <p class="node-path">Curated Archive</p>
+                            <h2>Browse one strong shelf at a time</h2>
+                            <p class="node-summary">The homepage stops at a few deliberate entry points. The full archive and poster packs are still here when you want depth, but they no longer dominate the scroll.</p>
 
                 document.documentElement.scrollTop = 0;
                 document.documentElement.scrollLeft = 0;
-                document.body.scrollTop = 0;
-                document.body.scrollLeft = 0;
-                window.scrollTo({ top: 0, left: 0, behavior: 'auto' });
-            };
-
-            const clearHash = () => {
-                if (!window.location.hash) {
+                        <div class="archive-preview-grid">
+                            <a class="archive-preview-card archive-preview-card-featured" id="series-scams" href="../Cyber%20Awareness%20Graphics/IMG_0232.PNG" target="_blank" rel="noopener">
+                                <img src="../Cyber%20Awareness%20Graphics/IMG_0232.PNG" alt="Scam Alert Monday fake toll road text scam poster" class="archive-preview-image">
+                                <div class="archive-preview-copy">
+                                    <p class="publication-tag">Awareness</p>
+                                    <h3>Scams &amp; phishing</h3>
+                                    <p>Field notes on fake texts, phishing pressure, impersonation, and the small pauses that prevent bigger losses.</p>
                     return;
-                }
 
-                history.replaceState(null, '', `${window.location.pathname}${window.location.search}`);
-            };
+                            <a class="archive-preview-card" id="series-convenience" href="../Cyber%20Awareness%20Graphics/IMG_0389.jpg" target="_blank" rel="noopener">
+                                <img src="../Cyber%20Awareness%20Graphics/IMG_0389.jpg" alt="Everyday data privacy awareness poster" class="archive-preview-image">
+                                <div class="archive-preview-copy">
+                                    <p class="publication-tag">Digital Autonomy</p>
+                                    <h3>Privacy &amp; convenience</h3>
+                                    <p>Ownership, data collection, and the hidden cost of frictionless systems.</p>
+                                </div>
+                            </a>
+                            <a class="archive-preview-card" id="series-ai" href="../Cyber%20Awareness%20Graphics/IMG_0230.PNG" target="_blank" rel="noopener">
+                                <img src="../Cyber%20Awareness%20Graphics/IMG_0230.PNG" alt="AI and future threats awareness poster" class="archive-preview-image">
+                                <div class="archive-preview-copy">
+                                    <p class="publication-tag">Synthetic Trust</p>
+                                    <h3>AI scams</h3>
+                                    <p>Deepfakes, cloned voices, and verification habits for a synthetic internet.</p>
+                                </div>
+                            </a>
+                            <a class="archive-preview-card" id="series-wellness" href="../Cyber%20Awareness%20Graphics/IMG_0231.PNG" target="_blank" rel="noopener">
+                                <img src="../Cyber%20Awareness%20Graphics/IMG_0231.PNG" alt="Digital wellness awareness poster" class="archive-preview-image">
+                                <div class="archive-preview-copy">
+                                    <p class="publication-tag">Digital Wellness</p>
+                                    <h3>Calmer habits</h3>
+                                    <p>Boundaries, attention, and a digital life that stays livable instead of overwhelming.</p>
+                                </div>
+                            </a>
+                        </div>
+                        <details class="content-drawer">
+                            <summary class="content-drawer-summary">
+                                <span>Open the full archive and poster packs</span>
+                                <span class="content-drawer-meta">Optional deep dive</span>
+                            </summary>
+                            <div class="content-drawer-body">
+                                <div class="publication-pill-row">
+                                    <span class="publication-pill">Scam Alert Monday</span>
+                                    <span class="publication-pill">Would You Fall For It?</span>
+                                    <span class="publication-pill">Digital Defense Friday</span>
+                                    <span class="publication-pill">The Convenience Tax</span>
+                                    <span class="publication-pill">Synthetic Signal</span>
+                                    <span class="publication-pill">Signal &amp; Self</span>
+                                </div>
+                                <div class="series-shelf-list">
+                                    <section class="series-shelf">
+                                        <div class="series-shelf-header">
+                                            <div>
+                                                <p class="publication-tag">Scam Alert Monday</p>
+                                                <h3>How scams create urgency and steal trust</h3>
+                                                <p>Weekly scam files built around the texts, inbox traps, and fake payment prompts people actually see.</p>
+                                            </div>
+                                        </div>
+                                        <div class="poster-grid">
+                                            <a class="poster-card" href="../Cyber%20Awareness%20Graphics/IMG_0232.PNG" target="_blank" rel="noopener">
+                                                <img src="../Cyber%20Awareness%20Graphics/IMG_0232.PNG" alt="Scam Alert Monday fake toll road text scam poster" class="poster-card-image">
+                                                <div class="poster-card-body">
+                                                    <p class="poster-tag">Scam Alert Monday</p>
+                                                    <h3>Fake toll road text scam</h3>
+                                                    <p>A fast field note on the tells, the pressure, and the safest next move.</p>
+                                                </div>
+                                            </a>
+                                            <a class="poster-card" href="../Cyber%20Awareness%20Graphics/IMG_0239.PNG" target="_blank" rel="noopener">
+                                                <img src="../Cyber%20Awareness%20Graphics/IMG_0239.PNG" alt="Scam Alert Monday package delivery text scam poster" class="poster-card-image">
+                                                <div class="poster-card-body">
+                                                    <p class="poster-tag">Scam Alert Monday</p>
+                                                    <h3>The package problem text scam</h3>
+                                                    <p>A tight read on fake delivery texts, rushed clicks, and the small pause that breaks the trap.</p>
+                                                </div>
+                                            </a>
+                                        </div>
+                                    </section>
+                                    <section class="series-shelf">
+                                        <div class="series-shelf-header">
+                                            <div>
+                                                <p class="publication-tag">The Convenience Tax</p>
+                                                <h3>Where everyday convenience quietly takes more than it gives</h3>
+                                                <p>Privacy features on movement, public networks, and routine digital habits that leak more than most people realize.</p>
+                                            </div>
+                                        </div>
+                                        <div class="poster-grid">
+                                            <a class="poster-card" href="../Cyber%20Awareness%20Graphics/IMG_0367.PNG" target="_blank" rel="noopener">
+                                                <img src="../Cyber%20Awareness%20Graphics/IMG_0367.PNG" alt="Public Wi-Fi privacy poster" class="poster-card-image">
+                                                <div class="poster-card-body">
+                                                    <p class="poster-tag">The Convenience Tax</p>
+                                                    <h3>Public Wi-Fi: what you don&rsquo;t see can hurt you</h3>
+                                                    <p>A practical travel read on risky networks, exposed credentials, and the small checks that make public connections safer.</p>
+                                                </div>
+                                            </a>
+                                            <a class="poster-card" href="../Cyber%20Awareness%20Graphics/IMG_0389.jpg" target="_blank" rel="noopener">
+                                                <img src="../Cyber%20Awareness%20Graphics/IMG_0389.jpg" alt="Everyday data privacy poster" class="poster-card-image">
+                                                <div class="poster-card-body">
+                                                    <p class="poster-tag">The Convenience Tax</p>
+                                                    <h3>You still leak data every day</h3>
+                                                    <p>A broader privacy feature on location patterns, ride-share signals, Wi-Fi exposure, and the routine metadata people give away without noticing.</p>
+                                                </div>
+                                            </a>
+                                        </div>
+                                    </section>
+                                    <section class="series-shelf">
+                                        <div class="series-shelf-header">
+                                            <div>
+                                                <p class="publication-tag">Synthetic Signal</p>
+                                                <h3>Deepfakes, cloned voices, and synthetic trust</h3>
+                                                <p>Verification-first coverage on deepfakes, voice cloning, AI scams, and the trust failures synthetic media creates.</p>
+                                            </div>
+                                        </div>
+                                        <div class="poster-grid">
+                                            <a class="poster-card" href="../Cyber%20Awareness%20Graphics/IMG_0230.PNG" target="_blank" rel="noopener">
+                                                <img src="../Cyber%20Awareness%20Graphics/IMG_0230.PNG" alt="AI and future threats awareness poster" class="poster-card-image">
+                                                <div class="poster-card-body">
+                                                    <p class="poster-tag">Synthetic Signal</p>
+                                                    <h3>The future is here. So are the threats.</h3>
+                                                    <p>A clear briefing on AI phishing, deepfakes, automated malware, and the habits that keep claims verifiable.</p>
+                                                </div>
+                                            </a>
+                                            <a class="poster-card" href="../Cyber%20Awareness%20Graphics/IMG_0237.PNG" target="_blank" rel="noopener">
+                                                <img src="../Cyber%20Awareness%20Graphics/IMG_0237.PNG" alt="AI and future threats follow-up poster" class="poster-card-image">
+                                                <div class="poster-card-body">
+                                                    <p class="poster-tag">Synthetic Signal</p>
+                                                    <h3>AI and future threats, part two</h3>
+                                                    <p>A follow-up briefing on voice cloning, fake media, and the verification steps people need before the next wave hits.</p>
+                                                </div>
+                                            </a>
+                                        </div>
+                                    </section>
+                                    <section class="series-shelf">
+                                        <div class="series-shelf-header">
+                                            <div>
+                                                <p class="publication-tag">Signal &amp; Self</p>
+                                                <h3>Online life without constant overload</h3>
+                                                <p>A calmer column on attention, stress, boundaries, and keeping digital life in proportion.</p>
+                                            </div>
+                                        </div>
+                                        <div class="poster-grid">
+                                            <a class="poster-card" href="../Cyber%20Awareness%20Graphics/IMG_0231.PNG" target="_blank" rel="noopener">
+                                                <img src="../Cyber%20Awareness%20Graphics/IMG_0231.PNG" alt="Digital wellness awareness poster" class="poster-card-image">
+                                                <div class="poster-card-body">
+                                                    <p class="poster-tag">Signal &amp; Self</p>
+                                                    <h3>Protect your mind, data, and life</h3>
+                                                    <p>A grounded read on boundaries, habits, and mental clarity in connected life.</p>
+                                                </div>
+                                            </a>
+                                            <a class="poster-card" href="../Cyber%20Awareness%20Graphics/IMG_0238.PNG" target="_blank" rel="noopener">
+                                                <img src="../Cyber%20Awareness%20Graphics/IMG_0238.PNG" alt="Digital wellness follow-up poster" class="poster-card-image">
+                                                <div class="poster-card-body">
+                                                    <p class="poster-tag">Signal &amp; Self</p>
+                                                    <h3>Signal &amp; Self, part two</h3>
+                                                    <p>Small rituals for better focus, steadier attention, and a digital life that does not swallow the rest of the day.</p>
+                                                </div>
+                                            </a>
+                                        </div>
+                                    </section>
+                                </div>
+                                <section class="drawer-packs" id="downloads">
+                                    <div class="series-shelf-header">
+                                        <div>
+                                            <p class="publication-tag">Poster Packs</p>
+                                            <h3>Downloadable awareness collections</h3>
+                                            <p>Shareable packs for classrooms, teams, families, and community use.</p>
+                                        </div>
+                                    </div>
+                                    <div class="resource-grid compact-pack-grid">
+                                        <a class="resource-card" href="../Cyber%20Awareness%20Graphics/IMG_0232.PNG" download>
+                                            <p class="resource-label">Collection</p>
+                                            <h3>Scam Awareness Pack</h3>
+                                            <p>Fake texts, urgency, impersonation, and reporting steps.</p>
+                                        </a>
+                                        <a class="resource-card" href="../Cyber%20Awareness%20Graphics/IMG_0229.PNG" download>
+                                            <p class="resource-label">Collection</p>
+                                            <h3>Account Security Pack</h3>
+                                            <p>Login habits, recovery options, and stronger defaults.</p>
+                                        </a>
+                                        <a class="resource-card" href="../Cyber%20Awareness%20Graphics/IMG_0230.PNG" download>
+                                            <p class="resource-label">Collection</p>
+                                            <h3>Synthetic Signal Collection</h3>
+                                            <p>Deepfakes, voice cloning, and verification-first materials.</p>
+                                        </a>
+                                        <a class="resource-card" href="../Cyber%20Awareness%20Graphics/IMG_0336.PNG" download>
+                                            <p class="resource-label">Collection</p>
+                                            <h3>Travel Awareness Pack</h3>
+                                            <p>Transit-ready graphics focused on movement, privacy, and exposure.</p>
+                                        </a>
+                                    </div>
+                                </section>
+                            </div>
+                        </details>
+                    </div>
+                </section>
 
-            const forceTop = () => {
-                clearHash();
-                resetScroll();
-                requestAnimationFrame(() => {
-                    clearHash();
-                    resetScroll();
-                    requestAnimationFrame(resetScroll);
-                });
-                setTimeout(resetScroll, 0);
-                setTimeout(resetScroll, 50);
-            };
+                <section class="tree-card quiet-tools-card utility-stage" id="guard">
+                    <div class="tree-header section-header-left">
+                        <div>
+                            <p class="node-path">Utility</p>
+                            <h2>Use the scanner only when you need it</h2>
+                            <p class="node-summary">The tool still matters. It just no longer needs to dominate the homepage experience.</p>
+                        </div>
+                    </div>
+                    <div class="node-body">
+                        <details class="content-drawer">
+                            <summary class="content-drawer-summary">
+                                <span>Open phishing and impersonation guard</span>
+                                <span class="content-drawer-meta">Optional utility</span>
+                            </summary>
+                            <div class="content-drawer-body">
+                                <div class="tools-preface">
+                                    <p class="publication-tag">Quiet Infrastructure</p>
+                                    <p>A practical utility for checking suspicious messages and links when something feels off.</p>
+                                </div>
+                                <div class="addon-grid">
+                                    <div class="addon-card">
+                                        <h3>Text / Link check</h3>
+                                        <p class="node-summary">Paste a DM, comment, or email.</p>
+                                        <textarea id="textInput" rows="6" placeholder="Paste the message or link..."></textarea>
+                                        <label class="node-summary inline-toggle">
+                                            <input type="checkbox" id="osintToggle" checked> <span>Threat feed check</span>
+                                        </label>
+                                        <button class="ghost" type="button" id="scanText">Scan text</button>
+                                        <div id="textStatus" class="node-summary">Ready</div>
+                                    </div>
+                                    <div class="addon-card">
+                                        <h3>Screenshot scan</h3>
+                                        <p class="node-summary">Upload a screenshot to scan safely.</p>
+                                        <label for="shotInput" class="sr-only">Upload screenshot for scanning</label>
+                                        <input type="file" id="shotInput" accept="image/png,image/jpeg">
+                                        <label class="node-summary inline-toggle">
+                                            <input type="checkbox" id="osintToggleShot" checked> <span>Threat feed check</span>
+                                        </label>
+                                        <label class="photo-mode-row">
+                                            <input type="checkbox" id="shotPhotoMode" class="photo-mode-toggle">
+                                            <span>Photo mode</span>
+                                        </label>
+                                        <div class="photo-mode-note">Best for phone photos of screens.</div>
+                                        <button class="ghost" type="button" id="scanShot">Scan screenshot</button>
+                                        <div id="shotStatus" class="node-summary">Ready</div>
+                                    </div>
+                                    <div class="addon-card">
+                                        <h3>QR / payload scan</h3>
+                                        <p class="node-summary">Upload a QR image to inspect it without opening it.</p>
+                                        <label for="qrInput" class="sr-only">Upload QR code image for scanning</label>
+                                        <input type="file" id="qrInput" accept="image/png,image/jpeg">
+                                        <button class="ghost" type="button" id="scanQr">Scan QR</button>
+                                        <div id="qrStatus" class="node-summary">Ready</div>
+                                    </div>
+                                    <div class="addon-card">
+                                        <h3>Verdict</h3>
+                                        <div id="verdictPill" class="risk-pill verdict-pending">Pending</div>
+                                        <div id="reasonList" class="node-summary reason-list-start">Awaiting scan.</div>
+                                    </div>
+                                    <div class="addon-card">
+                                        <h3>Extracted links</h3>
+                                        <div id="linksBlock" class="node-summary">No links yet.</div>
+                                    </div>
+                                    <div class="addon-card">
+                                        <h3>OSINT checks</h3>
+                                        <div id="osintBlock" class="node-summary">No checks yet.</div>
+                                        <div id="osintProgress" class="osint-progress is-hidden">
+                                            <div id="osintProgressBar" class="osint-progress-bar"></div>
+                                            <div id="osintProgressText" class="osint-progress-text">Running OSINT...</div>
+                                        </div>
+                                    </div>
+                                    <div class="addon-card">
+                                        <h3>OCR text (preview)</h3>
+                                        <div id="ocrPreview" class="node-summary">No preview yet.</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </details>
+                        <p class="privacy-note utility-note">Privacy-first by design. Scans run in your browser.</p>
+                    </div>
+                </section>
 
-            if ('scrollRestoration' in history) {
-                history.scrollRestoration = 'manual';
-            }
-
-            forceTop();
-            window.addEventListener('DOMContentLoaded', forceTop, { once: true });
-            window.addEventListener('load', forceTop);
-            window.addEventListener('pageshow', forceTop);
-            window.addEventListener('popstate', forceTop);
-            window.addEventListener('beforeunload', resetScroll);
-            window.addEventListener('pagehide', resetScroll);
-        })();
-    </script>
-    <style>
-        .photo-mode-row {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            margin: 6px 0 2px;
-            color: #f5f7fa;
-            font-size: 14px;
-            line-height: 1.4;
-            overflow: visible;
-            flex-wrap: wrap;
-            width: 100%;
-        }
-        .photo-mode-row span {
-            color: inherit;
-            flex: 1 1 auto;
-            min-width: 0;
-            white-space: normal;
-        }
-        .photo-mode-note {
-            color: #d8f5ff;
-            font-size: 13px;
-            margin: 0 0 8px 0;
-            line-height: 1.5;
-        }
-    </style>
-</head>
-<body>
-    <main class="layout">
-        <section class="hero hero-shell" id="top">
-            <div class="hero-content">
-                <p class="eyebrow">Digital Safety For Real Life</p>
-                <h1>Technology should empower people, not quietly exploit them.</h1>
-                <p class="hero-lede">Cyber Shield is a human-centered digital awareness publication for normal people navigating scams, privacy tradeoffs, synthetic media, and modern online pressure.</p>
-                <div class="hero-actions">
-                    <a class="primary hero-link" href="#start-here">Start Here</a>
-                    <a class="secondary hero-link" href="#latest-drop">Read The Cover</a>
-                </div>
-                <nav class="edition-nav" aria-label="Primary sections">
-                    <a class="edition-nav-link" href="#start-here">Start Here</a>
-                    <a class="edition-nav-link" href="#latest-drop">Cover</a>
-                    <a class="edition-nav-link" href="#travel-privacy">Special Focus</a>
-                    <a class="edition-nav-link" href="#library">Archive</a>
-                    <a class="edition-nav-link" href="#guard">Scanner</a>
-                </nav>
-                <p class="hero-support-copy">A modern publication about digital life, built to make awareness feel understandable, calm, and useful instead of technical, fear-driven, or performative.</p>
-            </div>
-            <div class="hero-visual hero-visual-hub">
-                <div class="hero-cover-stage">
-                    <a class="hero-cover-card" href="../Cyber%20Awareness%20Graphics/IMG_0243.PNG" target="_blank" rel="noopener">
-                        <img src="../Cyber%20Awareness%20Graphics/IMG_0243.PNG" alt="Digital Defense Friday credential stuffing poster" class="hero-cover-image">
-                        <div class="hero-cover-meta">
-                            <p class="publication-tag">Current Issue</p>
-                            <h2>Hacking Your Life To Stay Safe</h2>
-                            <p>Everyday digital self-defense, account habits, and routines that help ordinary people stay harder to fool.</p>
+                <section class="tree-card footer-stage" id="about">
+                    <div class="node-body footer-stage-layout">
+                        <div class="footer-copy">
+                            <p class="node-path">Cyber Shield</p>
+                            <h2>An independent digital awareness publication.</h2>
+                            <p class="support-copy">Human-centered digital literacy for normal people: scams, privacy tradeoffs, synthetic trust, and everyday online self-defense.</p>
                         </div>
-                    </a>
-                </div>
-                <div class="hero-signal-card">
-                    <p class="hero-signal-label">Editorial Stance</p>
-                    <h2>Awareness is modern self-defense.</h2>
-                    <p>Clarity first. No jargon, no fearbait, and no hacker theater standing between the reader and the point.</p>
-                </div>
-            </div>
-        </section>
-
-        <section class="tree-card feature-stage" id="latest-drop">
-            <div class="tree-header section-header-left">
-                <div>
-                    <p class="node-path">Step 02 | Current Issue</p>
-                    <h2>On the cover this week</h2>
-                    <p class="node-summary">The current cover package tracks account defense, digital pressure, and the habits that hold up under stress.</p>
-                </div>
-            </div>
-            <div class="node-body latest-drop-layout">
-                <a class="feature-marquee-card" href="../Cyber%20Awareness%20Graphics/IMG_0243.PNG" target="_blank" rel="noopener">
-                    <div class="feature-marquee-copy">
-                        <p class="publication-tag">Cover Story</p>
-                        <h3>Hacking Your Life To Stay Safe</h3>
-                        <p>A cover package on everyday digital self-defense: stronger account habits, calmer verification, and routines that make people harder to fool.</p>
-                        <div class="feature-meta-row">
-                            <span class="feature-chip">Issue package</span>
-                            <span class="feature-chip">Digital self-defense</span>
-                            <span class="feature-chip">Real life</span>
-                        </div>
-                        <span class="entry-link">Read the cover story</span>
-                    </div>
-                    <img src="../Cyber%20Awareness%20Graphics/IMG_0243.PNG" alt="Digital Defense Friday credential stuffing poster" class="lead-feature-image">
-                </a>
-                <div class="latest-drop-stack">
-                    <article class="latest-note-card">
-                        <p class="publication-tag">New In The Issue</p>
-                        <h3>Credential stuffing and everyday defenses</h3>
-                        <p>This week&rsquo;s lead piece follows reused passwords, breach chains, and the checks that keep one exposed login from becoming several compromised accounts.</p>
-                    </article>
-                    <article class="latest-note-card">
-                        <p class="publication-tag">Across The Desk Now</p>
-                        <h3>This week&rsquo;s running lineup</h3>
-                        <ul class="latest-drop-list">
-                            <li>Scam Alert Monday, the Monday brief on scam pressure</li>
-                            <li>Would You Fall For It?, the midweek drill for scam instincts</li>
-                            <li>Synthetic Signal, the verification desk for deepfakes and AI scams</li>
-                            <li>Signal &amp; Self, the human-side column on calmer digital life</li>
-                        </ul>
-                    </article>
-                </div>
-            </div>
-        </section>
-
-        <section class="tree-card editorial-front" id="start-here">
-            <div class="tree-header section-header-left">
-                <div>
-                    <p class="node-path">Start Here</p>
-                    <h2>New here? Begin with the part of digital life that feels hardest.</h2>
-                    <p class="node-summary">Built for overwhelmed, curious, and nontechnical readers who want a clear place to begin without having to learn cybersecurity language first.</p>
-                </div>
-            </div>
-            <div class="node-body">
-                <div class="frontline-grid">
-                    <article class="frontline-lead">
-                        <p class="publication-tag">For New Readers</p>
-                        <h3>You do not need to speak cybersecurity to use this publication.</h3>
-                        <p>Start with scams, privacy, AI manipulation, or healthier digital habits. Then move into the cover story and deeper archive when you want more.</p>
-                    </article>
-                    <a class="frontline-card" href="#series-scams">
-                        <p class="publication-tag">Start With</p>
-                        <h3>Scams &amp; impersonation</h3>
-                        <p>Learn the tells behind fake texts, phishing emails, payment pressure, and social engineering before urgency gets the advantage.</p>
-                        <span class="entry-link">Start with scam basics</span>
-                    </a>
-                    <a class="frontline-card" href="#travel-privacy">
-                        <p class="publication-tag">Start With</p>
-                        <h3>Privacy &amp; convenience</h3>
-                        <p>Understand what platforms collect, what public networks expose, and where frictionless design starts quietly costing too much.</p>
-                        <span class="entry-link">Start with privacy basics</span>
-                    </a>
-                    <a class="frontline-card" href="#series-ai">
-                        <p class="publication-tag">Start With</p>
-                        <h3>AI scams &amp; synthetic trust</h3>
-                        <p>Get grounded before deepfakes, cloned voices, and synthetic persuasion become harder to recognize in everyday life.</p>
-                        <span class="entry-link">Start with AI awareness</span>
-                    </a>
-                    <a class="frontline-card" href="#series-wellness">
-                        <p class="publication-tag">Start With</p>
-                        <h3>Calmer digital habits</h3>
-                        <p>Build steadier routines, clearer thinking, and better online boundaries without turning digital safety into constant stress.</p>
-                        <span class="entry-link">Start with better habits</span>
-                    </a>
-                </div>
-                <div class="desk-band">
-                    <div class="desk-band-copy">
-                        <p class="publication-tag">This Week</p>
-                        <h3>One issue, one special focus, one archive to keep exploring</h3>
-                        <p>Read the current cover, step into the featured privacy desk, then browse the recurring series when you want to keep going.</p>
-                    </div>
-                    <div class="topic-pill-row">
-                        <a class="topic-pill" href="#latest-drop">Current cover</a>
-                        <a class="topic-pill" href="#travel-privacy">Special focus</a>
-                        <a class="topic-pill" href="#library">Series archive</a>
-                        <a class="topic-pill" href="#downloads">Poster packs</a>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <section class="tree-card special-focus-stage" id="travel-privacy">
-            <div class="tree-header section-header-left">
-                <div>
-                    <p class="node-path">Special Focus | Movement &amp; Privacy</p>
-                    <h2>Travel, transit, and the data trails people leave behind</h2>
-                    <p class="node-summary">A front-of-book section on public Wi-Fi, commuting, airport awareness, and the quiet exposure built into moving through connected space.</p>
-                </div>
-            </div>
-            <div class="node-body">
-                <div class="focus-module-strip">
-                    <article class="focus-module-card focus-module-card-live">
-                        <p class="publication-tag">Special Focus Now</p>
-                        <h3>The Convenience Tax</h3>
-                        <p>This front-of-book module follows the quiet costs of movement, convenience, and always-on connection.</p>
-                    </article>
-                    <article class="focus-module-card">
-                        <p class="publication-tag">Current Brief</p>
-                        <h3>Public Wi-Fi and exposed sessions</h3>
-                        <p>The live brief covers risky networks, borrowed convenience, and how to keep travel habits from turning into open access.</p>
-                    </article>
-                    <article class="focus-module-card">
-                        <p class="publication-tag">Reading Next</p>
-                        <h3>Commutes, airports, and ambient data</h3>
-                        <p>Follow the section into movement data, transit awareness, and the background collection most people never see.</p>
-                    </article>
-                </div>
-                <div class="publication-grid">
-                    <a class="lead-feature-card" href="../Cyber%20Awareness%20Graphics/IMG_0367.PNG" target="_blank" rel="noopener">
-                        <div class="lead-feature-copy">
-                            <p class="publication-tag">The Convenience Tax</p>
-                            <h3>Public Wi-Fi: what you don&rsquo;t see can hurt you</h3>
-                            <p>A practical field guide to open networks, exposed sessions, and the small travel habits that keep convenience from turning into easy access.</p>
-                            <span class="entry-link">Open the travel privacy feature</span>
-                        </div>
-                        <img src="../Cyber%20Awareness%20Graphics/IMG_0367.PNG" alt="Public Wi-Fi privacy and travel awareness poster" class="lead-feature-image">
-                    </a>
-                    <div class="publication-side-rail">
-                        <a class="spotlight-card" href="../Cyber%20Awareness%20Graphics/IMG_0379.PNG" target="_blank" rel="noopener">
-                            <img src="../Cyber%20Awareness%20Graphics/IMG_0379.PNG" alt="Commute privacy awareness poster" class="spotlight-thumb">
-                            <div>
-                                <p class="publication-tag">The Convenience Tax</p>
-                                <h3>Your commute. Your data.</h3>
-                                <p>A privacy briefing on location, movement, and the behavioral signals that get collected in the background of ordinary travel.</p>
-                            </div>
-                        </a>
-                        <a class="spotlight-card" href="../Cyber%20Awareness%20Graphics/IMG_0336.PNG" target="_blank" rel="noopener">
-                            <img src="../Cyber%20Awareness%20Graphics/IMG_0336.PNG" alt="Airport and transit awareness poster" class="spotlight-thumb">
-                            <div>
-                                <p class="publication-tag">Field Guide</p>
-                                <h3>Stay alert while you move</h3>
-                                <p>A travel-awareness graphic focused on public space, personal control, and the habits that reduce exposure when you are in motion.</p>
-                            </div>
-                        </a>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <section class="tree-card" id="library">
-            <div class="tree-header section-header-left">
-                <div>
-                    <p class="node-path">Step 04 | Awareness Hub</p>
-                    <h2>Featured reads and the issue archive</h2>
-                    <p class="node-summary">A running archive of featured stories, recurring series, and shareable explainers.</p>
-                </div>
-            </div>
-            <div class="node-body">
-                <div class="publication-grid">
-                    <a class="lead-feature-card" href="../Cyber%20Awareness%20Graphics/IMG_0234.PNG" target="_blank" rel="noopener">
-                        <div class="lead-feature-copy">
-                            <p class="publication-tag">Lead Feature</p>
-                            <h3>Would You Fall For It? Spot the scam, real or fake.</h3>
-                            <p>A sharp pattern-recognition feature built to help people pause, compare signals, and spot manipulation faster.</p>
-                            <span class="entry-link">Open featured post</span>
-                        </div>
-                        <img src="../Cyber%20Awareness%20Graphics/IMG_0234.PNG" alt="Would you fall for it spot the scam poster" class="lead-feature-image">
-                    </a>
-                    <div class="publication-side-rail">
-                        <a class="spotlight-card" href="../Cyber%20Awareness%20Graphics/IMG_0389.jpg" target="_blank" rel="noopener">
-                            <img src="../Cyber%20Awareness%20Graphics/IMG_0389.jpg" alt="Everyday data privacy awareness poster" class="spotlight-thumb">
-                            <div>
-                                <p class="publication-tag">The Convenience Tax</p>
-                                <h3>You still leak data every day</h3>
-                                <p>A broader privacy feature on movement, Wi-Fi exposure, ride-share signals, and the metadata people hand over without noticing.</p>
-                            </div>
-                        </a>
-                        <a class="spotlight-card" href="../Cyber%20Awareness%20Graphics/IMG_0236.PNG" target="_blank" rel="noopener">
-                            <img src="../Cyber%20Awareness%20Graphics/IMG_0236.PNG" alt="Digital Defense Friday account takeover attempts poster" class="spotlight-thumb">
-                            <div>
-                                <p class="publication-tag">Digital Defense Friday</p>
-                                <h3>Account takeover attempts happen every day</h3>
-                                <p>A plainspoken warning about takeover attempts and the habits that make them less likely to land.</p>
-                            </div>
-                        </a>
-                        <a class="spotlight-card" href="../Cyber%20Awareness%20Graphics/IMG_0235.JPG" target="_blank" rel="noopener">
-                            <img src="../Cyber%20Awareness%20Graphics/IMG_0235.JPG" alt="Romance scams cyber storytime poster" class="spotlight-thumb">
-                            <div>
-                                <p class="publication-tag">Cyber Storytime</p>
-                                <h3>Romance scams: love, trust, loss</h3>
-                                <p>Narrative reporting on how scams land, what people miss, and what readers can carry forward.</p>
-                            </div>
-                        </a>
-                    </div>
-                </div>
-                <div class="publication-strip">
-                    <div class="publication-strip-copy">
-                        <p class="node-path">Issue Lineup</p>
-                        <h3>Eight recurring series, one growing archive</h3>
-                    </div>
-                    <div class="publication-pill-row">
-                        <span class="publication-pill">Scam Alert Monday</span>
-                        <span class="publication-pill">Tips Tuesday</span>
-                        <span class="publication-pill">Would You Fall For It?</span>
-                        <span class="publication-pill">Digital Defense Friday</span>
-                        <span class="publication-pill">The Convenience Tax</span>
-                        <span class="publication-pill">Synthetic Signal</span>
-                        <span class="publication-pill">Signal &amp; Self</span>
-                        <span class="publication-pill">Cyber Storytime</span>
-                    </div>
-                </div>
-                <div class="series-shelf-list">
-                    <section class="series-shelf" id="series-scams">
-                        <div class="series-shelf-header">
-                            <div>
-                                <p class="publication-tag">Scam Alert Monday</p>
-                                <h3>How scams create urgency and steal trust</h3>
-                                <p>Weekly scam files built around the texts, inbox traps, and fake payment prompts people actually see.</p>
-                            </div>
-                        </div>
-                        <div class="poster-grid">
-                            <a class="poster-card" href="../Cyber%20Awareness%20Graphics/IMG_0232.PNG" target="_blank" rel="noopener">
-                                <img src="../Cyber%20Awareness%20Graphics/IMG_0232.PNG" alt="Scam Alert Monday fake toll road text scam poster" class="poster-card-image">
-                                <div class="poster-card-body">
-                                    <p class="poster-tag">Scam Alert Monday</p>
-                                    <h3>Fake toll road text scam</h3>
-                                    <p>A fast field note on the tells, the pressure, and the safest next move.</p>
-                                </div>
+                        <div class="footer-actions">
+                            <a class="pill-link" href="https://www.linkedin.com/in/gbailey216/" target="_blank" rel="noopener">
+                                <img src="./LinkedIn_icon.svg" alt="LinkedIn">
+                                <span>LinkedIn</span>
                             </a>
-                            <a class="poster-card" href="../Cyber%20Awareness%20Graphics/IMG_0239.PNG" target="_blank" rel="noopener">
-                                <img src="../Cyber%20Awareness%20Graphics/IMG_0239.PNG" alt="Scam Alert Monday 3 package delivery text scam poster" class="poster-card-image">
-                                <div class="poster-card-body">
-                                    <p class="poster-tag">Scam Alert Monday</p>
-                                    <h3>The package problem text scam</h3>
-                                    <p>A tight read on fake delivery texts, rushed clicks, and the small pause that breaks the trap.</p>
-                                </div>
+                            <a class="pill-link" href="https://www.paypal.me/garinbailey1" target="_blank" rel="noopener">
+                                <img src="./support-paypal.svg" alt="PayPal">
+                                <span>Support the project</span>
                             </a>
-                            <a class="poster-card" href="../Cyber%20Awareness%20Graphics/IMG_0293.jpg" target="_blank" rel="noopener">
-                                <img src="../Cyber%20Awareness%20Graphics/IMG_0293.jpg" alt="Scam Alert Monday fake texts real damage poster" class="poster-card-image">
-                                <div class="poster-card-body">
-                                    <p class="poster-tag">Scam Alert Monday</p>
-                                    <h3>Fake texts, real damage</h3>
-                                    <p>A sharper field guide to bait messages, fake delivery links, and the fast habits that keep one tap from becoming a larger loss.</p>
-                                </div>
-                            </a>
-                        </div>
-                    </section>
-                    <section class="series-shelf" id="series-tips">
-                        <div class="series-shelf-header">
-                            <div>
-                                <p class="publication-tag">Tips Tuesday</p>
-                                <h3>Better defaults, less avoidable risk</h3>
-                                <p>Short habit resets for people who want stronger digital routines without jargon or lecture.</p>
-                            </div>
-                        </div>
-                        <div class="poster-grid">
-                            <a class="poster-card" href="../Cyber%20Awareness%20Graphics/IMG_0233.PNG" target="_blank" rel="noopener">
-                                <img src="../Cyber%20Awareness%20Graphics/IMG_0233.PNG" alt="Tips Tuesday enable two-factor authentication poster" class="poster-card-image">
-                                <div class="poster-card-body">
-                                    <p class="poster-tag">Tips Tuesday</p>
-                                    <h3>Enable two-factor authentication</h3>
-                                    <p>A quick reset on one habit that blocks a surprising amount of damage.</p>
-                                </div>
-                            </a>
-                            <a class="poster-card" href="../Cyber%20Awareness%20Graphics/IMG_0240.PNG" target="_blank" rel="noopener">
-                                <img src="../Cyber%20Awareness%20Graphics/IMG_0240.PNG" alt="Tips Tuesday 3 verify before you trust poster" class="poster-card-image">
-                                <div class="poster-card-body">
-                                    <p class="poster-tag">Tips Tuesday</p>
-                                    <h3>Verify before you trust</h3>
-                                    <p>A short field note on slowing down, verifying context, and refusing borrowed urgency.</p>
-                                </div>
-                            </a>
-                        </div>
-                    </section>
-                    <section class="series-shelf" id="series-would-you">
-                        <div class="series-shelf-header">
-                            <div>
-                                <p class="publication-tag">Would You Fall For It?</p>
-                                <h3>Train your eye before the click</h3>
-                                <p>A recurring format that teaches readers to pause, question context, and spot scam pressure before they click.</p>
-                            </div>
-                        </div>
-                        <div class="poster-grid">
-                            <a class="poster-card" href="../Cyber%20Awareness%20Graphics/IMG_0234.PNG" target="_blank" rel="noopener">
-                                <img src="../Cyber%20Awareness%20Graphics/IMG_0234.PNG" alt="Would you fall for it spot the scam poster" class="poster-card-image">
-                                <div class="poster-card-body">
-                                    <p class="poster-tag">Would You Fall For It?</p>
-                                    <h3>Spot the scam, real or fake</h3>
-                                    <p>A fast pattern drill built around familiar pressure and suspicious context.</p>
-                                </div>
-                            </a>
-                            <a class="poster-card" href="../Cyber%20Awareness%20Graphics/IMG_0241.PNG" target="_blank" rel="noopener">
-                                <img src="../Cyber%20Awareness%20Graphics/IMG_0241.PNG" alt="Would You Fall For It Weds 3 poster" class="poster-card-image">
-                                <div class="poster-card-body">
-                                    <p class="poster-tag">Would You Fall For It?</p>
-                                    <h3>Pause. Question. Protect.</h3>
-                                    <p>Another quick drill designed to make scam signals feel obvious sooner.</p>
-                                </div>
-                            </a>
-                        </div>
-                    </section>
-                    <section class="series-shelf" id="series-defense">
-                        <div class="series-shelf-header">
-                            <div>
-                                <p class="publication-tag">Digital Defense Friday</p>
-                                <h3>Account defense for normal life</h3>
-                                <p>Account security, recovery planning, and steady habits that fit real life.</p>
-                            </div>
-                        </div>
-                        <div class="poster-grid poster-grid-expanded">
-                            <a class="poster-card" href="../Cyber%20Awareness%20Graphics/IMG_0229.PNG" target="_blank" rel="noopener">
-                                <img src="../Cyber%20Awareness%20Graphics/IMG_0229.PNG" alt="Digital Defense Friday secure your Google account poster" class="poster-card-image">
-                                <div class="poster-card-body">
-                                    <p class="poster-tag">Digital Defense Friday</p>
-                                    <h3>Secure your Google account</h3>
-                                    <p>Six practical moves to harden one of the accounts attackers want first.</p>
-                                </div>
-                            </a>
-                            <a class="poster-card" href="../Cyber%20Awareness%20Graphics/IMG_0236.PNG" target="_blank" rel="noopener">
-                                <img src="../Cyber%20Awareness%20Graphics/IMG_0236.PNG" alt="Digital Defense Friday account takeover attempts poster" class="poster-card-image">
-                                <div class="poster-card-body">
-                                    <p class="poster-tag">Digital Defense Friday</p>
-                                    <h3>Account takeover attempts happen every day</h3>
-                                    <p>A direct read on takeover attempts and the habits that make them easier to stop.</p>
-                                </div>
-                            </a>
-                            <a class="poster-card" href="../Cyber%20Awareness%20Graphics/IMG_0243.PNG" target="_blank" rel="noopener">
-                                <img src="../Cyber%20Awareness%20Graphics/IMG_0243.PNG" alt="Digital Defense Friday 3 credential stuffing poster" class="poster-card-image">
-                                <div class="poster-card-body">
-                                    <p class="poster-tag">Digital Defense Friday</p>
-                                    <h3>Credential stuffing and everyday defenses</h3>
-                                    <p>A field guide to reused passwords, breach chains, and the checks that actually cut risk.</p>
-                                </div>
-                            </a>
-                        </div>
-                    </section>
-                    <section class="series-shelf" id="series-convenience">
-                        <div class="series-shelf-header">
-                            <div>
-                                <p class="publication-tag">The Convenience Tax</p>
-                                <h3>Where everyday convenience quietly takes more than it gives</h3>
-                                <p>Privacy features on movement, public networks, and routine digital habits that leak more than most people realize.</p>
-                            </div>
-                        </div>
-                        <div class="poster-grid poster-grid-expanded">
-                            <a class="poster-card" href="../Cyber%20Awareness%20Graphics/IMG_0367.PNG" target="_blank" rel="noopener">
-                                <img src="../Cyber%20Awareness%20Graphics/IMG_0367.PNG" alt="Public Wi-Fi what you do not see can hurt you poster" class="poster-card-image">
-                                <div class="poster-card-body">
-                                    <p class="poster-tag">The Convenience Tax</p>
-                                    <h3>Public Wi-Fi: what you don&rsquo;t see can hurt you</h3>
-                                    <p>A practical travel read on risky networks, exposed credentials, and the small checks that make public connections safer.</p>
-                                </div>
-                            </a>
-                            <a class="poster-card" href="../Cyber%20Awareness%20Graphics/IMG_0379.PNG" target="_blank" rel="noopener">
-                                <img src="../Cyber%20Awareness%20Graphics/IMG_0379.PNG" alt="Your commute your data poster" class="poster-card-image">
-                                <div class="poster-card-body">
-                                    <p class="poster-tag">The Convenience Tax</p>
-                                    <h3>Your commute. Your data.</h3>
-                                    <p>A privacy briefing on the location, device, and behavioral data that gets collected in the background of ordinary travel.</p>
-                                </div>
-                            </a>
-                            <a class="poster-card" href="../Cyber%20Awareness%20Graphics/IMG_0389.jpg" target="_blank" rel="noopener">
-                                <img src="../Cyber%20Awareness%20Graphics/IMG_0389.jpg" alt="You still leak data every day poster" class="poster-card-image">
-                                <div class="poster-card-body">
-                                    <p class="poster-tag">The Convenience Tax</p>
-                                    <h3>You still leak data every day</h3>
-                                    <p>A broader privacy feature on location patterns, ride-share signals, Wi-Fi exposure, and the routine metadata people give away without noticing.</p>
-                                </div>
-                            </a>
-                        </div>
-                    </section>
-                    <section class="series-shelf" id="series-ai">
-                        <div class="series-shelf-header">
-                            <div>
-                                <p class="publication-tag">Synthetic Signal</p>
-                                <h3>Deepfakes, cloned voices, and synthetic trust</h3>
-                                <p>Verification-first coverage on deepfakes, voice cloning, AI scams, and the trust failures synthetic media creates.</p>
-                            </div>
-                        </div>
-                        <div class="poster-grid">
-                            <a class="poster-card" href="../Cyber%20Awareness%20Graphics/IMG_0230.PNG" target="_blank" rel="noopener">
-                                <img src="../Cyber%20Awareness%20Graphics/IMG_0230.PNG" alt="AI and future threats awareness poster" class="poster-card-image">
-                                <div class="poster-card-body">
-                                    <p class="poster-tag">Synthetic Signal</p>
-                                    <h3>The future is here. So are the threats.</h3>
-                                    <p>A clear briefing on AI phishing, deepfakes, automated malware, and the habits that keep claims verifiable.</p>
-                                </div>
-                            </a>
-                            <a class="poster-card" href="../Cyber%20Awareness%20Graphics/IMG_0237.PNG" target="_blank" rel="noopener">
-                                <img src="../Cyber%20Awareness%20Graphics/IMG_0237.PNG" alt="AI and Future Threats 2 awareness poster" class="poster-card-image">
-                                <div class="poster-card-body">
-                                    <p class="poster-tag">Synthetic Signal</p>
-                                    <h3>AI and future threats, part two</h3>
-                                    <p>A follow-up briefing on voice cloning, fake media, and the verification steps people need before the next wave hits.</p>
-                                </div>
-                            </a>
-                        </div>
-                    </section>
-                    <section class="series-shelf" id="series-wellness">
-                        <div class="series-shelf-header">
-                            <div>
-                                <p class="publication-tag">Signal &amp; Self</p>
-                                <h3>Online life without constant overload</h3>
-                                <p>A calmer column on attention, stress, boundaries, and keeping digital life in proportion.</p>
-                            </div>
-                        </div>
-                        <div class="poster-grid">
-                            <a class="poster-card" href="../Cyber%20Awareness%20Graphics/IMG_0231.PNG" target="_blank" rel="noopener">
-                                <img src="../Cyber%20Awareness%20Graphics/IMG_0231.PNG" alt="Digital wellness awareness poster" class="poster-card-image">
-                                <div class="poster-card-body">
-                                    <p class="poster-tag">Signal &amp; Self</p>
-                                    <h3>Protect your mind, data, and life</h3>
-                                    <p>A grounded read on boundaries, habits, and mental clarity in connected life.</p>
-                                </div>
-                            </a>
-                            <a class="poster-card" href="../Cyber%20Awareness%20Graphics/IMG_0238.PNG" target="_blank" rel="noopener">
-                                <img src="../Cyber%20Awareness%20Graphics/IMG_0238.PNG" alt="Digital Wellness 2 awareness poster" class="poster-card-image">
-                                <div class="poster-card-body">
-                                    <p class="poster-tag">Signal &amp; Self</p>
-                                    <h3>Signal &amp; Self, part two</h3>
-                                    <p>Small rituals for better focus, steadier attention, and a digital life that does not swallow the rest of the day.</p>
-                                </div>
-                            </a>
-                        </div>
-                    </section>
-                    <section class="series-shelf" id="series-storytime">
-                        <div class="series-shelf-header">
-                            <div>
-                                <p class="publication-tag">Cyber Storytime</p>
-                                <h3>Stories that show how scams actually land</h3>
-                                <p>Real cases that show how pressure, trust, timing, and emotion get used against people.</p>
-                            </div>
-                        </div>
-                        <div class="poster-grid">
-                            <a class="poster-card" href="../Cyber%20Awareness%20Graphics/IMG_0235.JPG" target="_blank" rel="noopener">
-                                <img src="../Cyber%20Awareness%20Graphics/IMG_0235.JPG" alt="Romance scams cyber storytime poster" class="poster-card-image">
-                                <div class="poster-card-body">
-                                    <p class="poster-tag">Cyber Storytime</p>
-                                    <h3>Romance scams: love, trust, loss</h3>
-                                    <p>A reported story about trust, manipulation, and the damage that follows emotional pressure.</p>
-                                </div>
-                            </a>
-                            <a class="poster-card" href="../Cyber%20Awareness%20Graphics/IMG_0242.PNG" target="_blank" rel="noopener">
-                                <img src="../Cyber%20Awareness%20Graphics/IMG_0242.PNG" alt="Cyber Storytime 3 urgent email scam poster" class="poster-card-image">
-                                <div class="poster-card-body">
-                                    <p class="poster-tag">Cyber Storytime</p>
-                                    <h3>The urgent email story</h3>
-                                    <p>Real-story framing that shows how rushed requests and fake authority lead people into preventable losses.</p>
-                                </div>
-                            </a>
-                        </div>
-                    </section>
-                </div>
-            </div>
-        </section>
-
-        <section class="tree-card" id="downloads">
-            <div class="tree-header section-header-left">
-                <div>
-                    <p class="node-path">Awareness Collections</p>
-                    <h2>Download packs built to share</h2>
-                    <p class="node-summary">Ready-to-share packs for classrooms, teams, families, and community use.</p>
-                </div>
-            </div>
-            <div class="node-body">
-                <div class="resource-grid">
-                    <a class="resource-card" href="../Cyber%20Awareness%20Graphics/IMG_0232.PNG" download>
-                        <p class="resource-label">Collection</p>
-                        <h3>Scam Awareness Pack</h3>
-                        <p>Shareable posters and clear explainers focused on fake texts, urgency, impersonation, and reporting steps.</p>
-                    </a>
-                    <a class="resource-card" href="../Cyber%20Awareness%20Graphics/IMG_0229.PNG" download>
-                        <p class="resource-label">Collection</p>
-                        <h3>Account Security Pack</h3>
-                        <p>Practical handouts for logins, recovery options, account review habits, and stronger digital defaults.</p>
-                    </a>
-                    <a class="resource-card" href="../Cyber%20Awareness%20Graphics/IMG_0230.PNG" download>
-                        <p class="resource-label">Collection</p>
-                        <h3>Synthetic Signal Collection</h3>
-                        <p>Verification-first materials on deepfakes, voice cloning, AI scams, and the habits that keep claims checkable.</p>
-                    </a>
-                    <a class="resource-card" href="../Cyber%20Awareness%20Graphics/IMG_0231.PNG" download>
-                        <p class="resource-label">Collection</p>
-                        <h3>Signal &amp; Self Collection</h3>
-                        <p>Guides for better boundaries, steadier attention, and a digital life that stays livable.</p>
-                    </a>
-                    <a class="resource-card" href="../Cyber%20Awareness%20Graphics/IMG_0240.PNG" download>
-                        <p class="resource-label">Collection</p>
-                        <h3>Verification Habits Pack</h3>
-                        <p>Fast reminders for slower clicking, better trust checks, and practical habits people can carry anywhere.</p>
-                    </a>
-                    <a class="resource-card" href="../Cyber%20Awareness%20Graphics/IMG_0336.PNG" download>
-                        <p class="resource-label">Collection</p>
-                        <h3>Travel Awareness Pack</h3>
-                        <p>Airport and transit-ready awareness graphics focused on staying alert, protecting belongings, and reducing exposure on the move.</p>
-                    </a>
-                    <a class="resource-card" href="../Cyber%20Awareness%20Graphics/IMG_0235.JPG" download>
-                        <p class="resource-label">Collection</p>
-                        <h3>Story-Based Scam Awareness</h3>
-                        <p>Emotionally grounded story cards that help lessons stick for students, families, and community groups.</p>
-                    </a>
-                    <a class="resource-card" href="../Cyber%20Awareness%20Graphics/IMG_0418.jpg" download>
-                        <p class="resource-label">Collection</p>
-                        <h3>Risk &amp; Choice Awareness Pack</h3>
-                        <p>Plainspoken awareness material on online betting, platform manipulation, privacy risk, and staying in control of digital habits.</p>
-                    </a>
-                </div>
-            </div>
-        </section>
-
-        <section class="tree-card quiet-tools-card" id="guard">
-            <div class="tree-header">
-                <div>
-                    <p class="node-path">Step 05 | Tools</p>
-                    <h2>Phishing &amp; Impersonation Guard</h2>
-                    <p class="node-summary">Scan suspicious text, screenshots, or QR codes without opening risky links.</p>
-                </div>
-            </div>
-            <div class="node-body">
-                <div class="tools-preface">
-                    <p class="publication-tag">Quiet Infrastructure</p>
-                    <p>A practical utility for checking suspicious messages and links when something feels off.</p>
-                </div>
-                <div class="addon-grid">
-                    <div class="addon-card">
-                        <h3>Text / Link check</h3>
-                        <p class="node-summary">Paste a DM, comment, or email.</p>
-                        <textarea id="textInput" rows="6" placeholder="Paste the message or link..."></textarea>
-                        <label class="node-summary inline-toggle">
-                            <input type="checkbox" id="osintToggle" checked> <span>Threat feed check</span>
-                        </label>
-                        <button class="ghost" type="button" id="scanText">Scan text</button>
-                        <div id="textStatus" class="node-summary">Ready</div>
-                    </div>
-                    <div class="addon-card">
-                        <h3>Screenshot scan</h3>
-                        <p class="node-summary">Upload a screenshot to scan safely.</p>
-                        <label for="shotInput" class="sr-only">Upload screenshot for scanning</label>
-                        <input type="file" id="shotInput" accept="image/png,image/jpeg">
-                        <label class="node-summary inline-toggle">
-                            <input type="checkbox" id="osintToggleShot" checked> <span>Threat feed check</span>
-                        </label>
-                        <label class="photo-mode-row">
-                            <input type="checkbox" id="shotPhotoMode" class="photo-mode-toggle">
-                            <span>Photo mode</span>
-                        </label>
-                        <div class="photo-mode-note">Best for phone photos of screens.</div>
-                        <button class="ghost" type="button" id="scanShot">Scan screenshot</button>
-                        <div id="shotStatus" class="node-summary">Ready</div>
-                    </div>
-                    <div class="addon-card">
-                        <h3>QR / payload scan</h3>
-                        <p class="node-summary">Upload a QR image to inspect it without opening it.</p>
-                        <label for="qrInput" class="sr-only">Upload QR code image for scanning</label>
-                        <input type="file" id="qrInput" accept="image/png,image/jpeg">
-                        <button class="ghost" type="button" id="scanQr">Scan QR</button>
-                        <div id="qrStatus" class="node-summary">Ready</div>
-                    </div>
-                <div class="addon-card">
-                        <h3>Verdict</h3>
-                        <div id="verdictPill" class="risk-pill verdict-pending">Pending</div>
-                        <div id="reasonList" class="node-summary reason-list-start">Awaiting scan.</div>
-                    </div>
-                    <div class="addon-card">
-                        <h3>Extracted links</h3>
-                        <div id="linksBlock" class="node-summary">No links yet.</div>
-                    </div>
-                    <div class="addon-card">
-                        <h3>OSINT checks</h3>
-                        <div id="osintBlock" class="node-summary">No checks yet.</div>
-                        <div id="osintProgress" class="osint-progress is-hidden">
-                            <div id="osintProgressBar" class="osint-progress-bar"></div>
-                            <div id="osintProgressText" class="osint-progress-text">Running OSINT...</div>
                         </div>
                     </div>
-                    <div class="addon-card">
-                        <h3>OCR text (preview)</h3>
-                        <div id="ocrPreview" class="node-summary">No preview yet.</div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <section class="privacy-note">
-            Privacy-first by design. Scans run in your browser.
-        </section>
-
-        <section class="tree-card" id="about">
-            <div class="tree-header section-header-left">
-                <div>
-                    <p class="node-path">About Cyber Shield</p>
-                    <h2>An independent digital awareness publication</h2>
-                    <p class="node-summary">Created by GT Bailey with a practical voice that favors clarity, usefulness, and real-world digital self-defense over fear or technical posturing.</p>
-                </div>
-            </div>
-            <div class="node-body about-grid">
-                <div class="about-copy-block">
-                    <p class="entry-label">Created by GT Bailey</p>
-                    <p class="support-copy">Cyber Shield is a magazine-style digital literacy project focused on scams, privacy tradeoffs, synthetic trust, and everyday online self-defense.</p>
-                    <p class="support-copy">The editorial stance is simple: technology should help people, not confuse them, corner them, or quietly take more than it gives back.</p>
-                </div>
-                <div class="about-actions-block">
-                    <p class="entry-label">Stay Connected</p>
-                    <p class="support-copy">Follow the work and support future releases.</p>
-                    <a class="pill-link" href="https://www.linkedin.com/in/gbailey216/" target="_blank" rel="noopener">
-                        <img src="./LinkedIn_icon.svg" alt="LinkedIn">
-                        <span>LinkedIn</span>
-                    </a>
-                    <a class="pill-link" href="https://www.paypal.me/garinbailey1" target="_blank" rel="noopener">
-                        <img src="./support-paypal.svg" alt="PayPal">
-                        <span>Support the project</span>
-                    </a>
-                </div>
-            </div>
-        </section>
-
-        <section class="tree-card counter-card" id="visit-counter">
-            <div class="tree-header">
-                <div>
-                    <p class="node-path">Site stats</p>
-                    <h2>Global visit counter</h2>
-                    <p class="node-summary">Live site visits.</p>
-                </div>
-            </div>
-            <div class="node-body">
-                <div class="counter-shell" role="status" aria-live="polite">
-                    <div class="counter-label">Global visits</div>
-                    <div class="counter-display">
-                        <span id="visitCounter" class="counter-digits">0000000000</span>
-                    </div>
-                    <div id="visitCounterNote" class="counter-sub">Updating...</div>
-                </div>
-            </div>
-        </section>
+                </section>
     </main>
 
     <script>
