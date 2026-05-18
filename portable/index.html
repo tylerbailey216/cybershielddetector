@@ -13,6 +13,7 @@
         (() => {
             const resetScroll = () => {
                 const scroller = document.scrollingElement || document.documentElement;
+                const body = document.body;
 
                 if (scroller) {
                     scroller.scrollTop = 0;
@@ -21,8 +22,10 @@
 
                 document.documentElement.scrollTop = 0;
                 document.documentElement.scrollLeft = 0;
-                document.body.scrollTop = 0;
-                document.body.scrollLeft = 0;
+                if (body) {
+                    body.scrollTop = 0;
+                    body.scrollLeft = 0;
+                }
                 window.scrollTo({ top: 0, left: 0, behavior: 'auto' });
             };
 
@@ -63,6 +66,37 @@
         (() => {
             const imageHrefPattern = /\.(png|jpe?g|gif|webp|avif)$/i;
             const viewerFile = './image-viewer.html';
+            const previewBase = '../Cyber%20Awareness%20Graphics/previews/';
+
+            const attachPreviewFallback = (image, originalSrc) => {
+                image.addEventListener('error', () => {
+                    if (image.dataset.previewFallbackApplied === 'true') {
+                        return;
+                    }
+
+                    image.dataset.previewFallbackApplied = 'true';
+                    image.src = originalSrc;
+                }, { once: true });
+            };
+
+            const rewritePosterImages = () => {
+                document.querySelectorAll('img[src*="Cyber%20Awareness%20Graphics/"]').forEach((image) => {
+                    if (image.dataset.previewEnhanced === 'true') {
+                        return;
+                    }
+
+                    const originalSrc = image.getAttribute('src');
+                    const match = originalSrc.match(/Cyber%20Awareness%20Graphics\/([^/?#]+)\.(png|jpe?g)$/i);
+                    if (!match || originalSrc.includes('/previews/')) {
+                        return;
+                    }
+
+                    const previewSrc = `${previewBase}${match[1]}.webp`;
+                    attachPreviewFallback(image, originalSrc);
+                    image.src = previewSrc;
+                    image.dataset.previewEnhanced = 'true';
+                });
+            };
 
             const shouldUseViewer = (href) => {
                 if (!href) {
@@ -100,7 +134,12 @@
                 });
             };
 
-            window.addEventListener('DOMContentLoaded', rewriteImageLinks, { once: true });
+            const enhancePosterMedia = () => {
+                rewritePosterImages();
+                rewriteImageLinks();
+            };
+
+            window.addEventListener('DOMContentLoaded', enhancePosterMedia, { once: true });
         })();
     </script>
     <style>
