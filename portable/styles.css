@@ -289,6 +289,8 @@ body::before {
 }
 
 .hero-visual-hub {
+    display: grid;
+    grid-template-columns: 1fr;
     align-items: stretch;
     gap: 20px;
 }
@@ -341,10 +343,11 @@ body::before {
 }
 
 .hero-signal-card {
-    position: absolute;
-    left: 24px;
-    bottom: 28px;
-    max-width: 240px;
+    position: relative;
+    left: auto;
+    bottom: auto;
+    width: 100%;
+    max-width: 340px;
     z-index: 1;
     padding: 18px;
     border-radius: 22px;
