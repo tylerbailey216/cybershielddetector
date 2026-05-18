@@ -59,6 +59,50 @@
             window.addEventListener('pagehide', resetScroll);
         })();
     </script>
+    <script>
+        (() => {
+            const imageHrefPattern = /\.(png|jpe?g|gif|webp|avif)$/i;
+            const viewerFile = './image-viewer.html';
+
+            const shouldUseViewer = (href) => {
+                if (!href) {
+                    return false;
+                }
+
+                if (/^(https?:|data:|mailto:|tel:|#)/i.test(href)) {
+                    return false;
+                }
+
+                return imageHrefPattern.test(href);
+            };
+
+            const rewriteImageLinks = () => {
+                document.querySelectorAll('a[target="_blank"][href]:not([download])').forEach((link) => {
+                    if (link.dataset.viewerEnhanced === 'true') {
+                        return;
+                    }
+
+                    const href = link.getAttribute('href');
+                    if (!shouldUseViewer(href)) {
+                        return;
+                    }
+
+                    const posterImage = link.querySelector('img');
+                    const fallbackTitle = link.querySelector('h3')?.textContent?.trim();
+                    const alt = posterImage?.getAttribute('alt') || fallbackTitle || 'Cyber Shield poster';
+                    const viewerUrl = new URL(viewerFile, window.location.href);
+
+                    viewerUrl.searchParams.set('src', href);
+                    viewerUrl.searchParams.set('alt', alt);
+
+                    link.setAttribute('href', viewerUrl.toString());
+                    link.dataset.viewerEnhanced = 'true';
+                });
+            };
+
+            window.addEventListener('DOMContentLoaded', rewriteImageLinks, { once: true });
+        })();
+    </script>
     <style>
         .photo-mode-row {
             display: flex;

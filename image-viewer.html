@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cyber Shield Poster Viewer</title>
+    <style>
+        :root {
+            color-scheme: dark;
+            --bg: #05080a;
+            --panel: rgba(11, 16, 20, 0.88);
+            --border: rgba(255, 255, 255, 0.08);
+            --text: #f3f7f2;
+            --muted: rgba(243, 247, 242, 0.7);
+            --accent: #6dfc8c;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            font-family: Georgia, 'Times New Roman', serif;
+            background:
+                radial-gradient(circle at top, rgba(109, 252, 140, 0.12), transparent 38%),
+                linear-gradient(180deg, #081015 0%, var(--bg) 58%);
+            color: var(--text);
+        }
+
+        .viewer-shell {
+            min-height: 100vh;
+            display: grid;
+            grid-template-rows: auto 1fr;
+            gap: 18px;
+            padding: 20px;
+        }
+
+        .viewer-toolbar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+            flex-wrap: wrap;
+            padding: 14px 18px;
+            border-radius: 20px;
+            background: var(--panel);
+            border: 1px solid var(--border);
+            -webkit-backdrop-filter: blur(12px);
+            backdrop-filter: blur(12px);
+        }
+
+        .viewer-copy {
+            display: grid;
+            gap: 6px;
+        }
+
+        .viewer-label {
+            margin: 0;
+            font-family: 'Courier New', monospace;
+            font-size: 0.76rem;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--accent);
+        }
+
+        .viewer-title {
+            margin: 0;
+            font-size: clamp(1.05rem, 2vw, 1.5rem);
+        }
+
+        .viewer-actions {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .viewer-link {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 44px;
+            padding: 0 16px;
+            border-radius: 999px;
+            border: 1px solid var(--border);
+            color: var(--text);
+            text-decoration: none;
+            background: rgba(255, 255, 255, 0.04);
+        }
+
+        .viewer-link:hover {
+            border-color: rgba(109, 252, 140, 0.38);
+        }
+
+        .viewer-stage {
+            display: grid;
+            place-items: center;
+            min-height: 0;
+        }
+
+        .viewer-figure {
+            margin: 0;
+            width: min(100%, 1600px);
+            min-height: 0;
+            display: grid;
+            place-items: center;
+            gap: 12px;
+        }
+
+        .viewer-image {
+            display: block;
+            width: auto;
+            max-width: min(96vw, 1600px);
+            max-height: calc(100vh - 160px);
+            height: auto;
+            object-fit: contain;
+            border-radius: 18px;
+            box-shadow: 0 30px 90px -40px rgba(0, 0, 0, 0.9);
+            background: rgba(255, 255, 255, 0.02);
+        }
+
+        .viewer-caption {
+            margin: 0;
+            max-width: 70ch;
+            text-align: center;
+            color: var(--muted);
+        }
+
+        .viewer-empty {
+            text-align: center;
+            display: grid;
+            gap: 12px;
+            padding: 32px;
+            border-radius: 24px;
+            background: var(--panel);
+            border: 1px solid var(--border);
+        }
+
+        @media (max-width: 720px) {
+            .viewer-shell {
+                padding: 14px;
+            }
+
+            .viewer-toolbar {
+                padding: 14px;
+            }
+
+            .viewer-actions {
+                width: 100%;
+            }
+
+            .viewer-link {
+                flex: 1 1 160px;
+            }
+
+            .viewer-image {
+                max-width: 100%;
+                max-height: calc(100vh - 220px);
+            }
+        }
+    </style>
+</head>
+<body>
+    <main class="viewer-shell">
+        <header class="viewer-toolbar">
+            <div class="viewer-copy">
+                <p class="viewer-label">Poster Viewer</p>
+                <h1 class="viewer-title" id="viewerTitle">Loading image...</h1>
+            </div>
+            <div class="viewer-actions">
+                <a class="viewer-link" id="openOriginal" href="#" target="_blank" rel="noopener">Open original</a>
+                <a class="viewer-link" id="downloadPoster" href="#" download>Download</a>
+            </div>
+        </header>
+        <section class="viewer-stage" id="viewerStage"></section>
+    </main>
+    <script>
+        (() => {
+            const params = new URLSearchParams(window.location.search);
+            const src = params.get('src');
+            const alt = params.get('alt') || 'Cyber Shield poster';
+            const title = document.getElementById('viewerTitle');
+            const stage = document.getElementById('viewerStage');
+            const openOriginal = document.getElementById('openOriginal');
+            const downloadPoster = document.getElementById('downloadPoster');
+
+            if (!src) {
+                title.textContent = 'Image unavailable';
+                stage.innerHTML = '<div class="viewer-empty"><h2>No image selected</h2><p>Return to Cyber Shield and open a poster again.</p></div>';
+                openOriginal.removeAttribute('href');
+                downloadPoster.removeAttribute('href');
+                return;
+            }
+
+            const resolvedSrc = new URL(src, window.location.href);
+            const figure = document.createElement('figure');
+            const image = document.createElement('img');
+            const caption = document.createElement('figcaption');
+
+            figure.className = 'viewer-figure';
+            image.className = 'viewer-image';
+            image.src = resolvedSrc.toString();
+            image.alt = alt;
+
+            caption.className = 'viewer-caption';
+            caption.textContent = alt;
+
+            title.textContent = alt;
+            openOriginal.href = resolvedSrc.toString();
+            downloadPoster.href = resolvedSrc.toString();
+
+            figure.append(image, caption);
+            stage.replaceChildren(figure);
+        })();
+    </script>
+</body>
+</html>
