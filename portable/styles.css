@@ -290,6 +290,7 @@ body::before {
 
 .hero-visual-hub {
     align-items: stretch;
+    gap: 20px;
 }
 
 .hero-cover-stage {
@@ -2820,10 +2821,26 @@ a:focus-visible {
     .mission-layout {
         grid-template-columns: 1fr;
     }
+    .hero-visual-hub {
+        display: grid;
+        gap: 16px;
+        min-height: 0;
+    }
+    .hero-cover-stage {
+        display: block;
+    }
+    .hero-cover-card {
+        width: 100%;
+        max-width: none;
+    }
     .hero-signal-card {
         position: static;
+        left: auto;
+        bottom: auto;
+        width: 100%;
         max-width: none;
-        margin-top: auto;
+        margin-top: 0;
+        box-shadow: none;
     }
     .lead-feature-card,
     .publication-strip,
@@ -2941,6 +2958,7 @@ a:focus-visible {
     }
     .hero-cover-card {
         width: 100%;
+        max-width: none;
         padding: 14px;
         border-radius: 22px;
     }
@@ -2972,6 +2990,9 @@ a:focus-visible {
         border-radius: 22px;
         border: 1px solid rgba(255, 255, 255, 0.05);
         background: linear-gradient(180deg, rgba(10, 18, 18, 0.52), rgba(7, 9, 12, 0.2));
+    }
+    .hero-visual-hub {
+        gap: 14px;
     }
     .grid-lines {
         border-radius: 22px;
@@ -3029,7 +3050,7 @@ a:focus-visible {
         grid-template-columns: 1fr;
     }
     .hero-signal-card {
-        margin-top: 14px;
+        margin-top: 0;
         padding: 16px;
         border-radius: 18px;
     }
