@@ -3,8 +3,28 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cyber Shield | Digital Literacy & Awareness</title>
-    <meta name="description" content="Cyber Shield is a monthly digital literacy and awareness publication. Issue #1 focuses on securing your Google account with clear, practical steps.">
+    <!-- Monthly share update: replace /public/share/current-cover-share.jpg, then bump the share-version marker below before publishing. -->
+    <meta name="cybershield:share-version" content="2026-05-issue-1">
+    <title>Cyber Shield | Issue #1: Secure Your Google Account</title>
+    <meta name="description" content="Cyber Shield is a digital literacy and cyber awareness publication. Issue #1 walks readers through securing a Google account with practical, visual guidance.">
+    <link rel="canonical" href="https://tylerbailey216.github.io/cybershielddetector/">
+    <meta property="og:site_name" content="Cyber Shield">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Cyber Shield | Issue #1: Secure Your Google Account">
+    <meta property="og:description" content="A digital literacy and cyber awareness publication. Issue #1 focuses on securing your Google account with clear, practical steps.">
+    <meta property="og:url" content="https://tylerbailey216.github.io/cybershielddetector/">
+    <meta property="og:image" content="https://tylerbailey216.github.io/cybershielddetector/public/share/current-cover-share.jpg?v=2026-05-issue-1">
+    <meta property="og:image:secure_url" content="https://tylerbailey216.github.io/cybershielddetector/public/share/current-cover-share.jpg?v=2026-05-issue-1">
+    <meta property="og:image:url" content="https://tylerbailey216.github.io/cybershielddetector/public/share/current-cover-share.jpg?v=2026-05-issue-1">
+    <meta property="og:image:type" content="image/jpeg">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="Cyber Shield Issue 1 cover poster about securing your Google account">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Cyber Shield | Issue #1: Secure Your Google Account">
+    <meta name="twitter:description" content="A digital literacy and cyber awareness publication. Issue #1 focuses on securing your Google account with clear, practical steps.">
+    <meta name="twitter:image" content="https://tylerbailey216.github.io/cybershielddetector/public/share/current-cover-share.jpg?v=2026-05-issue-1">
+    <meta name="twitter:image:alt" content="Cyber Shield Issue 1 cover poster about securing your Google account">
     <link rel="stylesheet" href="./public/styles.css?v=tsb43">
     <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.js"></script>
@@ -554,6 +574,51 @@
             </div>
         </section>
 
+        <section class="tree-card audio-stage" id="audio-reflections">
+            <div class="tree-header section-header-left">
+                <div>
+                    <p class="node-path">Audio Reflections</p>
+                    <h2>Recorded audio can live directly inside the issue.</h2>
+                    <p class="node-summary">This keeps audio static-site friendly: you can record a reflection in the browser, play it back instantly, and download it locally. You can also load a prerecorded clip to preview how published narration will feel inside the issue.</p>
+                </div>
+            </div>
+            <div class="node-body audio-grid">
+                <article class="audio-card">
+                    <p class="publication-tag">Issue Format</p>
+                    <h3>Audio gives the monthly campaign a guided editorial voice.</h3>
+                    <p>A short narrated reflection can sit beside the posters and frame the month in plain language. Think 45 to 90 seconds: what this issue covers, why the habit matters, and the one action the reader should take next.</p>
+                    <audio id="issueAudioPlayer" class="audio-player" controls preload="none"></audio>
+                    <div class="audio-meta-row">
+                        <span class="audio-chip">Local-only recording</span>
+                        <span class="audio-chip">No backend required</span>
+                        <span class="audio-chip">Static-site friendly</span>
+                    </div>
+                    <p class="audio-note">If you later want a permanent published narration, this same player can point at an MP3 or WAV file stored in the repo.</p>
+                </article>
+                <div class="audio-stack">
+                    <article class="audio-recorder-card">
+                        <p class="publication-tag">Record Here</p>
+                        <h3>Create a quick issue reflection in the browser</h3>
+                        <p>Use your microphone to draft narration, review it, and download the clip before deciding whether to publish it with the issue.</p>
+                        <div class="audio-action-row">
+                            <button class="audio-button" type="button" id="audioRecordStart">Start recording</button>
+                            <button class="audio-button" type="button" id="audioRecordStop" disabled>Stop recording</button>
+                            <a class="audio-download" id="audioDownloadLink" href="#" download="cyber-shield-audio-reflection.webm" aria-disabled="true">Download clip</a>
+                        </div>
+                        <p class="audio-status" id="audioRecordStatus">Recorder idle.</p>
+                    </article>
+                    <article class="audio-library-card">
+                        <p class="publication-tag">Load A Clip</p>
+                        <h3>Preview prerecorded narration on the page</h3>
+                        <p>Choose any local audio file to hear how a narrated issue sounds in this layout before you commit it to the project.</p>
+                        <label class="audio-button audio-upload-label" for="audioUploadInput">Choose audio file</label>
+                        <input class="audio-upload-input" id="audioUploadInput" type="file" accept="audio/*">
+                        <p class="audio-library-status" id="audioUploadStatus">No audio file loaded.</p>
+                    </article>
+                </div>
+            </div>
+        </section>
+
         <section class="tree-card quiet-tools-card utility-stage" id="guard">
             <div class="tree-header section-header-left">
                 <div>
@@ -654,6 +719,15 @@
                     </a>
                 </div>
             </div>
+            <div class="footer-counter-row" aria-live="polite">
+                <div class="counter-shell">
+                    <div class="counter-label">Site Counter</div>
+                    <div class="counter-display">
+                        <span class="counter-digits" id="visitCounter">0000000000</span>
+                    </div>
+                    <p class="counter-sub" id="visitCounterNote">Connecting...</p>
+                </div>
+            </div>
         </section>
     </main>
 
@@ -678,6 +752,13 @@
         const qrStatus = document.getElementById('qrStatus');
         const visitCounter = document.getElementById('visitCounter');
         const visitCounterNote = document.getElementById('visitCounterNote');
+        const issueAudioPlayer = document.getElementById('issueAudioPlayer');
+        const audioUploadInput = document.getElementById('audioUploadInput');
+        const audioUploadStatus = document.getElementById('audioUploadStatus');
+        const audioRecordStart = document.getElementById('audioRecordStart');
+        const audioRecordStop = document.getElementById('audioRecordStop');
+        const audioRecordStatus = document.getElementById('audioRecordStatus');
+        const audioDownloadLink = document.getElementById('audioDownloadLink');
 
         const updateVisitCounter = (value) => {
             if (!visitCounter) return;
@@ -702,7 +783,103 @@
             }
         };
 
+        const initAudioStudio = () => {
+            if (!issueAudioPlayer || !audioUploadInput || !audioUploadStatus || !audioRecordStart || !audioRecordStop || !audioRecordStatus || !audioDownloadLink) {
+                return;
+            }
+
+            let recorder = null;
+            let mediaStream = null;
+            let recordedChunks = [];
+            let activeAudioUrl = null;
+
+            const revokeAudioUrl = () => {
+                if (!activeAudioUrl) return;
+                URL.revokeObjectURL(activeAudioUrl);
+                activeAudioUrl = null;
+            };
+
+            const setAudioSource = (blob, fileName) => {
+                revokeAudioUrl();
+                activeAudioUrl = URL.createObjectURL(blob);
+                issueAudioPlayer.src = activeAudioUrl;
+                issueAudioPlayer.load();
+                audioDownloadLink.href = activeAudioUrl;
+                audioDownloadLink.download = fileName;
+                audioDownloadLink.setAttribute('aria-disabled', 'false');
+            };
+
+            const stopTracks = () => {
+                if (!mediaStream) return;
+                mediaStream.getTracks().forEach((track) => track.stop());
+                mediaStream = null;
+            };
+
+            audioUploadInput.addEventListener('change', () => {
+                const [file] = audioUploadInput.files || [];
+                if (!file) {
+                    audioUploadStatus.textContent = 'No audio file loaded.';
+                    return;
+                }
+
+                setAudioSource(file, file.name);
+                audioUploadStatus.textContent = `Loaded: ${file.name}`;
+                audioRecordStatus.textContent = 'Audio player ready.';
+            });
+
+            audioRecordStart.addEventListener('click', async () => {
+                if (!navigator.mediaDevices?.getUserMedia || typeof MediaRecorder === 'undefined') {
+                    audioRecordStatus.textContent = 'This browser does not support in-page audio recording.';
+                    return;
+                }
+
+                try {
+                    mediaStream = await navigator.mediaDevices.getUserMedia({ audio: true });
+                    recordedChunks = [];
+                    recorder = new MediaRecorder(mediaStream);
+
+                    recorder.addEventListener('dataavailable', (event) => {
+                        if (event.data && event.data.size > 0) {
+                            recordedChunks.push(event.data);
+                        }
+                    });
+
+                    recorder.addEventListener('stop', () => {
+                        const audioBlob = new Blob(recordedChunks, { type: recorder.mimeType || 'audio/webm' });
+                        setAudioSource(audioBlob, 'cyber-shield-audio-reflection.webm');
+                        audioRecordStatus.textContent = 'Recording ready to review and download.';
+                        audioUploadStatus.textContent = 'Recorded clip loaded into the player.';
+                        audioRecordStart.disabled = false;
+                        audioRecordStop.disabled = true;
+                        stopTracks();
+                    }, { once: true });
+
+                    recorder.start();
+                    audioRecordStatus.textContent = 'Recording in progress...';
+                    audioRecordStart.disabled = true;
+                    audioRecordStop.disabled = false;
+                    audioDownloadLink.removeAttribute('href');
+                    audioDownloadLink.setAttribute('aria-disabled', 'true');
+                } catch (error) {
+                    audioRecordStatus.textContent = 'Microphone access was denied or unavailable.';
+                    audioRecordStart.disabled = false;
+                    audioRecordStop.disabled = true;
+                    stopTracks();
+                }
+            });
+
+            audioRecordStop.addEventListener('click', () => {
+                if (!recorder || recorder.state === 'inactive') return;
+                recorder.stop();
+                audioRecordStatus.textContent = 'Finishing recording...';
+            });
+
+            window.addEventListener('beforeunload', revokeAudioUrl);
+            window.addEventListener('beforeunload', stopTracks);
+        };
+
         fetchVisitCounter();
+        initAudioStudio();
         const suspiciousTlds = new Set(['zip','ru','cn','tk','ml','gq','ga','cf','work','top','quest','click','country','rest','cam']);
         const shortenerSet = new Set(['bit.ly','tinyurl.com','t.co','goo.gl','ow.ly','buff.ly','is.gd','rebrand.ly','cutt.ly','shorte.st','lnkd.in','bl.ink']);
         const riskyPathWords = ['login','signin','verify','account','secure','update','billing','invoice','prize','gift','bonus','free','btc','crypto','usdt','wallet','token','auth','reset','payment','appleid','icloud','account-lock','lock-account','reactivate','suspend'];
