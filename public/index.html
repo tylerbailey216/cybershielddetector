@@ -29,6 +29,7 @@
     <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.js"></script>
     <script src="https://unpkg.com/@zxing/library@0.19.1/umd/index.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/counterapi/dist/counter.browser.min.js"></script>
     <script>
         (() => {
             const resetScroll = () => {
@@ -197,8 +198,8 @@
                 <h1>Issue #1: Secure Your Google Account</h1>
                 <p class="hero-lede">A five-part May 2026 issue covering passwords, 2-step verification, recovery info, app access, and suspicious activity.</p>
                 <div class="hero-actions">
-                    <a class="primary hero-link" href="#latest-drop">Start The Issue</a>
-                    <a class="secondary hero-link" href="#issue-sequence">View All 5 Parts</a>
+                    <a class="primary hero-link" href="#part-1">Start With Part 1</a>
+                    <a class="secondary hero-link" href="#issue-sequence">View The 5-Part Sequence</a>
                 </div>
                 <nav class="edition-nav" aria-label="Primary sections">
                     <a class="edition-nav-link" href="#start-here">How It Works</a>
@@ -206,16 +207,21 @@
                     <a class="edition-nav-link" href="#issue-sequence">Sequence</a>
                     <a class="edition-nav-link" href="#library">Issue Shelf</a>
                 </nav>
+                <div class="hero-issue-summary">
+                    <p class="publication-tag">Current Issue</p>
+                    <h2>Secure Your Google Account</h2>
+                    <p>A five-part digital defense package on passwords, 2-step verification, recovery info, app access, and suspicious activity.</p>
+                    <div class="feature-meta-row">
+                        <span class="feature-chip">Issue #1</span>
+                        <span class="feature-chip">May 2026</span>
+                        <span class="feature-chip">5 parts</span>
+                    </div>
+                </div>
             </div>
             <div class="hero-visual hero-visual-hub">
                 <div class="hero-cover-stage">
                     <a class="hero-cover-card" href="./Cyber%20Awareness%20Graphics/Main%20Cover%20(1).jpg" target="_blank" rel="noopener">
                         <img src="./Cyber%20Awareness%20Graphics/Main%20Cover%20(1).jpg" alt="Digital Literacy and Awareness Issue 1 main cover" class="hero-cover-image">
-                        <div class="hero-cover-meta">
-                            <p class="publication-tag">Current Issue</p>
-                            <h2>Secure Your Google Account</h2>
-                            <p>A five-part digital defense package on passwords, 2-step verification, recovery info, third-party app access, and suspicious activity.</p>
-                        </div>
                     </a>
                 </div>
             </div>
@@ -268,34 +274,22 @@
                         <p class="publication-tag">Start With</p>
                         <h3>Part 1 | Strong, unique passwords</h3>
                         <p>Begin with the first line of defense and the habit that stops one breached login from cascading across your digital life.</p>
-                        <span class="entry-link">Start with passwords</span>
                     </a>
                     <a class="frontline-card" href="#part-2">
                         <p class="publication-tag">Next</p>
                         <h3>Part 2 | Turn on 2-step verification</h3>
                         <p>Add the second layer that keeps attackers out even if they already know your password.</p>
-                        <span class="entry-link">Add the second layer</span>
                     </a>
                     <a class="frontline-card" href="#part-3">
                         <p class="publication-tag">Then</p>
                         <h3>Part 3 | Recovery information</h3>
                         <p>Make sure you can still get back into your account when life, devices, or mistakes interrupt the plan.</p>
-                        <span class="entry-link">Check recovery info</span>
                     </a>
                     <a class="frontline-card" href="#part-4">
                         <p class="publication-tag">Finish Strong</p>
                         <h3>Parts 4 and 5 | App access and suspicious activity</h3>
                         <p>Trim what no longer needs access and learn to recognize prompts, alerts, and fake login pressure before it lands.</p>
-                        <span class="entry-link">Finish the issue</span>
                     </a>
-                </div>
-                <div class="desk-band">
-                    <div class="topic-pill-row">
-                        <a class="topic-pill" href="#latest-drop">Issue cover</a>
-                        <a class="topic-pill" href="#issue-sequence">Five-part sequence</a>
-                        <a class="topic-pill" href="#library">Issue shelf</a>
-                        <a class="topic-pill" href="#downloads">Downloads</a>
-                    </div>
                 </div>
             </div>
         </section>
@@ -332,7 +326,6 @@
                             <p class="publication-tag">Part 1</p>
                             <h3>Use a strong, unique password</h3>
                             <p>The opening lesson explains why reused, leaked, short, and predictable passwords still drive account compromise, then gives readers one immediate action they can take today.</p>
-                            <span class="entry-link">Open Part 1</span>
                         </div>
                         <img src="./Cyber%20Awareness%20Graphics/Pg%201.jpg" alt="Secure your Google account part 1 strong password poster" class="lead-feature-image">
                     </a>
@@ -615,11 +608,12 @@
         const fetchVisitCounter = async () => {
             if (!visitCounter) return;
             try {
-                const response = await fetch('https://api.counterapi.dev/v1/tylerbailey216-cybershielddetector/visits/up', { cache: 'no-store' });
-                if (!response.ok) throw new Error('Counter unavailable');
-                const data = await response.json();
-                if (typeof data?.count === 'number') {
-                    updateVisitCounter(data.count);
+                if (typeof window.Counter !== 'function') throw new Error('Counter client unavailable');
+                const counter = new window.Counter({ workspace: 'tylerbailey216-cybershielddetector' });
+                const result = await counter.up('visits');
+                const count = typeof result?.value === 'number' ? result.value : result?.data;
+                if (typeof count === 'number') {
+                    updateVisitCounter(count);
                     if (visitCounterNote) visitCounterNote.textContent = 'Live now.';
                 } else if (visitCounterNote) {
                     visitCounterNote.textContent = 'Counter unavailable.';
