@@ -751,6 +751,11 @@ body::before {
     gap: 18px;
 }
 
+.latest-drop-stack-wide {
+    grid-column: 1 / -1;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
 .latest-note-card {
     padding: 22px;
     border-radius: 24px;
@@ -766,6 +771,11 @@ body::before {
     margin: 0;
     color: var(--text-muted);
     line-height: 1.6;
+}
+
+.latest-note-card-summary {
+    border-color: rgba(109, 252, 140, 0.14);
+    background: linear-gradient(140deg, rgba(10, 24, 22, 0.5), rgba(8, 10, 12, 0.92));
 }
 
 .latest-drop-list {
@@ -2961,6 +2971,9 @@ a:focus-visible {
         display: grid;
         gap: 16px;
         min-height: 0;
+    }
+    .latest-drop-stack-wide {
+        grid-template-columns: 1fr;
     }
     .hero-cover-stage {
         display: block;
