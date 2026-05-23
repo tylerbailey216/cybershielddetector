@@ -108,6 +108,29 @@ body::before {
     display: flex;
     flex-direction: column;
     gap: 20px;
+    order: 2;
+}
+
+.hero-issue-summary {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding: 18px 20px;
+    border-radius: 22px;
+    border: 1px solid rgba(109, 252, 140, 0.14);
+    background: linear-gradient(160deg, rgba(10, 24, 22, 0.46), rgba(8, 10, 12, 0.92));
+}
+
+.hero-issue-summary h2 {
+    margin: 0;
+    font-size: clamp(1.45rem, 2.2vw, 1.9rem);
+    line-height: 1.08;
+}
+
+.hero-issue-summary p:last-of-type {
+    margin: 0;
+    color: var(--text-muted);
+    line-height: 1.6;
 }
 
 .hero-visual {
@@ -117,6 +140,7 @@ body::before {
     display: flex;
     align-items: center;
     justify-content: center;
+    order: 1;
 }
 .hero-logo-wrap {
     display: flex;
@@ -305,7 +329,6 @@ body::before {
 .hero-cover-card {
     display: flex;
     flex-direction: column;
-    gap: 16px;
     width: min(420px, 100%);
     padding: 18px;
     border-radius: 28px;
@@ -328,18 +351,6 @@ body::before {
     object-fit: cover;
     object-position: top center;
     border-radius: 20px;
-}
-
-.hero-cover-meta h2 {
-    margin: 0 0 8px;
-    font-size: clamp(1.55rem, 2.6vw, 2rem);
-    line-height: 1.08;
-}
-
-.hero-cover-meta p:last-child {
-    margin: 0;
-    color: var(--text-muted);
-    line-height: 1.6;
 }
 
 .hero-signal-card {
@@ -2981,6 +2992,9 @@ a:focus-visible {
     .hero-cover-card {
         width: 100%;
         max-width: none;
+    }
+    .hero-issue-summary {
+        padding: 16px 18px;
     }
     .hero-signal-card {
         position: static;
