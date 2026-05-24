@@ -609,9 +609,13 @@
             if (!visitCounter) return;
             try {
                 if (typeof window.Counter !== 'function') throw new Error('Counter client unavailable');
-                const counter = new window.Counter({ workspace: 'tylerbailey216-cybershielddetector' });
+                const counter = new window.Counter({ version: 'v1', namespace: 'tylerbailey216-cybershielddetector' });
                 const result = await counter.up('visits');
-                const count = typeof result?.value === 'number' ? result.value : result?.data;
+                const count = typeof result?.count === 'number'
+                    ? result.count
+                    : typeof result?.value === 'number'
+                        ? result.value
+                        : result?.data;
                 if (typeof count === 'number') {
                     updateVisitCounter(count);
                     if (visitCounterNote) visitCounterNote.textContent = 'Live now.';
@@ -1084,20 +1088,6 @@
                 console.warn('ZXing fallback failed', e);
             }
             return '';
-        };
-
-        const decodeQrImage = async (file) => {
-            const source = await loadImageFlexible(file);
-            const w = source.width || source.videoWidth || source.naturalWidth;
-            const h = source.height || source.videoHeight || source.naturalHeight;
-            const canvas = document.createElement('canvas');
-            canvas.width = w;
-            canvas.height = h;
-            const ctx = canvas.getContext('2d');
-            ctx.drawImage(source, 0, 0, w, h);
-            const imageData = ctx.getImageData(0, 0, w, h);
-            const result = jsQR(imageData.data, w, h, { inversionAttempts: 'attemptBoth' });
-            return result?.data || '';
         };
 
         const fetchWithTimeout = async (url, options = {}, ms = 5000) => {
