@@ -139,7 +139,7 @@
                     }
 
                     const href = link.getAttribute('href');
-                    if (!shouldUseViewer(href)) {
+                    if (link.dataset.magazineIssue || !shouldUseViewer(href)) {
                         return;
                     }
 
@@ -199,14 +199,12 @@
                 <h1>Issue #1: Secure Your Google Account</h1>
                 <p class="hero-lede">A five-part May 2026 issue covering passwords, 2-step verification, recovery info, app access, and suspicious activity.</p>
                 <div class="hero-actions">
-                    <a class="primary hero-link" href="#part-1">Start With Part 1</a>
-                    <a class="secondary hero-link" href="#issue-sequence">View The 5-Part Sequence</a>
+                    <a class="primary hero-link" href="./Cyber%20Awareness%20Graphics/Main%20Cover%20(1).jpg" target="_blank" rel="noopener" data-magazine-issue="issue-1">Open Issue #1</a>
+                    <a class="secondary hero-link" href="#library">Go To The Issue Shelf</a>
                 </div>
                 <nav class="edition-nav" aria-label="Primary sections">
-                    <a class="edition-nav-link" href="#start-here">How It Works</a>
-                    <a class="edition-nav-link" href="#latest-drop">Current Issue</a>
-                    <a class="edition-nav-link" href="#issue-sequence">Sequence</a>
                     <a class="edition-nav-link" href="#library">Issue Shelf</a>
+                    <a class="edition-nav-link" href="#about">About</a>
                 </nav>
                 <div class="hero-issue-summary">
                     <p class="publication-tag">Current Issue</p>
@@ -221,158 +219,8 @@
             </div>
             <div class="hero-visual hero-visual-hub">
                 <div class="hero-cover-stage">
-                    <a class="hero-cover-card" href="./Cyber%20Awareness%20Graphics/Main%20Cover%20(1).jpg" target="_blank" rel="noopener">
+                    <a class="hero-cover-card" href="./Cyber%20Awareness%20Graphics/Main%20Cover%20(1).jpg" target="_blank" rel="noopener" data-magazine-issue="issue-1">
                         <img src="./Cyber%20Awareness%20Graphics/Main%20Cover%20(1).jpg" alt="Digital Literacy and Awareness Issue 1 main cover" class="hero-cover-image">
-                    </a>
-                </div>
-            </div>
-        </section>
-
-        <section class="tree-card feature-stage" id="latest-drop">
-            <div class="tree-header section-header-left">
-                <div>
-                    <p class="node-path">Step 01 | Current Issue</p>
-                    <h2>Issue #1: Secure Your Google Account</h2>
-                    <p class="node-summary">One issue, five practical steps, one clear reading path.</p>
-                </div>
-            </div>
-            <div class="node-body latest-drop-layout">
-                <div class="latest-drop-stack latest-drop-stack-wide">
-                    <article class="latest-note-card latest-note-card-summary">
-                        <p class="publication-tag">Issue At A Glance</p>
-                        <h3>Five practical moves, one focused issue.</h3>
-                        <p>Start with the cover, follow the sequence, and use the issue shelf when you want the full set in one place.</p>
-                        <div class="feature-meta-row">
-                            <span class="feature-chip">Issue #1</span>
-                            <span class="feature-chip">Google account safety</span>
-                            <span class="feature-chip">May 2026</span>
-                        </div>
-                    </article>
-                    <article class="latest-note-card">
-                        <p class="publication-tag">Inside The Issue</p>
-                        <h3>The five-part reading path</h3>
-                        <ul class="latest-drop-list">
-                            <li>Part 1: use a strong, unique password</li>
-                            <li>Part 2: turn on 2-step verification</li>
-                            <li>Part 3: check your recovery info</li>
-                            <li>Part 4 and 5: review app access and watch for suspicious activity</li>
-                        </ul>
-                    </article>
-                </div>
-            </div>
-        </section>
-
-        <section class="tree-card editorial-front" id="start-here">
-            <div class="tree-header section-header-left">
-                <div>
-                    <p class="node-path">How The Publication Works</p>
-                    <h2>One issue leads. The rest supports it.</h2>
-                </div>
-            </div>
-            <div class="node-body">
-                <div class="frontline-grid">
-                    <a class="frontline-card" href="#part-1">
-                        <p class="publication-tag">Start With</p>
-                        <h3>Part 1 | Strong, unique passwords</h3>
-                        <p>Begin with the first line of defense and the habit that stops one breached login from cascading across your digital life.</p>
-                    </a>
-                    <a class="frontline-card" href="#part-2">
-                        <p class="publication-tag">Next</p>
-                        <h3>Part 2 | Turn on 2-step verification</h3>
-                        <p>Add the second layer that keeps attackers out even if they already know your password.</p>
-                    </a>
-                    <a class="frontline-card" href="#part-3">
-                        <p class="publication-tag">Then</p>
-                        <h3>Part 3 | Recovery information</h3>
-                        <p>Make sure you can still get back into your account when life, devices, or mistakes interrupt the plan.</p>
-                    </a>
-                    <a class="frontline-card" href="#part-4">
-                        <p class="publication-tag">Finish Strong</p>
-                        <h3>Parts 4 and 5 | App access and suspicious activity</h3>
-                        <p>Trim what no longer needs access and learn to recognize prompts, alerts, and fake login pressure before it lands.</p>
-                    </a>
-                </div>
-            </div>
-        </section>
-
-        <section class="tree-card special-focus-stage" id="issue-sequence">
-            <div class="tree-header section-header-left">
-                <div>
-                    <p class="node-path">Issue Sequence | Digital Defense Basics</p>
-                    <h2>Five practical steps to secure your Google account</h2>
-                    <p class="node-summary">The issue is designed as progressive learning: one part introduces the habit, the next part reinforces it, and the overall sequence turns a single account into a broader model for digital defense.</p>
-                </div>
-            </div>
-            <div class="node-body">
-                <div class="focus-module-strip">
-                    <article class="focus-module-card focus-module-card-live">
-                        <p class="publication-tag">Part 1 and Part 2</p>
-                        <h3>Strengthen the front door</h3>
-                        <p>Start with the basics that matter most: a password only you use and a second step only you control.</p>
-                    </article>
-                    <article class="focus-module-card">
-                        <p class="publication-tag">Part 3 and Part 4</p>
-                        <h3>Keep control of access</h3>
-                        <p>Make recovery possible and remove old connections that no longer deserve a path into your account.</p>
-                    </article>
-                    <article class="focus-module-card">
-                        <p class="publication-tag">Part 5</p>
-                        <h3>Stay alert after setup</h3>
-                        <p>Security is not just configuration. It is also pattern recognition when an email, alert, or login request feels wrong.</p>
-                    </article>
-                </div>
-                <div class="publication-grid">
-                    <a class="lead-feature-card" id="part-1" href="./Cyber%20Awareness%20Graphics/Pg%201.jpg" target="_blank" rel="noopener">
-                        <div class="lead-feature-copy">
-                            <p class="publication-tag">Part 1</p>
-                            <h3>Use a strong, unique password</h3>
-                            <p>The opening lesson explains why reused, leaked, short, and predictable passwords still drive account compromise, then gives readers one immediate action they can take today.</p>
-                        </div>
-                        <img src="./Cyber%20Awareness%20Graphics/Pg%201.jpg" alt="Secure your Google account part 1 strong password poster" class="lead-feature-image">
-                    </a>
-                    <div class="publication-side-rail">
-                        <a class="spotlight-card" id="part-2" href="./Cyber%20Awareness%20Graphics/Pg%202.jpg" target="_blank" rel="noopener">
-                            <img src="./Cyber%20Awareness%20Graphics/Pg%202.jpg" alt="Secure your Google account part 2 two-step verification poster" class="spotlight-thumb">
-                            <div>
-                                <p class="publication-tag">Part 2</p>
-                                <h3>Turn on 2-step verification</h3>
-                                <p>Add a second proof point so a stolen password alone is no longer enough to get in.</p>
-                            </div>
-                        </a>
-                        <a class="spotlight-card" id="part-3" href="./Cyber%20Awareness%20Graphics/Pg%203.jpg" target="_blank" rel="noopener">
-                            <img src="./Cyber%20Awareness%20Graphics/Pg%203.jpg" alt="Secure your Google account part 3 recovery info poster" class="spotlight-thumb">
-                            <div>
-                                <p class="publication-tag">Part 3</p>
-                                <h3>Check your recovery info</h3>
-                                <p>Keep your fallback paths current so a forgotten password or lost device does not become a lockout story.</p>
-                            </div>
-                        </a>
-                    </div>
-                </div>
-                <div class="poster-grid">
-                    <a class="poster-card" id="part-4" href="./Cyber%20Awareness%20Graphics/Pg%204.jpg" target="_blank" rel="noopener">
-                        <img src="./Cyber%20Awareness%20Graphics/Pg%204.jpg" alt="Secure your Google account part 4 third-party apps poster" class="poster-card-image">
-                        <div class="poster-card-body">
-                            <p class="poster-tag">Part 4</p>
-                            <h3>Manage your third-party apps</h3>
-                            <p>Review old connections, remove what you no longer trust, and cut down the number of pathways into your data.</p>
-                        </div>
-                    </a>
-                    <a class="poster-card" id="part-5" href="./Cyber%20Awareness%20Graphics/Pg%205.jpg" target="_blank" rel="noopener">
-                        <img src="./Cyber%20Awareness%20Graphics/Pg%205.jpg" alt="Secure your Google account part 5 suspicious activity poster" class="poster-card-image">
-                        <div class="poster-card-body">
-                            <p class="poster-tag">Part 5</p>
-                            <h3>Be alert for suspicious activity</h3>
-                            <p>Learn the signals behind fake warnings, unusual emails, and login bait before urgency turns into a bad click.</p>
-                        </div>
-                    </a>
-                    <a class="poster-card" href="./Cyber%20Awareness%20Graphics/Main%20Cover%20(1).jpg" target="_blank" rel="noopener">
-                        <img src="./Cyber%20Awareness%20Graphics/Main%20Cover%20(1).jpg" alt="Issue 1 secure your Google account cover poster" class="poster-card-image">
-                        <div class="poster-card-body">
-                            <p class="poster-tag">Issue Cover</p>
-                            <h3>Digital Literacy &amp; Awareness Issue #1</h3>
-                            <p>The cover anchors the whole package: one topic, one visual identity, and one reason for the homepage to feel focused instead of fragmented.</p>
-                        </div>
                     </a>
                 </div>
             </div>
@@ -382,13 +230,13 @@
             <div class="tree-header section-header-left">
                 <div>
                     <p class="node-path">Issue Shelf</p>
-                    <h2>The current campaign stays collectible without crowding the homepage</h2>
-                    <p class="node-summary">This shelf keeps the issue visible as a set instead of flattening everything into one endless stream. Future months can rotate into this same structure without reopening the old clutter problem.</p>
+                    <h2>The issue stays on the shelf until the reader opens it</h2>
+                    <p class="node-summary">Each cover now opens as a simulated publication instead of flattening the issue into separate homepage panels.</p>
                 </div>
             </div>
             <div class="node-body">
                 <div class="archive-preview-grid">
-                    <a class="archive-preview-card archive-preview-card-featured" href="./Cyber%20Awareness%20Graphics/Main%20Cover%20(1).jpg" target="_blank" rel="noopener">
+                    <a class="archive-preview-card archive-preview-card-featured" href="./Cyber%20Awareness%20Graphics/Main%20Cover%20(1).jpg" target="_blank" rel="noopener" data-magazine-issue="issue-1">
                         <img src="./Cyber%20Awareness%20Graphics/Main%20Cover%20(1).jpg" alt="Issue 1 main cover preview" class="archive-preview-image">
                         <div class="archive-preview-copy">
                             <p class="publication-tag">Issue #1</p>
@@ -396,148 +244,7 @@
                             <p>The full cover package for May 2026, built around one clear reader question: how do I protect the account that everything else depends on?</p>
                         </div>
                     </a>
-                    <a class="archive-preview-card" href="./Cyber%20Awareness%20Graphics/Pg%201.jpg" target="_blank" rel="noopener">
-                        <img src="./Cyber%20Awareness%20Graphics/Pg%201.jpg" alt="Issue 1 part 1 preview" class="archive-preview-image">
-                        <div class="archive-preview-copy">
-                            <p class="publication-tag">Part 1</p>
-                            <h3>Passwords first</h3>
-                            <p>Start with the simplest habit that prevents one breach from cascading across multiple services.</p>
-                        </div>
-                    </a>
-                    <a class="archive-preview-card" href="./Cyber%20Awareness%20Graphics/Pg%202.jpg" target="_blank" rel="noopener">
-                        <img src="./Cyber%20Awareness%20Graphics/Pg%202.jpg" alt="Issue 1 part 2 preview" class="archive-preview-image">
-                        <div class="archive-preview-copy">
-                            <p class="publication-tag">Part 2</p>
-                            <h3>Add the second layer</h3>
-                            <p>2-step verification turns a good password into a far harder target.</p>
-                        </div>
-                    </a>
-                    <a class="archive-preview-card" href="./Cyber%20Awareness%20Graphics/Pg%203.jpg" target="_blank" rel="noopener">
-                        <img src="./Cyber%20Awareness%20Graphics/Pg%203.jpg" alt="Issue 1 part 3 preview" class="archive-preview-image">
-                        <div class="archive-preview-copy">
-                            <p class="publication-tag">Part 3</p>
-                            <h3>Protect recovery paths</h3>
-                            <p>Security is not only about keeping people out. It is also about making sure you can still get back in.</p>
-                        </div>
-                    </a>
                 </div>
-                <details class="content-drawer">
-                    <summary class="content-drawer-summary">
-                        <span>Open the full issue shelf and downloads</span>
-                        <span class="content-drawer-meta">Issue archive</span>
-                    </summary>
-                    <div class="content-drawer-body">
-                        <div class="publication-pill-row">
-                            <span class="publication-pill">Issue #1</span>
-                            <span class="publication-pill">Digital Defense Basics</span>
-                            <span class="publication-pill">Monthly campaigns</span>
-                            <span class="publication-pill">Collectible issues</span>
-                            <span class="publication-pill">Future themes</span>
-                        </div>
-                        <div class="series-shelf-list">
-                            <section class="series-shelf">
-                                <div class="series-shelf-header">
-                                    <div>
-                                        <p class="publication-tag">Issue #1 | May 2026</p>
-                                        <h3>Secure Your Google Account</h3>
-                                        <p>The full six-piece package: one cover and five guided lessons that move from setup to ongoing awareness.</p>
-                                    </div>
-                                </div>
-                                <div class="poster-grid">
-                                    <a class="poster-card" href="./Cyber%20Awareness%20Graphics/Main%20Cover%20(1).jpg" target="_blank" rel="noopener">
-                                        <img src="./Cyber%20Awareness%20Graphics/Main%20Cover%20(1).jpg" alt="Issue 1 main cover poster" class="poster-card-image">
-                                        <div class="poster-card-body">
-                                            <p class="poster-tag">Cover</p>
-                                            <h3>Digital Literacy &amp; Awareness</h3>
-                                            <p>The campaign cover that introduces the issue and sets the tone for the month.</p>
-                                        </div>
-                                    </a>
-                                    <a class="poster-card" href="./Cyber%20Awareness%20Graphics/Pg%201.jpg" target="_blank" rel="noopener">
-                                        <img src="./Cyber%20Awareness%20Graphics/Pg%201.jpg" alt="Issue 1 part 1 poster" class="poster-card-image">
-                                        <div class="poster-card-body">
-                                            <p class="poster-tag">Part 1</p>
-                                            <h3>Use a strong, unique password</h3>
-                                            <p>The opening lesson on why passwords fail and what readers can change first.</p>
-                                        </div>
-                                    </a>
-                                    <a class="poster-card" href="./Cyber%20Awareness%20Graphics/Pg%202.jpg" target="_blank" rel="noopener">
-                                        <img src="./Cyber%20Awareness%20Graphics/Pg%202.jpg" alt="Issue 1 part 2 poster" class="poster-card-image">
-                                        <div class="poster-card-body">
-                                            <p class="poster-tag">Part 2</p>
-                                            <h3>Turn on 2-step verification</h3>
-                                            <p>The simplest upgrade for blocking account access even after password theft.</p>
-                                        </div>
-                                    </a>
-                                    <a class="poster-card" href="./Cyber%20Awareness%20Graphics/Pg%203.jpg" target="_blank" rel="noopener">
-                                        <img src="./Cyber%20Awareness%20Graphics/Pg%203.jpg" alt="Issue 1 part 3 poster" class="poster-card-image">
-                                        <div class="poster-card-body">
-                                            <p class="poster-tag">Part 3</p>
-                                            <h3>Check your recovery info</h3>
-                                            <p>Make sure your safety net still works before you need it.</p>
-                                        </div>
-                                    </a>
-                                    <a class="poster-card" href="./Cyber%20Awareness%20Graphics/Pg%204.jpg" target="_blank" rel="noopener">
-                                        <img src="./Cyber%20Awareness%20Graphics/Pg%204.jpg" alt="Issue 1 part 4 poster" class="poster-card-image">
-                                        <div class="poster-card-body">
-                                            <p class="poster-tag">Part 4</p>
-                                            <h3>Manage your third-party apps</h3>
-                                            <p>Remove old access and reduce unnecessary risk hiding inside connected services.</p>
-                                        </div>
-                                    </a>
-                                    <a class="poster-card" href="./Cyber%20Awareness%20Graphics/Pg%205.jpg" target="_blank" rel="noopener">
-                                        <img src="./Cyber%20Awareness%20Graphics/Pg%205.jpg" alt="Issue 1 part 5 poster" class="poster-card-image">
-                                        <div class="poster-card-body">
-                                            <p class="poster-tag">Part 5</p>
-                                            <h3>Be alert for suspicious activity</h3>
-                                            <p>Finish the issue with the behavioral signals that keep people from trusting fake prompts.</p>
-                                        </div>
-                                    </a>
-                                </div>
-                            </section>
-                        </div>
-                        <section class="drawer-packs" id="downloads">
-                            <div class="series-shelf-header">
-                                <div>
-                                    <p class="publication-tag">Downloads</p>
-                                    <h3>Issue #1 awareness assets</h3>
-                                    <p>Download the current issue one piece at a time for sharing, teaching, or reuse.</p>
-                                </div>
-                            </div>
-                            <div class="resource-grid compact-pack-grid">
-                                <a class="resource-card" href="./Cyber%20Awareness%20Graphics/Main%20Cover%20(1).jpg" download>
-                                    <p class="resource-label">Issue Cover</p>
-                                    <h3>Main Cover</h3>
-                                    <p>The May 2026 issue cover for the current campaign.</p>
-                                </a>
-                                <a class="resource-card" href="./Cyber%20Awareness%20Graphics/Pg%201.jpg" download>
-                                    <p class="resource-label">Part 1</p>
-                                    <h3>Password Guide</h3>
-                                    <p>Strong, unique passwords and the first quick win of the month.</p>
-                                </a>
-                                <a class="resource-card" href="./Cyber%20Awareness%20Graphics/Pg%202.jpg" download>
-                                    <p class="resource-label">Part 2</p>
-                                    <h3>2-Step Verification Guide</h3>
-                                    <p>The second layer that blocks attackers even when they know your password.</p>
-                                </a>
-                                <a class="resource-card" href="./Cyber%20Awareness%20Graphics/Pg%203.jpg" download>
-                                    <p class="resource-label">Part 3</p>
-                                    <h3>Recovery Info Guide</h3>
-                                    <p>Keep your email and phone details current before an emergency happens.</p>
-                                </a>
-                                <a class="resource-card" href="./Cyber%20Awareness%20Graphics/Pg%204.jpg" download>
-                                    <p class="resource-label">Part 4</p>
-                                    <h3>App Access Guide</h3>
-                                    <p>Review and remove third-party access you no longer need.</p>
-                                </a>
-                                <a class="resource-card" href="./Cyber%20Awareness%20Graphics/Pg%205.jpg" download>
-                                    <p class="resource-label">Part 5</p>
-                                    <h3>Suspicious Activity Guide</h3>
-                                    <p>Use the final page as a red-flag checklist for fake alerts and login bait.</p>
-                                </a>
-                            </div>
-                        </section>
-                    </div>
-                </details>
             </div>
         </section>
 
@@ -570,6 +277,123 @@
             </div>
         </section>
     </main>
+
+    <section class="magazine-overlay" id="magazineOverlay" hidden aria-hidden="true">
+        <div class="magazine-backdrop" data-magazine-close></div>
+        <div class="magazine-shell" role="dialog" aria-modal="true" aria-labelledby="magazineTitle">
+            <header class="magazine-toolbar">
+                <div class="magazine-toolbar-copy">
+                    <p class="magazine-kicker" id="magazineEyebrow">Issue</p>
+                    <h2 class="magazine-title" id="magazineTitle">Digital Literacy &amp; Awareness</h2>
+                    <p class="magazine-summary" id="magazineSummary">Select a cover to enter the simulated magazine reading mode.</p>
+                </div>
+                <div class="magazine-toolbar-actions">
+                    <button type="button" class="magazine-action" id="magazineScreenshot">Save Screenshot</button>
+                    <button type="button" class="magazine-action magazine-action-quiet" id="magazineShelfButton">Put The Magazine Back On The Shelf</button>
+                </div>
+            </header>
+
+            <div class="magazine-stage">
+                <section class="magazine-cover-view" id="magazineCoverView" aria-describedby="magazineHint">
+                    <div class="magazine-cover-board" id="magazineCoverBoard">
+                        <img src="" alt="Magazine cover" class="magazine-cover-image" id="magazineCoverImage">
+                        <button type="button" class="magazine-corner magazine-corner-top" id="magazineCornerTop" aria-label="Open the magazine from the top corner"></button>
+                        <button type="button" class="magazine-corner magazine-corner-bottom" id="magazineCornerBottom" aria-label="Open the magazine from the bottom corner"></button>
+                    </div>
+                    <p class="magazine-hint" id="magazineHint">Tap the right-side cover corners to open the issue. Once open, use the page edges or arrow buttons to turn pages.</p>
+                </section>
+
+                <section class="magazine-reader" id="magazineReader" hidden>
+                    <div class="magazine-frame" id="magazineReaderFrame">
+                        <button type="button" class="magazine-edge magazine-edge-left" id="magazineEdgePrev" aria-label="Turn to the previous pages"></button>
+                        <div class="magazine-book" id="magazineBook">
+                            <div class="magazine-page-surface" id="magazinePageSurface">
+                                <article class="magazine-page magazine-page-left" id="magazineLeftPage">
+                                    <span class="magazine-page-number" id="magazineLeftNumber"></span>
+                                    <img src="" alt="" class="magazine-page-image" id="magazineLeftImage">
+                                    <div class="magazine-page-copy">
+                                        <p class="magazine-page-tag" id="magazineLeftTag"></p>
+                                        <h3 class="magazine-page-title" id="magazineLeftTitle"></h3>
+                                        <p class="magazine-page-caption" id="magazineLeftCaption"></p>
+                                    </div>
+                                </article>
+                                <article class="magazine-page magazine-page-right" id="magazineRightPage">
+                                    <span class="magazine-page-number" id="magazineRightNumber"></span>
+                                    <img src="" alt="" class="magazine-page-image" id="magazineRightImage">
+                                    <div class="magazine-page-copy">
+                                        <p class="magazine-page-tag" id="magazineRightTag"></p>
+                                        <h3 class="magazine-page-title" id="magazineRightTitle"></h3>
+                                        <p class="magazine-page-caption" id="magazineRightCaption"></p>
+                                    </div>
+                                </article>
+                            </div>
+                            <article class="magazine-page magazine-page-single" id="magazineSinglePage">
+                                <span class="magazine-page-number" id="magazineSingleNumber"></span>
+                                <img src="" alt="" class="magazine-page-image" id="magazineSingleImage">
+                                <div class="magazine-page-copy">
+                                    <p class="magazine-page-tag" id="magazineSingleTag"></p>
+                                    <h3 class="magazine-page-title" id="magazineSingleTitle"></h3>
+                                    <p class="magazine-page-caption" id="magazineSingleCaption"></p>
+                                </div>
+                            </article>
+                        </div>
+                        <button type="button" class="magazine-edge magazine-edge-right" id="magazineEdgeNext" aria-label="Turn to the next pages"></button>
+                    </div>
+                    <div class="magazine-control-row">
+                        <button type="button" class="magazine-nav-button" id="magazinePrevButton">Previous</button>
+                        <p class="magazine-progress" id="magazineProgress">Page 1</p>
+                        <button type="button" class="magazine-nav-button" id="magazineNextButton">Next</button>
+                    </div>
+                </section>
+            </div>
+
+            <p class="magazine-status" id="magazineStatus" aria-live="polite">Magazine ready.</p>
+        </div>
+    </section>
+
+    <script id="magazineIssueCatalog" type="application/json">
+    {
+        "issue-1": {
+            "slug": "digital-literacy-awareness-issue-1",
+            "eyebrow": "Issue #1 | May 2026",
+            "title": "Secure Your Google Account",
+            "summary": "A five-part monthly issue on passwords, 2-step verification, recovery info, app access, and suspicious activity.",
+            "cover": "./Cyber%20Awareness%20Graphics/Main%20Cover%20(1).jpg",
+            "pages": [
+                {
+                    "tag": "Part 1",
+                    "title": "Use a strong, unique password",
+                    "caption": "The opening lesson explains why password reuse fails and where to start first.",
+                    "image": "./Cyber%20Awareness%20Graphics/Pg%201.jpg"
+                },
+                {
+                    "tag": "Part 2",
+                    "title": "Turn on 2-step verification",
+                    "caption": "Add the second layer that still holds even when the password is already known.",
+                    "image": "./Cyber%20Awareness%20Graphics/Pg%202.jpg"
+                },
+                {
+                    "tag": "Part 3",
+                    "title": "Check your recovery info",
+                    "caption": "Keep the recovery path current before an urgent reset depends on it.",
+                    "image": "./Cyber%20Awareness%20Graphics/Pg%203.jpg"
+                },
+                {
+                    "tag": "Part 4",
+                    "title": "Manage your third-party apps",
+                    "caption": "Remove old app access and shrink the surface area around the account.",
+                    "image": "./Cyber%20Awareness%20Graphics/Pg%204.jpg"
+                },
+                {
+                    "tag": "Part 5",
+                    "title": "Be alert for suspicious activity",
+                    "caption": "Finish the issue with the warning signs behind fake prompts and suspicious login pressure.",
+                    "image": "./Cyber%20Awareness%20Graphics/Pg%205.jpg"
+                }
+            ]
+        }
+    }
+    </script>
 
     <script>
     (() => {
@@ -1267,6 +1091,326 @@
                 const target = document.querySelector(btn.getAttribute('data-target'));
                 if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
             });
+        });
+    })();
+    </script>
+    <script>
+    (() => {
+        const overlay = document.getElementById('magazineOverlay');
+        const catalogNode = document.getElementById('magazineIssueCatalog');
+        const triggers = document.querySelectorAll('[data-magazine-issue]');
+
+        if (!overlay || !catalogNode || !triggers.length) {
+            return;
+        }
+
+        let catalog = {};
+        try {
+            catalog = JSON.parse(catalogNode.textContent);
+        } catch {
+            return;
+        }
+
+        const body = document.body;
+        const eyebrow = document.getElementById('magazineEyebrow');
+        const title = document.getElementById('magazineTitle');
+        const summary = document.getElementById('magazineSummary');
+        const status = document.getElementById('magazineStatus');
+        const coverView = document.getElementById('magazineCoverView');
+        const coverImage = document.getElementById('magazineCoverImage');
+        const reader = document.getElementById('magazineReader');
+        const pageSurface = document.getElementById('magazinePageSurface');
+        const book = document.getElementById('magazineBook');
+        const progress = document.getElementById('magazineProgress');
+        const screenshotButton = document.getElementById('magazineScreenshot');
+        const shelfButton = document.getElementById('magazineShelfButton');
+        const prevButton = document.getElementById('magazinePrevButton');
+        const nextButton = document.getElementById('magazineNextButton');
+        const edgePrev = document.getElementById('magazineEdgePrev');
+        const edgeNext = document.getElementById('magazineEdgeNext');
+        const cornerTop = document.getElementById('magazineCornerTop');
+        const cornerBottom = document.getElementById('magazineCornerBottom');
+
+        const pageRefs = {
+            left: { root: document.getElementById('magazineLeftPage'), number: document.getElementById('magazineLeftNumber'), image: document.getElementById('magazineLeftImage'), tag: document.getElementById('magazineLeftTag'), title: document.getElementById('magazineLeftTitle'), caption: document.getElementById('magazineLeftCaption') },
+            right: { root: document.getElementById('magazineRightPage'), number: document.getElementById('magazineRightNumber'), image: document.getElementById('magazineRightImage'), tag: document.getElementById('magazineRightTag'), title: document.getElementById('magazineRightTitle'), caption: document.getElementById('magazineRightCaption') },
+            single: { root: document.getElementById('magazineSinglePage'), number: document.getElementById('magazineSingleNumber'), image: document.getElementById('magazineSingleImage'), tag: document.getElementById('magazineSingleTag'), title: document.getElementById('magazineSingleTitle'), caption: document.getElementById('magazineSingleCaption') }
+        };
+
+        const state = { issueId: null, issue: null, mode: 'cover', pageIndex: 0, isTurning: false, lastTrigger: null };
+        const wait = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+        const isCompact = () => window.matchMedia('(max-width: 900px)').matches;
+        const setStatus = (message) => { status.textContent = message; };
+
+        const renderPageCard = (refs, page, number) => {
+            refs.root.classList.toggle('is-empty', !page);
+            if (!page) {
+                refs.number.textContent = '';
+                refs.tag.textContent = 'Shelf';
+                refs.title.textContent = 'End of issue';
+                refs.caption.textContent = 'Put the magazine back on the shelf and choose another issue when you are ready.';
+                refs.image.removeAttribute('src');
+                refs.image.alt = '';
+                return;
+            }
+            refs.number.textContent = `Page ${number}`;
+            refs.tag.textContent = page.tag;
+            refs.title.textContent = page.title;
+            refs.caption.textContent = page.caption;
+            refs.image.src = page.image;
+            refs.image.alt = page.title;
+        };
+
+        const updateProgress = () => {
+            const total = state.issue.pages.length;
+            if (isCompact()) {
+                progress.textContent = `Page ${state.pageIndex + 1} of ${total}`;
+                return;
+            }
+            const start = state.pageIndex + 1;
+            const end = Math.min(total, state.pageIndex + 2);
+            progress.textContent = end > start ? `Pages ${start}-${end} of ${total}` : `Page ${start} of ${total}`;
+        };
+
+        const updateControls = () => {
+            const total = state.issue.pages.length;
+            const atStart = state.pageIndex <= 0;
+            const atEnd = isCompact() ? state.pageIndex >= total - 1 : state.pageIndex >= total - 1 || state.pageIndex + 2 > total;
+            [prevButton, edgePrev].forEach((control) => { control.disabled = atStart; });
+            [nextButton, edgeNext].forEach((control) => { control.disabled = atEnd; });
+            prevButton.textContent = isCompact() ? 'Previous Page' : 'Previous Spread';
+            nextButton.textContent = isCompact() ? 'Next Page' : 'Next Spread';
+            updateProgress();
+        };
+
+        const renderReader = () => {
+            const pages = state.issue.pages;
+            const compact = isCompact();
+            if (!compact && state.pageIndex % 2 !== 0) {
+                state.pageIndex -= 1;
+            }
+            renderPageCard(pageRefs.left, pages[state.pageIndex] || null, state.pageIndex + 1);
+            renderPageCard(pageRefs.right, compact ? null : (pages[state.pageIndex + 1] || null), state.pageIndex + 2);
+            renderPageCard(pageRefs.single, pages[state.pageIndex] || null, state.pageIndex + 1);
+            updateControls();
+        };
+
+        const openReader = async () => {
+            if (!state.issue || state.mode === 'reader' || state.isTurning) return;
+            state.mode = 'reader';
+            coverView.classList.add('is-opening');
+            setStatus('Opening issue...');
+            await wait(260);
+            coverView.hidden = true;
+            coverView.classList.remove('is-opening');
+            reader.hidden = false;
+            renderReader();
+            nextButton.focus({ preventScroll: true });
+            setStatus('Issue open. Use the page edges or the arrow buttons to turn pages.');
+        };
+
+        const closeMagazine = () => {
+            overlay.classList.remove('is-active');
+            overlay.setAttribute('aria-hidden', 'true');
+            body.classList.remove('magazine-open');
+            setStatus('Magazine closed.');
+            window.setTimeout(() => {
+                overlay.hidden = true;
+                reader.hidden = true;
+                coverView.hidden = false;
+                state.mode = 'cover';
+                state.pageIndex = 0;
+                if (state.lastTrigger) {
+                    state.lastTrigger.focus({ preventScroll: true });
+                    state.lastTrigger.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }
+            }, 220);
+        };
+
+        const openMagazine = (issueId, trigger) => {
+            const issue = catalog[issueId];
+            if (!issue) return;
+            state.issueId = issueId;
+            state.issue = issue;
+            state.lastTrigger = trigger;
+            state.pageIndex = 0;
+            state.mode = 'cover';
+            eyebrow.textContent = issue.eyebrow;
+            title.textContent = issue.title;
+            summary.textContent = issue.summary;
+            coverImage.src = issue.cover;
+            coverImage.alt = `${issue.title} cover`;
+            reader.hidden = true;
+            coverView.hidden = false;
+            overlay.hidden = false;
+            overlay.setAttribute('aria-hidden', 'false');
+            body.classList.add('magazine-open');
+            requestAnimationFrame(() => { overlay.classList.add('is-active'); });
+            cornerTop.focus({ preventScroll: true });
+            setStatus('Cover open. Tap a right-side corner to open the magazine.');
+        };
+
+        const turnPages = async (direction) => {
+            if (!state.issue || state.mode !== 'reader' || state.isTurning) return;
+            const step = isCompact() ? 1 : 2;
+            const nextIndex = direction === 'next' ? state.pageIndex + step : state.pageIndex - step;
+            const lastIndex = state.issue.pages.length - 1;
+            if (nextIndex < 0 || nextIndex > lastIndex) return;
+            state.isTurning = true;
+            if (isCompact()) {
+                book.classList.remove('is-swipe-next', 'is-swipe-prev');
+                book.classList.add(direction === 'next' ? 'is-swipe-next' : 'is-swipe-prev');
+            } else {
+                pageSurface.classList.remove('is-turning-next', 'is-turning-prev');
+                pageSurface.classList.add(direction === 'next' ? 'is-turning-next' : 'is-turning-prev');
+            }
+            await wait(360);
+            state.pageIndex = nextIndex;
+            renderReader();
+            await wait(80);
+            book.classList.remove('is-swipe-next', 'is-swipe-prev');
+            pageSurface.classList.remove('is-turning-next', 'is-turning-prev');
+            state.isTurning = false;
+            setStatus(direction === 'next' ? 'Turned forward.' : 'Turned back.');
+        };
+
+        const loadImage = (src) => new Promise((resolve, reject) => {
+            const image = new Image();
+            image.onload = () => resolve(image);
+            image.onerror = reject;
+            image.src = new URL(src, window.location.href).toString();
+        });
+
+        const drawRoundRect = (ctx, x, y, width, height, radius) => {
+            const r = Math.min(radius, width / 2, height / 2);
+            ctx.beginPath();
+            ctx.moveTo(x + r, y);
+            ctx.arcTo(x + width, y, x + width, y + height, r);
+            ctx.arcTo(x + width, y + height, x, y + height, r);
+            ctx.arcTo(x, y + height, x, y, r);
+            ctx.arcTo(x, y, x + width, y, r);
+            ctx.closePath();
+        };
+
+        const drawFittedImage = (ctx, image, x, y, width, height) => {
+            const ratio = Math.min(width / image.width, height / image.height);
+            const drawWidth = image.width * ratio;
+            const drawHeight = image.height * ratio;
+            const drawX = x + (width - drawWidth) / 2;
+            const drawY = y + (height - drawHeight) / 2;
+            ctx.drawImage(image, drawX, drawY, drawWidth, drawHeight);
+        };
+
+        const drawMagazineSheet = async (ctx, page, number, x, y, width, height) => {
+            ctx.save();
+            ctx.shadowColor = 'rgba(0, 0, 0, 0.18)';
+            ctx.shadowBlur = 40;
+            ctx.shadowOffsetY = 18;
+            drawRoundRect(ctx, x, y, width, height, 34);
+            ctx.fillStyle = '#f7f1e5';
+            ctx.fill();
+            ctx.restore();
+            ctx.save();
+            drawRoundRect(ctx, x, y, width, height, 34);
+            ctx.clip();
+            if (page) {
+                const image = await loadImage(page.image);
+                drawFittedImage(ctx, image, x + 46, y + 82, width - 92, height - 248);
+            }
+            ctx.restore();
+            ctx.fillStyle = '#2d241c';
+            ctx.font = '600 34px Georgia, serif';
+            ctx.fillText(page ? page.tag : 'Shelf', x + 48, y + height - 120);
+            ctx.font = '700 54px Georgia, serif';
+            ctx.fillText(page ? page.title : 'End of issue', x + 48, y + height - 66);
+            ctx.font = '500 28px Georgia, serif';
+            ctx.fillStyle = 'rgba(45, 36, 28, 0.78)';
+            ctx.fillText(page ? `Page ${number}` : 'Choose another cover from the shelf.', x + 48, y + height - 26);
+        };
+
+        const saveScreenshot = async () => {
+            if (!state.issue || screenshotButton.disabled) return;
+            screenshotButton.disabled = true;
+            screenshotButton.textContent = 'Rendering...';
+            setStatus('Rendering screenshot...');
+            try {
+                const compact = isCompact();
+                const canvas = document.createElement('canvas');
+                const ctx = canvas.getContext('2d');
+                if (state.mode === 'cover') {
+                    canvas.width = 1800;
+                    canvas.height = 2320;
+                    ctx.fillStyle = '#0b0f13';
+                    ctx.fillRect(0, 0, canvas.width, canvas.height);
+                    await drawMagazineSheet(ctx, { tag: state.issue.eyebrow, title: state.issue.title, image: state.issue.cover }, 0, 180, 120, 1440, 2080);
+                } else if (compact) {
+                    canvas.width = 1800;
+                    canvas.height = 2320;
+                    ctx.fillStyle = '#10161a';
+                    ctx.fillRect(0, 0, canvas.width, canvas.height);
+                    await drawMagazineSheet(ctx, state.issue.pages[state.pageIndex] || null, state.pageIndex + 1, 180, 120, 1440, 2080);
+                } else {
+                    canvas.width = 3000;
+                    canvas.height = 1900;
+                    ctx.fillStyle = '#10161a';
+                    ctx.fillRect(0, 0, canvas.width, canvas.height);
+                    ctx.fillStyle = 'rgba(255,255,255,0.05)';
+                    ctx.fillRect(1486, 124, 28, 1652);
+                    await drawMagazineSheet(ctx, state.issue.pages[state.pageIndex] || null, state.pageIndex + 1, 130, 124, 1330, 1652);
+                    await drawMagazineSheet(ctx, state.issue.pages[state.pageIndex + 1] || null, state.pageIndex + 2, 1540, 124, 1330, 1652);
+                }
+                const range = state.mode === 'cover' ? 'cover' : compact ? `page-${state.pageIndex + 1}` : `pages-${state.pageIndex + 1}-${Math.min(state.issue.pages.length, state.pageIndex + 2)}`;
+                const blob = await new Promise((resolve) => canvas.toBlob(resolve, 'image/png'));
+                const url = URL.createObjectURL(blob);
+                const link = document.createElement('a');
+                link.href = url;
+                link.download = `${state.issue.slug}-${range}.png`;
+                document.body.appendChild(link);
+                link.click();
+                link.remove();
+                URL.revokeObjectURL(url);
+                setStatus('Screenshot saved.');
+            } catch {
+                setStatus('Screenshot could not be created.');
+            } finally {
+                screenshotButton.disabled = false;
+                screenshotButton.textContent = 'Save Screenshot';
+            }
+        };
+
+        triggers.forEach((trigger) => {
+            trigger.addEventListener('click', (event) => {
+                event.preventDefault();
+                openMagazine(trigger.dataset.magazineIssue, trigger);
+            });
+        });
+        [cornerTop, cornerBottom].forEach((button) => { button.addEventListener('click', openReader); });
+        [prevButton, edgePrev].forEach((button) => { button.addEventListener('click', () => turnPages('prev')); });
+        [nextButton, edgeNext].forEach((button) => { button.addEventListener('click', () => turnPages('next')); });
+        screenshotButton.addEventListener('click', saveScreenshot);
+        shelfButton.addEventListener('click', closeMagazine);
+        overlay.querySelectorAll('[data-magazine-close]').forEach((node) => { node.addEventListener('click', closeMagazine); });
+
+        window.addEventListener('keydown', (event) => {
+            if (overlay.hidden) return;
+            if (event.key === 'Escape') {
+                closeMagazine();
+            } else if (state.mode === 'cover' && (event.key === 'Enter' || event.key === ' ')) {
+                event.preventDefault();
+                openReader();
+            } else if (state.mode === 'reader' && event.key === 'ArrowRight') {
+                event.preventDefault();
+                turnPages('next');
+            } else if (state.mode === 'reader' && event.key === 'ArrowLeft') {
+                event.preventDefault();
+                turnPages('prev');
+            }
+        });
+
+        window.addEventListener('resize', () => {
+            if (!overlay.hidden && state.mode === 'reader') {
+                renderReader();
+            }
         });
     })();
     </script>
