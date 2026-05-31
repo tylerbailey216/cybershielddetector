@@ -52,18 +52,12 @@
             };
 
             const clearHash = () => {
-                if (!window.location.hash) {
-                    return;
-                }
+                    if (window.location.hash) {
+                        return;
+                    }
 
-                history.replaceState(null, '', `${window.location.pathname}${window.location.search}`);
-            };
-
-            const forceTop = () => {
-                clearHash();
                 resetScroll();
                 requestAnimationFrame(() => {
-                    clearHash();
                     resetScroll();
                     requestAnimationFrame(resetScroll);
                 });
@@ -71,15 +65,66 @@
                 setTimeout(resetScroll, 50);
             };
 
+            const scrollToHashTarget = (hash, behavior = 'smooth') => {
+                if (!hash || hash === '#') {
+                    return false;
+                }
+
+                const target = document.querySelector(hash);
+                if (!target) {
+                    return false;
+                }
+
+                target.scrollIntoView({ behavior, block: 'start' });
+                return true;
+            };
+
+            const scheduleHashScroll = (behavior = 'auto') => {
+                if (!window.location.hash) {
+                    return;
+                }
+
+                window.setTimeout(() => {
+                    scrollToHashTarget(window.location.hash, behavior);
+                }, 80);
+            };
+
+            const bindHashLinks = () => {
+                document.querySelectorAll('a[href^="#"]').forEach((link) => {
+                    link.addEventListener('click', (event) => {
+                        const hash = link.getAttribute('href');
+                        if (!scrollToHashTarget(hash, 'auto')) {
+                            return;
+                        }
+
+                        event.preventDefault();
+                        history.pushState(null, '', `${window.location.pathname}${window.location.search}${hash}`);
+                    });
+                });
+            };
+
+            window.jumpToSection = (sectionId) => {
+                const hash = `#${sectionId}`;
+                if (!scrollToHashTarget(hash, 'auto')) {
+                    return false;
+                }
+
+                history.pushState(null, '', `${window.location.pathname}${window.location.search}${hash}`);
+                return false;
+            };
+
             if ('scrollRestoration' in history) {
                 history.scrollRestoration = 'manual';
             }
 
-            forceTop();
-            window.addEventListener('DOMContentLoaded', forceTop, { once: true });
-            window.addEventListener('load', forceTop);
-            window.addEventListener('pageshow', forceTop);
-            window.addEventListener('popstate', forceTop);
+            clearHash();
+            window.addEventListener('DOMContentLoaded', () => {
+                clearHash();
+                bindHashLinks();
+                scheduleHashScroll('auto');
+            }, { once: true });
+            window.addEventListener('load', () => scheduleHashScroll('auto'), { once: true });
+            window.addEventListener('pageshow', () => scheduleHashScroll('auto'), { once: true });
             window.addEventListener('beforeunload', resetScroll);
             window.addEventListener('pagehide', resetScroll);
         })();
@@ -200,11 +245,11 @@
                 <p class="hero-lede">A ten-page June 2026 issue on AI-generated phishing, deepfake scams, automated malware, data privacy, verification, and everyday digital defense.</p>
                 <div class="hero-actions">
                     <a class="primary hero-link" href="../Cyber%20Awareness%20Graphics/June%202026%20Issue%20%232/June%202026%20Cover.png" target="_blank" rel="noopener" data-magazine-issue="issue-2">Open Issue #2</a>
-                    <a class="secondary hero-link" href="#library">Go To The Issue Shelf</a>
+                    <a class="secondary hero-link" href="#library" onclick="return window.jumpToSection('library');">Go To The Issue Shelf</a>
                 </div>
                 <nav class="edition-nav" aria-label="Primary sections">
-                    <a class="edition-nav-link" href="#library">Issue Shelf</a>
-                    <a class="edition-nav-link" href="#about">About</a>
+                    <a class="edition-nav-link" href="#library" onclick="return window.jumpToSection('library');">Issue Shelf</a>
+                    <a class="edition-nav-link" href="#about" onclick="return window.jumpToSection('about');">About</a>
                 </nav>
                 <div class="hero-issue-summary">
                     <p class="publication-tag">Current Issue</p>

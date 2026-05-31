@@ -2965,6 +2965,10 @@ body.magazine-open {
     transition: opacity 0.24s ease;
 }
 
+.magazine-overlay[hidden] {
+    display: none !important;
+}
+
 .magazine-overlay.is-active {
     opacity: 1;
     pointer-events: auto;
