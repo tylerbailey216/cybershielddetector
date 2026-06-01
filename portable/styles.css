@@ -3098,7 +3098,8 @@ body.magazine-open {
     position: relative;
     border-radius: 28px;
     overflow: hidden;
-    background: linear-gradient(180deg, #f5efe4, #efe3d1);
+    background: linear-gradient(180deg, rgba(10, 14, 18, 0.98), rgba(15, 20, 24, 0.98));
+    border: 1px solid rgba(245, 248, 240, 0.18);
     box-shadow: 0 32px 80px -44px rgba(0, 0, 0, 0.92);
 }
 
@@ -3115,6 +3116,7 @@ body.magazine-open {
     width: 100%;
     height: auto;
     border-radius: 20px;
+    border: 1px solid rgba(245, 248, 240, 0.12);
 }
 
 .hero-cover-card[data-magazine-issue],
@@ -3184,14 +3186,22 @@ body.magazine-open {
 }
 
 .magazine-page.is-empty {
-    background: linear-gradient(180deg, rgba(245, 239, 228, 0.78), rgba(233, 224, 206, 0.78));
+    background: linear-gradient(180deg, rgba(15, 20, 24, 0.92), rgba(11, 15, 19, 0.92));
 }
 
 .magazine-page-copy {
     display: grid;
     gap: 8px;
     padding: 16px 8px 6px;
-    color: #2d241c;
+    color: rgba(245, 248, 240, 0.96);
+}
+
+.magazine-page-title {
+    color: rgba(245, 248, 240, 0.98);
+}
+
+.magazine-page-caption {
+    color: rgba(245, 248, 240, 0.82);
 }
 
 .magazine-page-number {
