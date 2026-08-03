@@ -9,6 +9,8 @@
     "start": "node server/index.js",
     "build-kb": "node scripts/build-kb.mjs",
     "check-links": "node scripts/check-links.mjs",
+    "check-publication": "node scripts/check-publication.mjs",
+    "check-release-sync": "node scripts/check-release-sync.mjs",
     "portable": "node scripts/build-portable.mjs",
     "deploy:cloudflare": "npx wrangler deploy"
   },
