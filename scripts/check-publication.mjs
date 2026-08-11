@@ -77,6 +77,12 @@ if (!reader.includes("enlargeButton.className = 'publication-enlarge-button'")) 
 if (!reader.includes("enlargeButton.textContent = 'Enlarge Page'")) failures.push('The Enlarge Page control label is missing.');
 if (!css.includes('animation: publicationEnlargePulse')) failures.push('Enlarge Page controls are missing their pulse animation.');
 if (!css.includes('@keyframes publicationEnlargePulse')) failures.push('Enlarge Page pulse keyframes are missing.');
+if (!reader.includes('const markQuizQuestions')) failures.push('Quiz questions are missing per-question scoring feedback.');
+if (!reader.includes('const quizReviewMessage')) failures.push('Quiz summaries do not identify which questions need review.');
+if (!reader.includes('const enableQuizRetryFeedback')) failures.push('Quiz feedback does not support answer changes and retrying.');
+if (!reader.includes('data-quiz-question=')) failures.push('Quiz question fieldsets are missing feedback identifiers.');
+if (!css.includes('.publication-quiz fieldset.is-incorrect')) failures.push('Incorrect quiz questions are missing visual feedback.');
+if (!css.includes('.publication-question-feedback.is-correct')) failures.push('Correct quiz questions are missing visual feedback.');
 
 if (failures.length) {
     console.error(failures.map((failure) => `FAIL ${failure}`).join('\n'));

@@ -553,25 +553,89 @@ const QUICK_CHECK = [
     { question: 'Does a detailed prompt guarantee a factual answer?', options: ['Yes', 'No - important claims still require verification'], answer: 1 }
 ];
 
+const markQuizQuestions = (form, questions, data) => {
+    const incorrectQuestions = [];
+    const unansweredQuestions = [];
+    let score = 0;
+
+    questions.forEach((item, index) => {
+        const fieldset = form.querySelector(`[data-quiz-question="${index}"]`);
+        const feedback = fieldset?.querySelector('.publication-question-feedback');
+        const submittedValue = data.get(`question-${index}`);
+        const isAnswered = submittedValue !== null;
+        const isCorrect = isAnswered && Number(submittedValue) === item.answer;
+
+        if (isCorrect) score += 1;
+        else if (isAnswered) incorrectQuestions.push(index + 1);
+        else unansweredQuestions.push(index + 1);
+
+        if (!fieldset || !feedback) return;
+        fieldset.classList.toggle('is-correct', isCorrect);
+        fieldset.classList.toggle('is-incorrect', isAnswered && !isCorrect);
+        fieldset.classList.toggle('is-unanswered', !isAnswered);
+        fieldset.querySelectorAll('label').forEach((label) => {
+            const input = label.querySelector('input');
+            label.classList.toggle('is-selected-answer', Boolean(input?.checked));
+        });
+
+        feedback.textContent = isCorrect ? 'Correct' : (isAnswered ? 'Needs another look' : 'Choose an answer');
+        feedback.className = `publication-question-feedback ${isCorrect ? 'is-correct' : (isAnswered ? 'is-incorrect' : 'is-unanswered')}`;
+    });
+
+    return { score, incorrectQuestions, unansweredQuestions };
+};
+
+const quizReviewMessage = (result, total) => {
+    const messages = [`${result.score} of ${total} correct.`];
+    if (result.incorrectQuestions.length) {
+        const noun = result.incorrectQuestions.length === 1 ? 'Question' : 'Questions';
+        messages.push(`${noun} ${result.incorrectQuestions.join(', ')} ${result.incorrectQuestions.length === 1 ? 'needs' : 'need'} another look.`);
+    }
+    if (result.unansweredQuestions.length) {
+        const noun = result.unansweredQuestions.length === 1 ? 'Question' : 'Questions';
+        messages.push(`${noun} ${result.unansweredQuestions.join(', ')} ${result.unansweredQuestions.length === 1 ? 'is' : 'are'} unanswered.`);
+    }
+    messages.push('Change only those answers and submit again.');
+    return messages.join(' ');
+};
+
+const enableQuizRetryFeedback = (form) => {
+    form.addEventListener('change', (event) => {
+        const fieldset = event.target.closest('[data-quiz-question]');
+        if (!fieldset) return;
+        fieldset.classList.remove('is-correct', 'is-incorrect', 'is-unanswered');
+        fieldset.querySelectorAll('label').forEach((label) => {
+            const input = label.querySelector('input');
+            label.classList.toggle('is-selected-answer', Boolean(input?.checked));
+        });
+        const feedback = fieldset.querySelector('.publication-question-feedback');
+        if (feedback) {
+            feedback.textContent = 'Answer changed - submit again to check it';
+            feedback.className = 'publication-question-feedback is-pending';
+        }
+    });
+};
+
 const renderQuickCheck = (activity) => {
     activityTitle.textContent = 'Lesson 9 Quick Check';
     activityBody.innerHTML = `<form id="publicationQuiz" class="publication-quiz">${QUICK_CHECK.map((item, questionIndex) => `
-        <fieldset><legend>${questionIndex + 1}. ${item.question}</legend>${item.options.map((option, optionIndex) => `
-            <label><input type="radio" name="question-${questionIndex}" value="${optionIndex}"><span>${option}</span></label>`).join('')}</fieldset>`).join('')}
+        <fieldset data-quiz-question="${questionIndex}"><legend>${questionIndex + 1}. ${item.question}</legend>${item.options.map((option, optionIndex) => `
+            <label><input type="radio" name="question-${questionIndex}" value="${optionIndex}"><span>${option}</span></label>`).join('')}<p class="publication-question-feedback"></p></fieldset>`).join('')}
         <p class="publication-activity-status" id="publicationQuizStatus" aria-live="polite"></p>
         <div class="publication-activity-actions"><button type="submit" class="primary">Check Answers</button></div></form>`;
     const quiz = document.getElementById('publicationQuiz');
     const status = document.getElementById('publicationQuizStatus');
+    enableQuizRetryFeedback(quiz);
     quiz.addEventListener('submit', (event) => {
         event.preventDefault();
         const data = new FormData(quiz);
-        const score = QUICK_CHECK.reduce((total, item, index) => total + (Number(data.get(`question-${index}`)) === item.answer ? 1 : 0), 0);
-        if (score === QUICK_CHECK.length) {
+        const result = markQuizQuestions(quiz, QUICK_CHECK, data);
+        if (result.score === QUICK_CHECK.length) {
             completeActivity(activity.id, activity.lessonNumber);
             status.textContent = '3 of 3 correct. Quick check complete.';
             status.className = 'publication-activity-status is-success';
         } else {
-            status.textContent = `${score} of 3 correct. Review the lesson and try again.`;
+            status.textContent = quizReviewMessage(result, QUICK_CHECK.length);
             status.className = 'publication-activity-status is-review';
         }
     });
@@ -632,22 +696,23 @@ const renderChoiceCheck = (activity) => {
     const check = CHOICE_ACTIVITIES[activity.id];
     activityTitle.textContent = check.title;
     activityBody.innerHTML = `<form id="publicationLessonCheck" class="publication-quiz">${check.questions.map((item, questionIndex) => `
-        <fieldset><legend>${questionIndex + 1}. ${item.question}</legend>${item.options.map((option, optionIndex) => `
-            <label><input type="radio" name="question-${questionIndex}" value="${optionIndex}"><span>${option}</span></label>`).join('')}</fieldset>`).join('')}
+        <fieldset data-quiz-question="${questionIndex}"><legend>${questionIndex + 1}. ${item.question}</legend>${item.options.map((option, optionIndex) => `
+            <label><input type="radio" name="question-${questionIndex}" value="${optionIndex}"><span>${option}</span></label>`).join('')}<p class="publication-question-feedback"></p></fieldset>`).join('')}
         <p class="publication-activity-status" id="publicationLessonCheckStatus" aria-live="polite"></p>
         <div class="publication-activity-actions"><button type="submit" class="primary">Check Answers</button></div></form>`;
     const form = document.getElementById('publicationLessonCheck');
     const status = document.getElementById('publicationLessonCheckStatus');
+    enableQuizRetryFeedback(form);
     form.addEventListener('submit', (event) => {
         event.preventDefault();
         const data = new FormData(form);
-        const score = check.questions.reduce((total, item, index) => total + (Number(data.get(`question-${index}`)) === item.answer ? 1 : 0), 0);
-        if (score === check.questions.length) {
+        const result = markQuizQuestions(form, check.questions, data);
+        if (result.score === check.questions.length) {
             completeActivity(activity.id, activity.lessonNumber);
-            status.textContent = `${score} of ${check.questions.length} correct. Lesson ${activity.lessonNumber} complete.`;
+            status.textContent = `${result.score} of ${check.questions.length} correct. Lesson ${activity.lessonNumber} complete.`;
             status.className = 'publication-activity-status is-success';
         } else {
-            status.textContent = `${score} of ${check.questions.length} correct. Review the page and try again.`;
+            status.textContent = quizReviewMessage(result, check.questions.length);
             status.className = 'publication-activity-status is-review';
         }
     });
