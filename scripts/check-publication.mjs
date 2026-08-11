@@ -73,6 +73,10 @@ if (!reader.includes("activityButton.className = 'publication-activity-tab'")) f
 if (!css.includes('animation: publicationActivityPulse')) failures.push('Publication activity badges are missing their pulse animation.');
 if (!css.includes('@keyframes publicationActivityPulse')) failures.push('Publication activity badge keyframes are missing.');
 if (!css.includes('@media (prefers-reduced-motion: reduce)')) failures.push('Reduced-motion support is missing.');
+if (!reader.includes("enlargeButton.className = 'publication-enlarge-button'")) failures.push('Illustrated pages are not using the shared Enlarge Page control.');
+if (!reader.includes("enlargeButton.textContent = 'Enlarge Page'")) failures.push('The Enlarge Page control label is missing.');
+if (!css.includes('animation: publicationEnlargePulse')) failures.push('Enlarge Page controls are missing their pulse animation.');
+if (!css.includes('@keyframes publicationEnlargePulse')) failures.push('Enlarge Page pulse keyframes are missing.');
 
 if (failures.length) {
     console.error(failures.map((failure) => `FAIL ${failure}`).join('\n'));

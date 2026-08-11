@@ -4323,12 +4323,38 @@ body.publication-open {
     font-family: 'Space Mono', monospace;
     font-size: 0.62rem;
     box-shadow: 0 0 20px -10px rgba(0, 246, 255, 0.9);
+    animation: publicationEnlargePulse 2.35s 0.28s ease-in-out infinite;
+    will-change: box-shadow, border-color, background-color;
 }
 
 .publication-enlarge-button:hover,
 .publication-enlarge-button:focus-visible {
     border-color: #60efff;
     color: #fff;
+    outline: 2px solid rgba(96, 239, 255, 0.72);
+    outline-offset: 3px;
+    animation-play-state: paused;
+    box-shadow: 0 0 12px rgba(96, 239, 255, 0.72), 0 0 29px rgba(0, 246, 255, 0.48);
+}
+
+@keyframes publicationEnlargePulse {
+    0%, 100% {
+        border-color: rgba(0, 246, 255, 0.42);
+        background-color: rgba(0, 8, 14, 0.88);
+        box-shadow: 0 0 9px -3px rgba(96, 239, 255, 0.62), 0 0 21px -10px rgba(0, 246, 255, 0.82);
+    }
+    50% {
+        border-color: #8ff7ff;
+        background-color: rgba(0, 26, 34, 0.96);
+        box-shadow: 0 0 12px -1px rgba(143, 247, 255, 0.9), 0 0 29px -5px rgba(0, 246, 255, 0.82), inset 0 0 11px rgba(0, 246, 255, 0.14);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .publication-enlarge-button {
+        animation: none;
+        box-shadow: 0 0 13px -4px rgba(96, 239, 255, 0.72), 0 0 23px -10px rgba(0, 246, 255, 0.82);
+    }
 }
 
 .publication-cover-copy {
