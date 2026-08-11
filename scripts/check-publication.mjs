@@ -62,6 +62,10 @@ if (!fs.existsSync(releasePath)) failures.push('Missing release manifest.');
 if (!fs.existsSync(gatewayScriptPath)) failures.push('Missing learning gateway behavior script.');
 if (!fs.existsSync(gatewayArtworkPath)) failures.push('Missing learning gateway artwork.');
 if (!html.includes('./downloads/practical-ai-module-1-workbook.pdf')) failures.push('Workbook is not linked from the learning hub.');
+if (!css.includes('height: 100dvh')) failures.push('Reader is missing dynamic mobile viewport sizing.');
+if (!css.includes('touch-action: pan-y')) failures.push('Reader pages are missing vertical touch scrolling support.');
+if (!reader.includes('readerIsMobile !== readerWasMobile')) failures.push('Reader resize handling can rebuild pages during mobile scrolling.');
+if (!reader.includes("addEventListener('touchcancel'")) failures.push('Reader touch state is not reset when a gesture is cancelled.');
 
 if (failures.length) {
     console.error(failures.map((failure) => `FAIL ${failure}`).join('\n'));

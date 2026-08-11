@@ -425,6 +425,10 @@ const renderReader = () => {
     readerState.page = spreadStart(readerState.page);
     const indices = pageIndicesForView();
     readerPages.replaceChildren(...indices.map((index) => createPage(PUBLICATION_PAGES[index], index)));
+    readerPages.querySelectorAll('.publication-page').forEach((page) => {
+        page.scrollTop = 0;
+        page.scrollLeft = 0;
+    });
     readerPages.classList.toggle('is-single-page', indices.length === 1);
     readerPages.style.setProperty('--publication-text-scale', readerState.textScale);
     updateReaderControls();
@@ -463,14 +467,17 @@ const buildToc = () => {
 const openReader = (mode = 'start') => {
     if (mode === 'start') readerState.page = 0;
     else if (mode === 'bookmark' && readerState.bookmark !== null) readerState.page = readerState.bookmark;
-    readerDialog.showModal();
+    if (!readerDialog.open) readerDialog.showModal();
     document.body.classList.add('publication-open');
     renderReader();
 };
 
 const closeReader = () => {
     saveReaderState();
-    readerDialog.close();
+    if (activityDialog.open) activityDialog.close();
+    if (imageDialog.open) imageDialog.close();
+    readerToc.classList.remove('is-open');
+    if (readerDialog.open) readerDialog.close();
     document.body.classList.remove('publication-open');
 };
 
@@ -658,7 +665,7 @@ const openImageViewer = (page) => {
     imageDialogTitle.textContent = page.title;
     imageDialogImage.src = page.image;
     imageDialogImage.alt = page.title;
-    imageDialog.showModal();
+    if (!imageDialog.open) imageDialog.showModal();
 };
 
 const resetPublicationProgress = () => {
@@ -732,7 +739,7 @@ function openActivity(activity) {
     else if (activity.type === 'choice-check') renderChoiceCheck(activity);
     else if (activity.type === 'module-review') renderModuleReview();
     else renderReflection(activity);
-    activityDialog.showModal();
+    if (!activityDialog.open) activityDialog.showModal();
 }
 
 document.querySelectorAll('[data-open-course]').forEach((button) => {
@@ -762,19 +769,41 @@ readerDialog.addEventListener('cancel', (event) => { event.preventDefault(); clo
 activityDialog.addEventListener('cancel', (event) => { event.preventDefault(); activityDialog.close(); });
 imageDialog.addEventListener('cancel', (event) => { event.preventDefault(); imageDialog.close(); });
 
-let touchStartX = null;
-readerPages.addEventListener('touchstart', (event) => { touchStartX = event.changedTouches[0].clientX; }, { passive: true });
-readerPages.addEventListener('touchend', (event) => {
-    if (touchStartX === null) return;
-    const distance = event.changedTouches[0].clientX - touchStartX;
-    if (Math.abs(distance) > 60) turnPage(distance < 0 ? 1 : -1);
-    touchStartX = null;
+let touchStart = null;
+readerPages.addEventListener('touchstart', (event) => {
+    if (event.changedTouches.length !== 1) {
+        touchStart = null;
+        return;
+    }
+    touchStart = {
+        x: event.changedTouches[0].clientX,
+        y: event.changedTouches[0].clientY
+    };
 }, { passive: true });
+readerPages.addEventListener('touchend', (event) => {
+    if (!touchStart || !event.changedTouches.length) return;
+    const distanceX = event.changedTouches[0].clientX - touchStart.x;
+    const distanceY = event.changedTouches[0].clientY - touchStart.y;
+    touchStart = null;
+    if (Math.abs(distanceX) > 60 && Math.abs(distanceX) > Math.abs(distanceY) * 1.25) {
+        turnPage(distanceX < 0 ? 1 : -1);
+    }
+}, { passive: true });
+readerPages.addEventListener('touchcancel', () => { touchStart = null; }, { passive: true });
 window.addEventListener('keydown', (event) => {
     if (!readerDialog.open || activityDialog.open || imageDialog.open || ['INPUT', 'TEXTAREA'].includes(document.activeElement?.tagName)) return;
     if (event.key === 'ArrowRight') turnPage(1);
     if (event.key === 'ArrowLeft') turnPage(-1);
 });
-window.addEventListener('resize', () => { if (readerDialog.open) renderReader(); });
+let readerWasMobile = isMobileReader();
+window.addEventListener('resize', () => {
+    const readerIsMobile = isMobileReader();
+    if (readerDialog.open && readerIsMobile !== readerWasMobile) renderReader();
+    readerWasMobile = readerIsMobile;
+});
+readerDialog.addEventListener('close', () => {
+    readerToc.classList.remove('is-open');
+    document.body.classList.remove('publication-open');
+});
 
 buildToc();
