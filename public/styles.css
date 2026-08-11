@@ -4597,6 +4597,30 @@ body.publication-open {
     background: rgba(12, 7, 24, 0.94);
     color: #e2ceff;
     box-shadow: 0 0 26px -10px rgba(155, 92, 255, 0.95);
+    animation: publicationActivityPulse 2.35s ease-in-out infinite;
+    will-change: box-shadow, border-color, background-color;
+}
+
+.publication-activity-tab:hover,
+.publication-activity-tab:focus-visible {
+    border-color: #e2ceff;
+    outline: 2px solid rgba(226, 206, 255, 0.72);
+    outline-offset: 3px;
+    animation-play-state: paused;
+    box-shadow: 0 0 12px rgba(182, 140, 255, 0.74), 0 0 30px rgba(155, 92, 255, 0.5);
+}
+
+@keyframes publicationActivityPulse {
+    0%, 100% {
+        border-color: rgba(182, 140, 255, 0.72);
+        background-color: rgba(12, 7, 24, 0.94);
+        box-shadow: 0 0 10px -4px rgba(182, 140, 255, 0.62), 0 0 24px -10px rgba(155, 92, 255, 0.82);
+    }
+    50% {
+        border-color: #d8bdff;
+        background-color: rgba(25, 12, 45, 0.96);
+        box-shadow: 0 0 13px -2px rgba(216, 189, 255, 0.92), 0 0 31px -6px rgba(155, 92, 255, 0.88), inset 0 0 12px rgba(155, 92, 255, 0.15);
+    }
 }
 
 .publication-activity-tab span {
@@ -4608,6 +4632,13 @@ body.publication-open {
 .publication-activity-tab strong {
     font-size: 0.74rem;
     line-height: 1.2;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .publication-activity-tab {
+        animation: none;
+        box-shadow: 0 0 14px -4px rgba(182, 140, 255, 0.72), 0 0 24px -10px rgba(155, 92, 255, 0.82);
+    }
 }
 
 .publication-reader-navigation {

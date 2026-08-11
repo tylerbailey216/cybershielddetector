@@ -25,6 +25,8 @@ const lessons = [...reader.matchAll(lessonPattern)].map((match) => ({
     activityId: match[6],
     activityLesson: Number(match[7])
 }));
+const supplementalActivityBadges = [...reader.matchAll(/activity:\s*\{\s*type:\s*'[^']+',\s*id:\s*'[^']+',\s*label:\s*'[^']+'/g)];
+const publicationActivityBadgeCount = lessons.length + supplementalActivityBadges.length;
 
 const expectedLessons = Array.from({ length: 12 }, (_, index) => index + 1);
 const actualLessons = lessons.map((lesson) => lesson.number).sort((a, b) => a - b);
@@ -66,6 +68,11 @@ if (!css.includes('height: 100dvh')) failures.push('Reader is missing dynamic mo
 if (!css.includes('touch-action: pan-y')) failures.push('Reader pages are missing vertical touch scrolling support.');
 if (!reader.includes('readerIsMobile !== readerWasMobile')) failures.push('Reader resize handling can rebuild pages during mobile scrolling.');
 if (!reader.includes("addEventListener('touchcancel'")) failures.push('Reader touch state is not reset when a gesture is cancelled.');
+if (publicationActivityBadgeCount !== 16) failures.push(`Expected 16 publication activity badges; found ${publicationActivityBadgeCount}.`);
+if (!reader.includes("activityButton.className = 'publication-activity-tab'")) failures.push('Publication activities are not using the shared badge component.');
+if (!css.includes('animation: publicationActivityPulse')) failures.push('Publication activity badges are missing their pulse animation.');
+if (!css.includes('@keyframes publicationActivityPulse')) failures.push('Publication activity badge keyframes are missing.');
+if (!css.includes('@media (prefers-reduced-motion: reduce)')) failures.push('Reduced-motion support is missing.');
 
 if (failures.length) {
     console.error(failures.map((failure) => `FAIL ${failure}`).join('\n'));
